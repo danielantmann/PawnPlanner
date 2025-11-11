@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 import { Animal } from '../../animals/domain/Animal';
+import { Pet } from '../../pets/domain/Pet';
 
 @Entity('breeds')
 export class Breed {
@@ -11,4 +12,7 @@ export class Breed {
 
   @ManyToOne(() => Animal, (animal) => animal.breeds, { onDelete: 'CASCADE' })
   animal!: Animal;
+
+  @OneToMany(() => Pet, (pet) => pet.breed)
+  pets!: Pet[];
 }
