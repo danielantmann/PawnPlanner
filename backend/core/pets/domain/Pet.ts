@@ -24,7 +24,7 @@ export class Pet {
   owner!: Owner;
 
   @ManyToOne(() => Breed, (breed) => breed.pets)
-  breed!: Breed[];
+  breed!: Breed;
 
   @OneToMany(() => Appointment, (appointment) => appointment.pet)
   appointments!: Appointment[];
