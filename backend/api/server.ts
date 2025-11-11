@@ -1,22 +1,36 @@
 import 'reflect-metadata';
 import express from 'express';
 import { AppDataSource } from '../infrastructure/orm/data-source';
-// import petRoutes from './routes/pet.routes'
 
-export async function startServer(port: 3000) {
+// Import your routes here
+// import petsRoutes from './routes/pets.routes';
+
+export async function startServer(port: number = 3000) {
   try {
+    // Initialize database connection
     await AppDataSource.initialize();
     console.log('📦 Database connected');
 
+    const queryRunner = AppDataSource.createQueryRunner();
+    const tables = await queryRunner.getTables();
+    console.log(
+      'Tablas en la DB:',
+      tables.map((t) => t.name)
+    );
+    await queryRunner.release();
     const app = express();
 
-    //Routes
+    // Middlewares
+    app.use(express.json());
 
-    //  app.use("/pets", petsRoutes);
+    // Routes
+    // app.use("/pets", petsRoutes);
+
     app.get('/ping', (req, res) => {
       res.send('pong 🏓');
     });
 
+    // Start server
     app.listen(port, () => {
       console.log(`🚀 Server running at http://localhost:${port}`);
     });
@@ -25,4 +39,5 @@ export async function startServer(port: 3000) {
   }
 }
 
-startServer(3000);
+// Entry point
+startServer();
