@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
 import { Owner } from '../../owners/domain/Owner';
 import { Breed } from '../../breeds/domain/Breed';
+import { Appointment } from '../../appointments/domain/Appointment';
 
 @Entity('pets')
 export class Pet {
@@ -24,4 +25,7 @@ export class Pet {
 
   @ManyToOne(() => Breed, (breed) => breed.pets)
   breed!: Breed[];
+
+  @OneToMany(() => Appointment, (appointment) => appointment.pet)
+  appointments!: Appointment[];
 }
