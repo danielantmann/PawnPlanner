@@ -9,7 +9,10 @@
     "prebuild": "expo prebuild",
     "lint": "eslint \"**/*.{js,jsx,ts,tsx}\" && prettier -c \"**/*.{js,jsx,ts,tsx,json}\"",
     "format": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix && prettier \"**/*.{js,jsx,ts,tsx,json}\" --write",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "backend": "ts-node-dev --respawn --transpile-only --project tsconfig.backend.json backend/api/server.ts",
+    "frontend": "expo start",
+    "dev": "npm run backend & npm run frontend"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",
@@ -46,9 +49,12 @@
     "eslint": "^9.25.1",
     "eslint-config-expo": "~10.0.0",
     "eslint-config-prettier": "^10.1.2",
+    "nodemon": "^3.1.10",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.11",
     "tailwindcss": "^3.4.0",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
     "typescript": "~5.9.2"
   },
   "private": true

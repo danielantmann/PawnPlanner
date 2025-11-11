@@ -12,6 +12,9 @@ export async function startServer(port: 3000) {
     //Routes
 
     //  app.use("/pets", petsRoutes);
+    app.get('/ping', (req, res) => {
+      res.send('pong 🏓');
+    });
 
     app.listen(port, () => {
       console.log(`🚀 Server running at http://localhost:${port}`);
@@ -20,3 +23,5 @@ export async function startServer(port: 3000) {
     console.error('❌ Error starting server:', error);
   }
 }
+
+startServer(3000);

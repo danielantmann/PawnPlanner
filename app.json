@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "PawnPlanner",
-    "slug": "PawnPlanner",
+    "name": "pawn-planner",
+    "slug": "pawn-planner",
     "version": "1.0.0",
 
-    "scheme": "PawnPlanner",
+    "scheme": "pawn-planner",
     "platforms": ["ios", "android"],
     "web": {
       "bundler": "metro",
