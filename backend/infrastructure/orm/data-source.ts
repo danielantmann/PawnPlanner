@@ -5,8 +5,8 @@ import { DataSource } from 'typeorm';
 // import { Owner } from '../../core/owners/domain/Owner';
 // import { Appointment } from '../../core/appointments/domain/Appointment';
 // import { Service } from '../../core/services/domain/Service';
-// import { Breed } from '../../core/breeds/domain/Breed';
-// import { Animal } from '../../core/animals/domain/Animal';
+import { Breed } from '../../core/breeds/domain/Breed';
+import { Animal } from '../../core/animals/domain/Animal';
 
 export const AppDataSource = new DataSource({
   type: 'sqlite',
@@ -14,5 +14,5 @@ export const AppDataSource = new DataSource({
   synchronize: true,
   logging: false,
   //   entities: [Pet, Owner, Appointment, Service, Breed, Animal],
-  entities: [],
+  entities: [Animal, Breed],
 });

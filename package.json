@@ -10,7 +10,7 @@
     "lint": "eslint \"**/*.{js,jsx,ts,tsx}\" && prettier -c \"**/*.{js,jsx,ts,tsx,json}\"",
     "format": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix && prettier \"**/*.{js,jsx,ts,tsx,json}\" --write",
     "web": "expo start --web",
-    "backend": "ts-node-dev --respawn --transpile-only --project tsconfig.backend.json backend/api/server.ts",
+    "backend": "ts-node-dev --respawn --project backend/tsconfig.json backend/api/server.ts",
     "frontend": "expo start",
     "dev": "npm run backend & npm run frontend"
   },
