@@ -5,13 +5,11 @@ import { CreatePetDTO } from '../dto/CreatePetDTO';
 import { PetResponseDTO } from '../dto/PetResponseDTO';
 import { PetMapper } from '../mappers/PetMapper';
 import { Pet } from '../../../core/pets/domain/Pet';
+import { injectable, inject } from 'tsyringe';
 
+@injectable()
 export class CreatePetService {
-  constructor(
-    private petRepo: IPetRepository
-    // private ownerRepo: IOwnerRepository,
-    // private breedRepo: IBreedRepository
-  ) {}
+  constructor(@inject('PetRepository') private petRepo: IPetRepository) {}
 
   async execute(dto: CreatePetDTO): Promise<PetResponseDTO> {
     try {

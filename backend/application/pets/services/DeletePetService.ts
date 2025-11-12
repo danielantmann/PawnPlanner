@@ -1,7 +1,9 @@
+import { injectable, inject } from 'tsyringe';
 import { IPetRepository } from '../../../core/pets/domain/IPetRepository';
 
+@injectable()
 export class DeletePetService {
-  constructor(private petRepo: IPetRepository) {}
+  constructor(@inject('PetRepository') private petRepo: IPetRepository) {}
 
   async execute(id: number): Promise<Boolean> {
     try {
