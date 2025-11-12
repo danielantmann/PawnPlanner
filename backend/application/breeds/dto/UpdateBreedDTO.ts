@@ -6,7 +6,7 @@ export class UpdateBreedDTO {
 
   @IsString()
   @Length(2, 80)
-  name?: string;
+  name!: string;
 
   @IsInt()
   animalId?: number;
