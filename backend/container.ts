@@ -1,8 +1,7 @@
-import { PetRepository } from './infrastructure/repositories';
-import { CreatePetService } from './application/pets/CreatePetService';
-import { UpdatePetService } from './application/pets/UpdatePetService';
+import { container } from 'tsyringe';
+import { PetRepository } from './infrastructure/repositories/PetRespository';
+import { IPetRepository } from './core/pets/domain/IPetRepository';
 
-const petRepository = new PetRepository();
-
-export const createPetService = new CreatePetService(petRepository);
-export const updatePetService = new UpdatePetService(petRepository);
+container.register<IPetRepository>('PetRepository', {
+  useClass: PetRepository,
+});
