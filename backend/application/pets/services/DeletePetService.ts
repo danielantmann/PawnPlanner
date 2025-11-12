@@ -5,7 +5,7 @@ import { IPetRepository } from '../../../core/pets/domain/IPetRepository';
 export class DeletePetService {
   constructor(@inject('PetRepository') private petRepo: IPetRepository) {}
 
-  async execute(id: number): Promise<Boolean> {
+  async execute(id: number): Promise<boolean> {
     try {
       const pet = await this.petRepo.findById(id);
       if (!pet) return false;

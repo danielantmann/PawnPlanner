@@ -8,5 +8,5 @@ export interface IPetRepository {
   findAll(): Promise<Pet[]>;
   findByName(name: string): Promise<Pet[]>;
   findByBreed(breedId: number): Promise<Pet[]>;
-  delete(id: number): Promise<void>;
+  delete(id: number): Promise<boolean>;
 }

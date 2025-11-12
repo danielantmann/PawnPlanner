@@ -47,7 +47,8 @@ export class PetRepository implements IPetRepository {
     });
   }
 
-  async delete(id: number): Promise<void> {
-    await this.ormRepo.delete(id);
+  async delete(id: number): Promise<boolean> {
+    const result = await this.ormRepo.delete(id);
+    return !!result.affected && result.affected > 0;
   }
 }

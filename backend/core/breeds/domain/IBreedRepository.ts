@@ -6,5 +6,5 @@ export interface IBreedRepository {
   delete(id: number): Promise<boolean>;
   findById(id: number): Promise<Breed | null>;
   findByName(name: string): Promise<Breed[]>;
-  findAll(): Promise<Breed>;
+  findAll(): Promise<Breed[]>;
 }

@@ -1,5 +1,5 @@
 import { Breed } from '../../../core/breeds/domain/Breed';
-import { BreedResponseDTO } from '../dto/BreedResponseDto';
+import { BreedResponseDTO } from '../dto/BreedResponseDTO';
 
 export class BreedMapper {
   static toDTO(breed: Breed): BreedResponseDTO {
