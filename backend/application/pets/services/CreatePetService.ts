@@ -15,7 +15,7 @@ export class CreatePetService {
     try {
       const pet = new Pet();
       pet.name = dto.name;
-      pet.birthDate = dto.birthDate;
+      pet.birthDate = new Date(dto.birthDate);
       pet.importantNotes = dto.importantNotes;
       pet.quickNotes = dto.quickNotes;
 

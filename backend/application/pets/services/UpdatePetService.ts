@@ -22,7 +22,7 @@ export class UpdatePetService {
       if (!pet) return null;
 
       if (dto.name !== undefined) pet.name = dto.name;
-      if (dto.birthDate !== undefined) pet.birthDate = dto.birthDate;
+      if (dto.birthDate !== undefined) pet.birthDate = new Date(dto.birthDate);
       if (dto.importantNotes !== undefined) pet.importantNotes = dto.importantNotes;
       if (dto.quickNotes !== undefined) pet.quickNotes = dto.quickNotes;
 
