@@ -16,6 +16,12 @@ export class PetRepository implements IPetRepository {
     return await this.ormRepo.save(pet);
   }
 
+  async update(pet: Pet): Promise<Pet | null> {
+    const existing = await this.ormRepo.findOne({ where: { id: pet.id } });
+    if (!existing) return null;
+    return await this.ormRepo.save(pet);
+  }
+
   async findById(id: number): Promise<Pet | null> {
     return await this.ormRepo.findOne({
       where: { id },

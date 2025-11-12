@@ -38,7 +38,8 @@ export class UpdatePetService {
       //     pet.breed = breed;
       //   }
 
-      const updated = await this.petRepo.save(pet);
+      const updated = await this.petRepo.update(pet);
+      if (!updated) return null;
       return PetMapper.toDTO(updated);
     } catch (error) {
       throw new Error('Error updating pet: ' + (error as Error).message);

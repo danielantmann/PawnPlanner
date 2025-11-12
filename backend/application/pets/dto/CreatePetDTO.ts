@@ -5,7 +5,7 @@ export class CreatePetDTO {
   name!: string;
 
   @IsDateString()
-  birthDate!: string; // mejor como string ISO, luego lo parseas a Date
+  birthDate!: string;
 
   @IsInt()
   ownerId!: number;
