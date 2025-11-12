@@ -1,4 +1,4 @@
-import { PetResponseDTO } from './../dto/PetResponseDTO';
+import { PetResponseDTO } from '../dto/PetResponseDTO';
 import { inject, injectable } from 'tsyringe';
 import { IPetRepository } from '../../../core/pets/domain/IPetRepository';
 import { PetMapper } from '../mappers/PetMapper';
