@@ -3,8 +3,6 @@ import { injectable } from 'tsyringe';
 import { IAnimalRepository } from '../../core/animals/domain/IAnimalRepository';
 import { AppDataSource } from '../orm/data-source';
 import { Animal } from '../../core/animals/domain/Animal';
-import { ConflictError } from '../../shared/errors/ConflictError';
-import { NotFoundError } from '../../shared/errors/NotFoundError';
 
 @injectable()
 export class AnimalRepository implements IAnimalRepository {
