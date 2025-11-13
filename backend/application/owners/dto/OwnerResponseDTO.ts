@@ -3,4 +3,8 @@ export class OwnerResponseDTO {
   name!: string;
   email!: string;
   phone!: string;
+  pets?: {
+    id: number;
+    name: string;
+  }[];
 }
