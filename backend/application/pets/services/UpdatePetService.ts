@@ -3,7 +3,7 @@ import { IPetRepository } from '../../../core/pets/domain/IPetRepository';
 // import { IBreedRepository } from '../../../core/breeds/domain/IBreedRepository';
 import { PetResponseDTO } from '../dto/PetResponseDTO';
 import { PetMapper } from '../mappers/PetMapper';
-import { UpdatePetDTO } from '../dto/UpdatePetDto';
+import { UpdatePetDTO } from '../dto/UpdatePetDTO';
 import { injectable, inject } from 'tsyringe';
 
 @injectable()

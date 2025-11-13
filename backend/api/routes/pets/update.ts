@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { validationMiddleware } from '../../middlewares/validationMiddleware';
-import { UpdatePetDTO } from '../../../application/pets/dto/UpdatePetDto';
+import { UpdatePetDTO } from '../../../application/pets/dto/UpdatePetDTO';
 import { container } from 'tsyringe';
 import { UpdatePetService } from '../../../application/pets/services/UpdatePetService';
 
