@@ -1,10 +1,13 @@
 import 'reflect-metadata';
 import express from 'express';
 import { AppDataSource } from '../infrastructure/orm/data-source';
+import '../infrastructure/container';
 
 // Import your routes here
 import petsRoutes from './routes/pets';
-import breedsRouter from './routes/breeds';
+import breedsRoutes from './routes/breeds';
+import animalsRoutes from './routes/animals';
+
 export async function startServer(port: number = 3000) {
   try {
     // Initialize database connection
@@ -18,6 +21,7 @@ export async function startServer(port: number = 3000) {
       tables.map((t) => t.name)
     );
     await queryRunner.release();
+
     const app = express();
 
     // Middlewares
@@ -25,11 +29,20 @@ export async function startServer(port: number = 3000) {
 
     // Routes
     app.use('/pets', petsRoutes);
-    app.use('/breed', breedsRouter);
+    app.use('/breeds', breedsRoutes);
+    app.use('/animals', animalsRoutes);
 
-    app.get('/ping', (req, res) => {
+    app.get('/ping', (_req, res) => {
       res.send('pong 🏓');
     });
+
+    // Error handler global
+    app.use(
+      (err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+    );
 
     // Start server
     app.listen(port, () => {
