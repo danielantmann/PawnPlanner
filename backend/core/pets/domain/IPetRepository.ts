@@ -2,7 +2,7 @@ import { Pet } from './Pet';
 
 export interface IPetRepository {
   save(pet: Pet): Promise<Pet>;
-  update(pet: Pet): Promise<Pet | null>;
+  update(id: number, data: Partial<Pet>): Promise<Pet | null>;
 
   findById(id: number): Promise<Pet | null>;
   findAll(): Promise<Pet[]>;

@@ -10,11 +10,14 @@ export class UpdateAnimalService {
   constructor(@inject('AnimalRepository') private repo: IAnimalRepository) {}
 
   async execute(id: number, dto: UpdateAnimalDTO): Promise<AnimalResponseDTO> {
-    const updated = await this.repo.update(id, dto.species);
+    const updated = await this.repo.update(id, {
+      species: dto.species,
+    });
 
     if (!updated) {
       throw new NotFoundError(`Animal with id ${id} not found`);
     }
+
     return AnimalMapper.toDTO(updated);
   }
 }
