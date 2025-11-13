@@ -7,7 +7,7 @@ export class Animal {
   id!: number;
 
   @Column()
-  type!: string;
+  species!: string;
 
   @OneToMany(() => Breed, (breed) => breed.animal)
   breeds!: Breed[];

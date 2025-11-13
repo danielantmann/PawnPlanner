@@ -16,6 +16,23 @@ export class PetRepository implements IPetRepository {
     return await this.ormRepo.save(pet);
   }
 
+  async update(pet: Pet): Promise<Pet | null> {
+    const existing = await this.ormRepo.findOne({
+      where: { id: pet.id },
+      relations: ['owner', 'breed'],
+    });
+    if (!existing) return null;
+
+    existing.name = pet.name ?? existing.name;
+    existing.birthDate = pet.birthDate ?? existing.birthDate;
+    existing.importantNotes = pet.importantNotes ?? existing.importantNotes;
+    existing.quickNotes = pet.quickNotes ?? existing.quickNotes;
+    existing.owner = pet.owner ?? existing.owner;
+    existing.breed = pet.breed ?? existing.breed;
+
+    return await this.ormRepo.save(existing);
+  }
+
   async findById(id: number): Promise<Pet | null> {
     return await this.ormRepo.findOne({
       where: { id },
@@ -41,7 +58,8 @@ export class PetRepository implements IPetRepository {
     });
   }
 
-  async delete(id: number): Promise<void> {
-    await this.ormRepo.delete(id);
+  async delete(id: number): Promise<boolean> {
+    const result = await this.ormRepo.delete(id);
+    return !!result.affected && result.affected > 0;
   }
 }

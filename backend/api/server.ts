@@ -3,8 +3,8 @@ import express from 'express';
 import { AppDataSource } from '../infrastructure/orm/data-source';
 
 // Import your routes here
-// import petsRoutes from './routes/pets.routes';
-
+import petsRoutes from './routes/pets';
+import breedsRouter from './routes/breeds';
 export async function startServer(port: number = 3000) {
   try {
     // Initialize database connection
@@ -24,7 +24,8 @@ export async function startServer(port: number = 3000) {
     app.use(express.json());
 
     // Routes
-    // app.use("/pets", petsRoutes);
+    app.use('/pets', petsRoutes);
+    app.use('/breed', breedsRouter);
 
     app.get('/ping', (req, res) => {
       res.send('pong 🏓');
