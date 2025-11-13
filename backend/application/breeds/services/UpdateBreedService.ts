@@ -3,7 +3,6 @@ import { IBreedRepository } from '../../../core/breeds/domain/IBreedRepository';
 import { UpdateBreedDTO } from '../dto/UpdateBreedDTO';
 import { BreedResponseDTO } from '../dto/BreedResponseDTO';
 import { BreedMapper } from '../mappers/BreedMapper';
-import { Breed } from '../../../core/breeds/domain/Breed';
 import { NotFoundError } from '../../../shared/errors/NotFoundError';
 
 @injectable()
