@@ -22,6 +22,16 @@ import { GetBreedByIdService } from './application/breeds/services/GetBreedByIdS
 import { GetBreedByNameService } from './application/breeds/services/GetBreedByNameService';
 import { GetBreedsByAnimalService } from './application/breeds/services/GetBreedsByAnimalService';
 
+// -------------------- ANIMAL --------------------
+import { AnimalRepository } from './infrastructure/repositories/AnimalRepository';
+import { IAnimalRepository } from './core/animals/domain/IAnimalRepository';
+import { CreateAnimalService } from './application/animals/services/CreateAnimalService';
+import { UpdateAnimalService } from './application/animals/services/UpdateAnimalService';
+import { DeleteAnimalService } from './application/animals/services/DeleteAnimalService';
+import { GetAllAnimalsService } from './application/animals/services/GetAllAnimalsService';
+import { GetAnimalByIdService } from './application/animals/services/GetAnimalByIdService';
+import { GetAnimalBySpeciesService } from './application/animals/services/GetAnimalBySpeciesService';
+
 // -------------------- REGISTER --------------------
 
 // Pet
@@ -43,3 +53,12 @@ container.register(GetAllBreedsService, { useClass: GetAllBreedsService });
 container.register(GetBreedByIdService, { useClass: GetBreedByIdService });
 container.register(GetBreedByNameService, { useClass: GetBreedByNameService });
 container.register(GetBreedsByAnimalService, { useClass: GetBreedsByAnimalService });
+
+// Animal
+container.register<IAnimalRepository>('AnimalRepository', { useClass: AnimalRepository });
+container.register(CreateAnimalService, { useClass: CreateAnimalService });
+container.register(UpdateAnimalService, { useClass: UpdateAnimalService });
+container.register(DeleteAnimalService, { useClass: DeleteAnimalService });
+container.register(GetAllAnimalsService, { useClass: GetAllAnimalsService });
+container.register(GetAnimalByIdService, { useClass: GetAnimalByIdService });
+container.register(GetAnimalBySpeciesService, { useClass: GetAnimalBySpeciesService });

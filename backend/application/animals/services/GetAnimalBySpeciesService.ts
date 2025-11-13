@@ -5,7 +5,7 @@ import { NotFoundError } from '../../../shared/errors/NotFoundError';
 import { AnimalMapper } from '../mappers/AnimalMapper';
 
 @injectable()
-export class GetAnimalBySpeciesServices {
+export class GetAnimalBySpeciesService {
   constructor(@inject('AnimalRepository') private repo: IAnimalRepository) {}
 
   async execute(species: string): Promise<AnimalResponseDTO> {
