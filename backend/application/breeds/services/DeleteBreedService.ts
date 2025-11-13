@@ -6,11 +6,10 @@ import { NotFoundError } from '../../../shared/errors/NotFoundError';
 export class DeleteBreedService {
   constructor(@inject('BreedRepository') private breedRepo: IBreedRepository) {}
 
-  async execute(id: number): Promise<boolean> {
+  async execute(id: number): Promise<void> {
     const deleted = await this.breedRepo.delete(id);
     if (!deleted) {
       throw new NotFoundError('Breed not found');
     }
-    return true;
   }
 }

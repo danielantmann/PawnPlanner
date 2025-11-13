@@ -11,6 +11,6 @@ export class GetBreedByIdService {
   async execute(id: number): Promise<BreedResponseDTO | null> {
     const breed = await this.breedRepo.findById(id);
     if (!breed) throw new NotFoundError('Breed not found');
-    return breed ? BreedMapper.toDTO(breed) : null;
+    return BreedMapper.toDTO(breed);
   }
 }
