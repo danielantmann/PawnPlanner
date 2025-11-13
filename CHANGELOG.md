@@ -138,3 +138,76 @@ This included domain, application services, routes, and error handling aligned w
 - Services are clean, consistent, and aligned with the error-handling strategy.
 - Routes expose a RESTful API for breeds, integrated with the existing server setup.
 - The branch is ready to merge into `master` and tag for release.
+
+## [Breed Branch] - 2025-11-14
+
+## Overview
+
+The **animals** branch introduced full support for managing **Animals** in the backend.  
+It includes the domain layer, application services, RESTful routes, and standardized error handling, all aligned with the existing architecture.
+
+---
+
+## Key Changes
+
+### 1. Domain Layer
+
+- Defined the **Animal** entity in `core/animals/domain/Animal.ts`.
+- Created the **IAnimalRepository** interface to abstract persistence operations.
+
+### 2. Application Layer
+
+- Added DTOs:
+  - `CreateAnimalDTO`
+  - `UpdateAnimalDTO`
+  - `AnimalResponseDTO`
+- Implemented **AnimalMapper** to convert between domain entities and DTOs.
+- Implemented services with proper exception handling:
+  - `CreateAnimalService`
+  - `UpdateAnimalService`
+  - `DeleteAnimalService`
+  - `GetAllAnimalsService`
+  - `GetAnimalByIdService`
+  - `GetAnimalBySpeciesService`
+- Refactored services to throw exceptions (`NotFoundError`, `ConflictError`, `ValidationError`) instead of returning `null` or `boolean`.
+
+### 3. Infrastructure Layer
+
+- Added **AnimalRepository** implementation in `infrastructure/repositories/AnimalRepository.ts`.
+
+### 4. API Layer
+
+- Created routes under `api/routes/animals/`:
+  - `create.ts` → **POST /animals**
+  - `update.ts` → **PUT /animals/:id**
+  - `delete.ts` → **DELETE /animals/:id**
+  - `getAll.ts` → **GET /animals**
+  - `getById.ts` → **GET /animals/:id**
+  - `getBySpecies.ts` → **GET /animals/species/:species**
+  - `index.ts` → aggregates all animal routes
+- Integrated routes in `server.ts` with:
+
+  ```ts
+  app.use("/animals", animalsRouter);
+
+  ### 5. Error Handling
+  ```
+
+- Standardized error handling using custom exceptions in `shared/errors`:
+  - `NotFoundError`
+  - `ValidationError`
+  - `ConflictError`
+- Ensured routes catch these exceptions and return proper HTTP codes:
+  - **404** → Not Found
+  - **400** → Bad Request (Validation)
+  - **409** → Conflict
+  - **500** → Internal Server Error
+
+---
+
+## Outcome
+
+- Full CRUD and query operations for **Animals** are now available.
+- Services are clean, consistent, and aligned with the error-handling strategy.
+- Routes expose a RESTful API for animals, fully integrated with the existing server setup.
+- The branch is ready to merge into master and tag for release.
