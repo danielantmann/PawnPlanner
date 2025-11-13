@@ -1,10 +1,10 @@
 import { injectable, inject } from 'tsyringe';
 import { IBreedRepository } from '../../../core/breeds/domain/IBreedRepository';
 import { CreateBreedDTO } from '../dto/CreateBreedDTO';
-import { BreedResponseDTO } from '../dto/BreedResponseDto';
+import { BreedResponseDTO } from '../dto/BreedResponseDTO';
 import { BreedMapper } from '../mappers/BreedMapper';
 import { Breed } from '../../../core/breeds/domain/Breed';
-import { NotFoundError } from '../../../shared/Errors/NotFoundError';
+import { NotFoundError } from '../../../shared/errors/NotFoundError';
 
 @injectable()
 export class CreateBreedService {
