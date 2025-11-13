@@ -4,17 +4,21 @@ import { UpdateBreedDTO } from '../dto/UpdateBreedDTO';
 import { BreedResponseDTO } from '../dto/BreedResponseDTO';
 import { BreedMapper } from '../mappers/BreedMapper';
 import { Breed } from '../../../core/breeds/domain/Breed';
+import { NotFoundError } from '../../../shared/errors/NotFoundError';
 
 @injectable()
 export class UpdateBreedService {
   constructor(@inject('BreedRepository') private breedRepo: IBreedRepository) {}
 
   async execute(dto: UpdateBreedDTO): Promise<BreedResponseDTO | null> {
-    const breed = new Breed();
-    breed.id = dto.id;
-    breed.name = dto.name;
+    const breed = await this.breedRepo.findById(dto.id);
+    if (!breed) throw new NotFoundError('Breed not found');
+
+    breed.name = dto.name ?? breed.name;
 
     const updated = await this.breedRepo.update(breed);
-    return updated ? BreedMapper.toDTO(updated) : null;
+    if (!updated) throw new NotFoundError('Breed could not be updated');
+
+    return BreedMapper.toDTO(updated);
   }
 }
