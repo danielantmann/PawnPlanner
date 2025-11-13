@@ -4,7 +4,7 @@ import { IPetRepository } from '../../../core/pets/domain/IPetRepository';
 import { PetMapper } from '../mappers/PetMapper';
 
 @injectable()
-export class GetAllPetService {
+export class GetAllPetsService {
   constructor(@inject('PetRepository') private petRepo: IPetRepository) {}
 
   async execute(): Promise<PetResponseDTO[]> {
