@@ -1,5 +1,3 @@
-# Makefile en la raíz del proyecto
-
 backend-install:
     cd backend && npm install
 
