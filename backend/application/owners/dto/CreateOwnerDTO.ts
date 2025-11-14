@@ -1,4 +1,4 @@
-import { IsString, Length } from 'class-validator';
+import { IsEmail, IsString, Length, Matches } from 'class-validator';
 
 export class CreateOwnerDTO {
   @IsString({ message: 'Name must be a string' })
@@ -6,10 +6,11 @@ export class CreateOwnerDTO {
   name!: string;
 
   @IsString({ message: 'Phone must be a string' })
-  @Length(2, 50, { message: 'Phone must be between 2 and 50 characters' })
+  @Matches(/^\+?[0-9]{7,15}$/, {
+    message: 'Phone must be a valid number (7-15 digits, optional +)',
+  })
   phone!: string;
 
-  @IsString({ message: 'Email must be a string' })
-  @Length(2, 50, { message: 'Email must be between 2 and 50 characters' })
+  @IsEmail({}, { message: 'Email must be a valid email address' })
   email!: string;
 }
