@@ -6,6 +6,6 @@ export interface IOwnerRepository {
   delete(id: number): Promise<boolean>;
   findAll(): Promise<Owner[]>;
   findById(id: number): Promise<Owner | null>;
-  findByName(name: string): Promise<Owner | null>;
+  findByName(name: string): Promise<Owner[] | null>;
   findByEmail(email: string): Promise<Owner | null>;
 }
