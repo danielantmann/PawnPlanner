@@ -211,3 +211,53 @@ It includes the domain layer, application services, RESTful routes, and standard
 - Services are clean, consistent, and aligned with the error-handling strategy.
 - Routes expose a RESTful API for animals, fully integrated with the existing server setup.
 - The branch is ready to merge into master and tag for release.
+
+## [Owner Branch] - 2025-11-15
+
+1. Domain Layer
+   Defined the Owner entity in core/owners/domain/Owner.ts.
+   Created the IOwnerRepository interface to abstract persistence operations.
+2. Application Layer
+   Added DTOs:
+   CreateOwnerDTO
+   UpdateOwnerDTO
+   OwnerResponseDTO
+   Implemented OwnerMapper to convert between domain entities and DTOs (including pets summary).
+   Implemented services with proper exception handling:
+   CreateOwnerService
+   UpdateOwnerService
+   DeleteOwnerService
+   GetAllOwnersService
+   GetOwnerByIdService
+   GetOwnerByEmailService
+   GetOwnerByNameService
+   Refactored services to throw exceptions (NotFoundError, ConflictError, ValidationError) instead of returning null or boolean.
+3. Infrastructure Layer
+   Added OwnerRepository implementation in infrastructure/repositories/OwnerRepository.ts.
+4. API Layer
+   Created routes under api/routes/owners/:
+
+create.ts → POST /owners
+update.ts → PUT /owners/:id
+delete.ts → DELETE /owners/:id
+getAll.ts → GET /owners
+getById.ts → GET /owners/:id
+getByEmail.ts → GET /owners/email/:email
+getByName.ts → GET /owners/name/:name
+index.ts → aggregates all owner routes
+Integrated routes in server.ts with:
+
+app.use("/owners", ownersRouter);
+
+5. Error Handling
+   Standardized error handling using custom exceptions in shared/errors:
+
+NotFoundError
+ValidationError
+ConflictError
+Ensured routes catch these exceptions and return proper HTTP codes:
+
+404 → Not Found
+400 → Bad Request (Validation)
+409 → Conflict
+500 → Internal Server Error
