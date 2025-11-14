@@ -9,14 +9,15 @@ import { NotFoundError } from '../../../shared/errors/NotFoundError';
 export class UpdateBreedService {
   constructor(@inject('BreedRepository') private breedRepo: IBreedRepository) {}
 
-  async execute(dto: UpdateBreedDTO): Promise<BreedResponseDTO> {
-    const breed = await this.breedRepo.findById(dto.id);
-    if (!breed) throw new NotFoundError('Breed not found');
+  async execute(id: number, dto: UpdateBreedDTO): Promise<BreedResponseDTO> {
+    const updated = await this.breedRepo.update(id, {
+      name: dto.name,
+      animal: dto.animalId ? ({ id: dto.animalId } as any) : undefined,
+    });
 
-    breed.name = dto.name ?? breed.name;
-
-    const updated = await this.breedRepo.update(breed);
-    if (!updated) throw new NotFoundError('Breed could not be updated');
+    if (!updated) {
+      throw new NotFoundError(`Breed with id ${id} not found`);
+    }
 
     return BreedMapper.toDTO(updated);
   }

@@ -1,13 +1,14 @@
-import { IsInt, IsString, Length } from 'class-validator';
+import { IsInt, IsString, Length, IsOptional } from 'class-validator';
 
 export class UpdateBreedDTO {
-  @IsInt()
+  @IsInt({ message: 'Id must be an integer' })
   id!: number;
 
-  @IsString()
-  @Length(2, 80)
+  @IsString({ message: 'Name must be a string' })
+  @Length(2, 80, { message: 'Name must be between 2 and 80 characters' })
   name!: string;
 
-  @IsInt()
+  @IsOptional()
+  @IsInt({ message: 'AnimalId must be an integer' })
   animalId?: number;
 }

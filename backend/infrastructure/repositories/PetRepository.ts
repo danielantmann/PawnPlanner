@@ -16,20 +16,11 @@ export class PetRepository implements IPetRepository {
     return await this.ormRepo.save(pet);
   }
 
-  async update(pet: Pet): Promise<Pet | null> {
-    const existing = await this.ormRepo.findOne({
-      where: { id: pet.id },
-      relations: ['owner', 'breed'],
-    });
+  async update(id: number, data: Partial<Pet>): Promise<Pet | null> {
+    const existing = await this.ormRepo.findOne({ where: { id }, relations: ['owner', 'breed'] });
     if (!existing) return null;
 
-    existing.name = pet.name ?? existing.name;
-    existing.birthDate = pet.birthDate ?? existing.birthDate;
-    existing.importantNotes = pet.importantNotes ?? existing.importantNotes;
-    existing.quickNotes = pet.quickNotes ?? existing.quickNotes;
-    existing.owner = pet.owner ?? existing.owner;
-    existing.breed = pet.breed ?? existing.breed;
-
+    Object.assign(existing, data);
     return await this.ormRepo.save(existing);
   }
 

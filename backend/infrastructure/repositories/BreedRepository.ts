@@ -16,13 +16,11 @@ export class BreedRepository implements IBreedRepository {
     return await this.ormRepo.save(breed);
   }
 
-  async update(breed: Breed): Promise<Breed | null> {
-    const existing = await this.ormRepo.findOne({ where: { id: breed.id } });
+  async update(id: number, data: Partial<Breed>): Promise<Breed | null> {
+    const existing = await this.ormRepo.findOne({ where: { id }, relations: ['animal', 'pets'] });
     if (!existing) return null;
 
-    existing.name = breed.name ?? existing.name;
-    existing.animal = breed.animal ?? existing.animal;
-
+    Object.assign(existing, data);
     return await this.ormRepo.save(existing);
   }
 

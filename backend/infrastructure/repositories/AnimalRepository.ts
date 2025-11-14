@@ -3,8 +3,6 @@ import { injectable } from 'tsyringe';
 import { IAnimalRepository } from '../../core/animals/domain/IAnimalRepository';
 import { AppDataSource } from '../orm/data-source';
 import { Animal } from '../../core/animals/domain/Animal';
-import { ConflictError } from '../../shared/errors/ConflictError';
-import { NotFoundError } from '../../shared/errors/NotFoundError';
 
 @injectable()
 export class AnimalRepository implements IAnimalRepository {
@@ -17,13 +15,14 @@ export class AnimalRepository implements IAnimalRepository {
     return await this.ormRepo.save(animal);
   }
 
-  async update(id: number, species: string): Promise<Animal | null> {
+  async update(id: number, data: Partial<Animal>): Promise<Animal | null> {
     const existing = await this.ormRepo.findOne({ where: { id } });
-
     if (!existing) return null;
-    existing.species = species ?? existing.species;
+
+    Object.assign(existing, data);
     return await this.ormRepo.save(existing);
   }
+
   async delete(id: number): Promise<boolean> {
     const result = await this.ormRepo.delete(id);
     return !!result.affected && result.affected > 0;

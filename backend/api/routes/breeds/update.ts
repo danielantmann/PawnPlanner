@@ -10,8 +10,8 @@ const router = Router();
 router.put('/:id', validationMiddleware(UpdateBreedDTO), async (req, res) => {
   try {
     const service = container.resolve(UpdateBreedService);
-    const dto = { ...req.body, id: Number(req.params.id) };
-    const breed = await service.execute(dto);
+    const id = Number(req.params.id);
+    const breed = await service.execute(id, req.body);
     res.status(200).json(breed);
   } catch (error) {
     if (error instanceof NotFoundError) {

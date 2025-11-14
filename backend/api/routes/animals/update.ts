@@ -11,18 +11,14 @@ const router = Router();
 router.put('/:id', validationMiddleware(UpdateAnimalDTO), async (req, res) => {
   try {
     const service = container.resolve(UpdateAnimalService);
-    const animal = await service.execute(Number(req.params.id), req.body);
+    const id = Number(req.params.id);
+    const animal = await service.execute(id, req.body);
     res.status(200).json(animal);
   } catch (error) {
     if (error instanceof NotFoundError) {
       return res.status(404).json({ error: error.message });
     }
-
-    if (error instanceof ValidationError) {
-      return res.status(400).json({ error: error.message });
-    }
-
-    res.status(500).json('Internal server error');
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
