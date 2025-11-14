@@ -3,14 +3,20 @@ import express from 'express';
 import { AppDataSource } from '../infrastructure/orm/data-source';
 import '../infrastructure/container';
 
-// Import your routes here
+// Importa tus rutas
 import petsRoutes from './routes/pets';
 import breedsRoutes from './routes/breeds';
 import animalsRoutes from './routes/animals';
+import ownersRoutes from './routes/owners';
+
+// Importa tus errores de dominio
+import { ValidationError } from '../shared/errors/ValidationError';
+import { ConflictError } from '../shared/errors/ConflictError';
+import { NotFoundError } from '../shared/errors/NotFoundError';
 
 export async function startServer(port: number = 3000) {
   try {
-    // Initialize database connection
+    // Inicializa la conexión a la DB
     await AppDataSource.initialize();
     console.log('📦 Database connected');
 
@@ -27,18 +33,29 @@ export async function startServer(port: number = 3000) {
     // Middlewares
     app.use(express.json());
 
-    // Routes
+    // Rutas
     app.use('/pets', petsRoutes);
     app.use('/breeds', breedsRoutes);
     app.use('/animals', animalsRoutes);
+    app.use('/owners', ownersRoutes);
 
     app.get('/ping', (_req, res) => {
       res.send('pong 🏓');
     });
 
-    // Error handler global
+    // Middleware global de errores
     app.use(
       (err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+        if (err instanceof ValidationError) {
+          return res.status(400).json({ error: err.message });
+        }
+        if (err instanceof ConflictError) {
+          return res.status(409).json({ error: err.message });
+        }
+        if (err instanceof NotFoundError) {
+          return res.status(404).json({ error: err.message });
+        }
+
         console.error(err);
         res.status(500).json({ error: 'Internal server error' });
       }

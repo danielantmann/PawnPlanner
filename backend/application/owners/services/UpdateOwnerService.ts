@@ -10,7 +10,7 @@ import { OwnerMapper } from '../mappers/OwnerMapper';
 export class UpdateOwnerService {
   constructor(@inject('OwnerRepository') private repo: IOwnerRepository) {}
 
-  async execute(dto: UpdateOwnerDTO, id: number): Promise<OwnerResponseDTO> {
+  async execute(id: number, dto: UpdateOwnerDTO): Promise<OwnerResponseDTO> {
     const updated = await this.repo.update(id, {
       name: dto.name,
       phone: dto.phone,
