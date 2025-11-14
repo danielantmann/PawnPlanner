@@ -1,0 +1,15 @@
+import { inject, injectable } from 'tsyringe';
+import { IOwnerRepository } from '../../../core/owners/domain/IOwnerRepository';
+import { Owner } from '../../../core/owners/domain/Owner';
+import { OwnerResponseDTO } from '../dto/OwnerResponseDTO';
+import { OwnerMapper } from '../mappers/OwnerMapper';
+
+@injectable()
+export class GetAllOwnerService {
+  constructor(@inject('OwnerRepository') private repo: IOwnerRepository) {}
+
+  async execute(): Promise<OwnerResponseDTO[]> {
+    const owners = await this.repo.findAll();
+    return OwnerMapper.toDTOs(owners);
+  }
+}
