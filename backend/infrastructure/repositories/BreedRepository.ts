@@ -53,4 +53,10 @@ export class BreedRepository implements IBreedRepository {
       relations: ['animal'],
     });
   }
+
+  async findByNameAndAnimal(name: string, animalId: number): Promise<Breed | null> {
+    return await this.ormRepo.findOne({
+      where: { name, animalId },
+    });
+  }
 }

@@ -1,8 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+  Unique,
+  JoinColumn,
+} from 'typeorm';
 import { Animal } from '../../animals/domain/Animal';
 import { Pet } from '../../pets/domain/Pet';
 
 @Entity('breeds')
+@Unique(['name', 'animalId'])
 export class Breed {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -10,7 +19,11 @@ export class Breed {
   @Column()
   name!: string;
 
+  @Column()
+  animalId!: number;
+
   @ManyToOne(() => Animal, (animal) => animal.breeds, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'animalId' })
   animal!: Animal;
 
   @OneToMany(() => Pet, (pet) => pet.breed)

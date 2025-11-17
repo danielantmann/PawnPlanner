@@ -4,20 +4,30 @@ import { CreateBreedDTO } from '../dto/CreateBreedDTO';
 import { BreedResponseDTO } from '../dto/BreedResponseDTO';
 import { BreedMapper } from '../mappers/BreedMapper';
 import { Breed } from '../../../core/breeds/domain/Breed';
+import { IAnimalRepository } from '../../../core/animals/domain/IAnimalRepository';
 import { NotFoundError } from '../../../shared/errors/NotFoundError';
+import { ConflictError } from '../../../shared/errors/ConflictError';
 
 @injectable()
 export class CreateBreedService {
-  constructor(@inject('BreedRepository') private breedRepo: IBreedRepository) {}
+  constructor(
+    @inject('BreedRepository') private breedRepo: IBreedRepository,
+    @inject('AnimalRepository') private animalRepo: IAnimalRepository
+  ) {}
 
   async execute(dto: CreateBreedDTO): Promise<BreedResponseDTO> {
-    const breed = new Breed();
-    breed.name = dto.name;
+    const animal = await this.animalRepo.findById(dto.animalId);
+    if (!animal) throw new NotFoundError('Animal not found');
+    const normalizedName = dto.name.toLowerCase();
 
-    // Cuando tengas el repo de Animal:
-    // const animal = await this.animalRepo.findById(dto.animalId);
-    // if (!animal) throw new NotFoundError("Animal not found");
-    // breed.animal = animal;
+    const existing = await this.breedRepo.findByNameAndAnimal(normalizedName, dto.animalId);
+    if (existing) {
+      throw new ConflictError(`Breed '${dto.name}' already exists for this animal`);
+    }
+
+    const breed = new Breed();
+    breed.name = normalizedName;
+    breed.animal = animal;
 
     const saved = await this.breedRepo.save(breed);
     return BreedMapper.toDTO(saved);
