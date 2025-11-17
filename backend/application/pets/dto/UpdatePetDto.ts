@@ -1,9 +1,6 @@
-import { IsInt, IsOptional, IsString, IsDateString, Length } from 'class-validator';
+import { IsOptional, IsString, IsDateString, Length } from 'class-validator';
 
 export class UpdatePetDTO {
-  @IsInt({ message: 'Id must be an integer' })
-  id!: number;
-
   @IsOptional()
   @IsString({ message: 'Name must be a string' })
   @Length(2, 50, { message: 'Name must be between 2 and 50 characters' })

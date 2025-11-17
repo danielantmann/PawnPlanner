@@ -1,23 +1,19 @@
-import { Router } from 'express';
-import { validationMiddleware } from '../../middlewares/validationMiddleware';
-import { UpdatePetDTO } from '../../../application/pets/dto/UpdatePetDTO';
+import { Request, Response, NextFunction } from 'express';
 import { container } from 'tsyringe';
 import { UpdatePetService } from '../../../application/pets/services/UpdatePetService';
+import { UpdatePetDTO } from '../../../application/pets/dto/UpdatePetDTO';
 import { NotFoundError } from '../../../shared/errors/NotFoundError';
 
-const router = Router();
-router.put('/:id', validationMiddleware(UpdatePetDTO), async (req, res) => {
+export async function updatePet(req: Request, res: Response, next: NextFunction) {
   try {
     const service = container.resolve(UpdatePetService);
     const id = Number(req.params.id);
-    const pet = await service.execute(id, req.body);
+    const pet = await service.execute(id, req.body as UpdatePetDTO);
     res.status(200).json(pet);
   } catch (error) {
     if (error instanceof NotFoundError) {
       return res.status(404).json({ error: error.message });
     }
-    res.status(500).json({ error: 'Internal server error' });
+    next(error);
   }
-});
-
-export default router;
+}

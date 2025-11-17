@@ -1,18 +1,23 @@
 import { Router } from 'express';
-import createRoute from './create';
-import updateRoute from './update';
-import deleteRoute from './delete';
-import getAllRoute from './getAll';
-import getByIdRoute from './getById';
-import getBySpeciesRoute from './getBySpecies';
+import { validationMiddleware } from '../../middlewares/validationMiddleware';
+import { CreateAnimalDTO } from '../../../application/animals/dto/CreateAnimalDTO';
+import { UpdateAnimalDTO } from '../../../application/animals/dto/UpdateAnimalDTO';
+
+import { createAnimal } from '../../controllers/animals/create';
+import { updateAnimal } from '../../controllers/animals/update';
+import { deleteAnimal } from '../../controllers/animals/delete';
+import { getAllAnimals } from '../../controllers/animals/getAll';
+import { getAnimalById } from '../../controllers/animals/getById';
+import { getAnimalBySpecies } from '../../controllers/animals/getBySpecies';
 
 const router = Router();
 
-router.use(createRoute);
-router.use(updateRoute);
-router.use(deleteRoute);
-router.use(getAllRoute);
-router.use(getByIdRoute);
-router.use(getBySpeciesRoute);
+router.post('/', validationMiddleware(CreateAnimalDTO), createAnimal);
+router.put('/:id', validationMiddleware(UpdateAnimalDTO), updateAnimal);
+router.delete('/:id', deleteAnimal);
+
+router.get('/', getAllAnimals);
+router.get('/:id', getAnimalById);
+router.get('/species/:species', getAnimalBySpecies);
 
 export default router;

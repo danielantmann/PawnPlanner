@@ -1,21 +1,25 @@
 import { Router } from 'express';
+import { validationMiddleware } from '../../middlewares/validationMiddleware';
+import { CreatePetDTO } from '../../../application/pets/dto/CreatePetDTO';
+import { UpdatePetDTO } from '../../../application/pets/dto/UpdatePetDTO';
 
-import createRoute from './create';
-import updateRoute from './update';
-import deleteRoute from './delete';
-import getAllRoute from './getAll';
-import getByIdRoute from './getById';
-import getByNameRoute from './getByName';
-import getByBreedRoute from './getByBreed';
+import { createPet } from '../../controllers/pets/create';
+import { updatePet } from '../../controllers/pets/update';
+import { deletePet } from '../../controllers/pets/delete';
+import { getAllPets } from '../../controllers/pets/getAll';
+import { getPetById } from '../../controllers/pets/getById';
+import { getPetsByName } from '../../controllers/pets/getByName';
+import { getPetsByBreed } from '../../controllers/pets/getByBreed';
 
 const router = Router();
 
-router.use('/', createRoute);
-router.use('/', updateRoute);
-router.use('/', deleteRoute);
-router.use('/', getAllRoute);
-router.use('/', getByIdRoute);
-router.use('/', getByNameRoute);
-router.use('/', getByBreedRoute);
+router.post('/', validationMiddleware(CreatePetDTO), createPet);
+router.put('/:id', validationMiddleware(UpdatePetDTO), updatePet);
+router.delete('/:id', deletePet);
+
+router.get('/', getAllPets);
+router.get('/:id', getPetById);
+router.get('/name/:name', getPetsByName);
+router.get('/breed/:breedId', getPetsByBreed);
 
 export default router;

@@ -1,10 +1,8 @@
-import { Router } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { container } from 'tsyringe';
 import { GetAllAnimalsService } from '../../../application/animals/services/GetAllAnimalsService';
 
-const router = Router();
-
-router.get('/', async (_req, res, next) => {
+export async function getAllAnimals(_req: Request, res: Response, next: NextFunction) {
   try {
     const service = container.resolve(GetAllAnimalsService);
     const animals = await service.execute();
@@ -12,6 +10,4 @@ router.get('/', async (_req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
-
-export default router;
+}

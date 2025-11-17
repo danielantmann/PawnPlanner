@@ -4,10 +4,10 @@ import { AppDataSource } from '../infrastructure/orm/data-source';
 import '../container';
 
 // Importa tus rutas
-import petsRoutes from './routes/pets';
-import breedsRoutes from './routes/breeds';
-import animalsRoutes from './routes/animals';
-import ownersRoutes from './routes/owners';
+import petsRoutes from '../api/routes/pets';
+import breedsRoutes from '../api/routes/breeds';
+import animalsRoutes from '../api/routes/animals';
+import ownersRoutes from '../api/routes/owners';
 
 // Importa tus errores de dominio
 

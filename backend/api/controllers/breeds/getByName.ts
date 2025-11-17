@@ -1,21 +1,17 @@
-import { Router } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { container } from 'tsyringe';
 import { GetBreedByNameService } from '../../../application/breeds/services/GetBreedByNameService';
 import { NotFoundError } from '../../../shared/errors/NotFoundError';
 
-const router = Router();
-
-router.get('/name/:name', async (req, res) => {
+export async function getBreedByName(req: Request, res: Response, next: NextFunction) {
   try {
     const service = container.resolve(GetBreedByNameService);
     const breeds = await service.execute(req.params.name);
     res.status(200).json(breeds);
   } catch (error) {
     if (error instanceof NotFoundError) {
-      res.status(404).json({ error: error.message });
+      return res.status(404).json({ error: error.message });
     }
-    res.status(500).json({ error: 'Internal server error' });
+    next(error);
   }
-});
-
-export default router;
+}

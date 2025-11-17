@@ -1,11 +1,8 @@
+import { Request, Response, NextFunction } from 'express';
 import { container } from 'tsyringe';
-import { Router } from 'express';
 import { GetAnimalBySpeciesService } from '../../../application/animals/services/GetAnimalBySpeciesService';
-import { NotFoundError } from '../../../shared/errors/NotFoundError';
 
-const router = Router();
-
-router.get('/species/:species', async (req, res, next) => {
+export async function getAnimalBySpecies(req: Request, res: Response, next: NextFunction) {
   try {
     const service = container.resolve(GetAnimalBySpeciesService);
     const animals = await service.execute(req.params.species);
@@ -13,6 +10,4 @@ router.get('/species/:species', async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
-
-export default router;
+}

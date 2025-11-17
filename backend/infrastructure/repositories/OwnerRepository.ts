@@ -29,6 +29,10 @@ export class OwnerRepository implements IOwnerRepository {
     return !!owner.affected && owner.affected > 0;
   }
 
+  async save(owner: Owner): Promise<Owner> {
+    return await this.ormRepo.save(owner);
+  }
+
   async findAll(): Promise<Owner[]> {
     return await this.ormRepo.find({ relations: ['pets'] });
   }
@@ -44,5 +48,9 @@ export class OwnerRepository implements IOwnerRepository {
 
   async findByEmail(email: string): Promise<Owner | null> {
     return await this.ormRepo.findOne({ where: { email }, relations: ['pets'] });
+  }
+
+  async findByPhone(phone: string): Promise<Owner | null> {
+    return await this.ormRepo.findOne({ where: { phone } });
   }
 }

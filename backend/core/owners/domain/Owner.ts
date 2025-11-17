@@ -12,7 +12,7 @@ export class Owner {
   @Column({ unique: true })
   email!: string;
 
-  @Column()
+  @Column({ unique: true })
   phone!: string;
 
   @OneToMany(() => Pet, (pet) => pet.owner)
