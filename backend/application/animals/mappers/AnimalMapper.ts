@@ -1,15 +1,16 @@
 import { Animal } from '../../../core/animals/domain/Animal';
 import { AnimalResponseDTO } from '../dto/AnimalResponseDTO';
+import { capitalize } from '../../../shared/utils/stringUtils';
 
 export class AnimalMapper {
   static toDTO(animal: Animal): AnimalResponseDTO {
     return {
       id: animal.id,
-      species: animal.species,
+      species: capitalize(animal.species),
       breeds:
         animal.breeds?.map((b) => ({
           id: b.id,
-          name: b.name,
+          name: capitalize(b.name),
         })) ?? [],
     };
   }

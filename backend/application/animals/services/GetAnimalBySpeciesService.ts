@@ -9,7 +9,8 @@ export class GetAnimalBySpeciesService {
   constructor(@inject('AnimalRepository') private repo: IAnimalRepository) {}
 
   async execute(species: string): Promise<AnimalResponseDTO> {
-    const animal = await this.repo.findBySpecies(species);
+    const normalized = species.toLowerCase();
+    const animal = await this.repo.findBySpecies(normalized);
 
     if (!animal) {
       throw new NotFoundError(`Animal with species:  ${species} not found`);
