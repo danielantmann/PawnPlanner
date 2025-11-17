@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import express from 'express';
 import { AppDataSource } from '../infrastructure/orm/data-source';
-import '../infrastructure/container';
+import '../container';
 
 // Importa tus rutas
 import petsRoutes from './routes/pets';

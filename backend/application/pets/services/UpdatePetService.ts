@@ -1,9 +1,9 @@
 import { IPetRepository } from '../../../core/pets/domain/IPetRepository';
 import { PetResponseDTO } from '../dto/PetResponseDTO';
 import { PetMapper } from '../mappers/PetMapper';
-import { UpdatePetDTO } from '../dto/UpdatePetDTO';
 import { injectable, inject } from 'tsyringe';
 import { NotFoundError } from '../../../shared/errors/NotFoundError';
+import { UpdatePetDTO } from '../dto/UpdatePetDTO';
 
 @injectable()
 export class UpdatePetService {
@@ -15,7 +15,6 @@ export class UpdatePetService {
       birthDate: dto.birthDate ? new Date(dto.birthDate) : undefined,
       importantNotes: dto.importantNotes,
       quickNotes: dto.quickNotes,
-      // owner y breed se añadirán más adelante
     });
 
     if (!updated) {

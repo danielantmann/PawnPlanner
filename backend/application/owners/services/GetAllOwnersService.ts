@@ -5,7 +5,7 @@ import { OwnerResponseDTO } from '../dto/OwnerResponseDTO';
 import { OwnerMapper } from '../mappers/OwnerMapper';
 
 @injectable()
-export class GetAllOwnerService {
+export class GetAllOwnersService {
   constructor(@inject('OwnerRepository') private repo: IOwnerRepository) {}
 
   async execute(): Promise<OwnerResponseDTO[]> {

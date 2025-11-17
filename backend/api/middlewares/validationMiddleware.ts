@@ -17,5 +17,6 @@ export function validationMiddleware(type: any) {
     }
 
     req.body = dto;
+    next();
   };
 }

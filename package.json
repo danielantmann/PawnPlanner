@@ -12,7 +12,8 @@
     "web": "expo start --web",
     "backend": "ts-node-dev --respawn --project backend/tsconfig.json backend/api/server.ts",
     "frontend": "expo start",
-    "dev": "npm run backend & npm run frontend"
+    "dev": "npm run backend & npm run frontend",
+    "seed": "ts-node backend/infrastructure/seed.ts"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",

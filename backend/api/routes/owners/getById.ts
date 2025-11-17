@@ -7,7 +7,7 @@ const router = Router();
 router.get('/:id', async (req, res, next) => {
   try {
     const service = container.resolve(GetOwnerByIdService);
-    const result = service.execute(Number(req.params.id));
+    const result = await service.execute(Number(req.params.id));
     res.status(200).json(result);
   } catch (error) {
     next(error);

@@ -6,7 +6,7 @@ import { OwnerMapper } from '../mappers/OwnerMapper';
 
 @injectable()
 export class GetOwnerByIdService {
-  constructor(@inject('OwnerRespostitory') private repo: IOwnerRepository) {}
+  constructor(@inject('OwnerRepository') private repo: IOwnerRepository) {}
 
   async execute(id: number): Promise<OwnerResponseDTO> {
     const owner = await this.repo.findById(id);

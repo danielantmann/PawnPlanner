@@ -8,7 +8,10 @@ router.delete('/:id', async (req, res, next) => {
   try {
     const service = container.resolve(DeleteOwnerService);
     await service.execute(Number(req.params.id));
-    res.status(204).send();
+    res.status(200).json({
+      deleted: true,
+      message: `Owner ${req.params.id} deleted`,
+    });
   } catch (error) {
     next(error);
   }

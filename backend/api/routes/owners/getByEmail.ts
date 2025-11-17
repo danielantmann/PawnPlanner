@@ -7,7 +7,7 @@ const router = Router();
 router.get('/email/:email', async (req, res, next) => {
   try {
     const service = container.resolve(GetOwnerByEmailService);
-    const result = service.execute(req.params.email);
+    const result = await service.execute(req.params.email);
     res.status(200).json(result);
   } catch (error) {
     next(error);
