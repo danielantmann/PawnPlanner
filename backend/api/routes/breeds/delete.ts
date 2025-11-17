@@ -5,16 +5,13 @@ import { NotFoundError } from '../../../shared/errors/NotFoundError';
 
 const router = Router();
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', async (req, res, next) => {
   try {
     const service = container.resolve(DeleteBreedService);
     await service.execute(Number(req.params.id));
     res.status(204).send();
   } catch (error) {
-    if (error instanceof NotFoundError) {
-      return res.status(404).json({ error: error.message });
-    }
-    res.status(500).json({ error: 'Internal server error' });
+    next();
   }
 });
 

@@ -8,17 +8,15 @@ import { ValidationError } from '../../../shared/errors/ValidationError';
 
 const router = Router();
 
-router.put('/:id', validationMiddleware(UpdateAnimalDTO), async (req, res) => {
+router.put('/:id', validationMiddleware(UpdateAnimalDTO), async (req, res, next) => {
   try {
     const service = container.resolve(UpdateAnimalService);
     const id = Number(req.params.id);
-    const animal = await service.execute(id, req.body);
+
+    const animal = await service.execute(id, req.body as UpdateAnimalDTO);
     res.status(200).json(animal);
   } catch (error) {
-    if (error instanceof NotFoundError) {
-      return res.status(404).json({ error: error.message });
-    }
-    res.status(500).json({ error: 'Internal server error' });
+    next(error);
   }
 });
 

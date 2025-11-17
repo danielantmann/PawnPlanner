@@ -11,7 +11,7 @@ export class UpdateAnimalService {
 
   async execute(id: number, dto: UpdateAnimalDTO): Promise<AnimalResponseDTO> {
     const updated = await this.repo.update(id, {
-      species: dto.species,
+      species: dto.species.toLowerCase(),
     });
 
     if (!updated) {

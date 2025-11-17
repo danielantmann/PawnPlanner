@@ -18,7 +18,7 @@ export class CreateAnimalService {
     }
 
     const animal = new Animal();
-    animal.species = dto.species;
+    animal.species = dto.species.toLowerCase();
 
     const saved = await this.repo.create(animal);
     return AnimalMapper.toDTO(saved);

@@ -18,33 +18,33 @@ async function seed() {
 
   // Insertar datos iniciales
   const owner1 = AppDataSource.getRepository(Owner).create({
-    name: 'Daniel',
+    name: 'daniel',
     email: 'daniel@example.com',
     phone: '+34123456789',
   });
   await AppDataSource.getRepository(Owner).save(owner1);
 
-  const animalDog = AppDataSource.getRepository(Animal).create({ species: 'Dog' });
-  const animalCat = AppDataSource.getRepository(Animal).create({ species: 'Cat' });
+  const animalDog = AppDataSource.getRepository(Animal).create({ species: 'dog' });
+  const animalCat = AppDataSource.getRepository(Animal).create({ species: 'cat' });
   await AppDataSource.getRepository(Animal).save([animalDog, animalCat]);
 
   const breedLabrador = AppDataSource.getRepository(Breed).create({
-    name: 'Labrador',
+    name: 'labrador',
     animal: animalDog,
   });
   const breedSiamese = AppDataSource.getRepository(Breed).create({
-    name: 'Siamese',
+    name: 'siamese',
     animal: animalCat,
   });
   await AppDataSource.getRepository(Breed).save([breedLabrador, breedSiamese]);
 
   const pet1 = AppDataSource.getRepository(Pet).create({
-    name: 'Firulais',
+    name: 'firulais',
     owner: owner1,
     breed: breedLabrador,
   });
   const pet2 = AppDataSource.getRepository(Pet).create({
-    name: 'Luna',
+    name: 'luna',
     owner: owner1,
     breed: breedSiamese,
   });
