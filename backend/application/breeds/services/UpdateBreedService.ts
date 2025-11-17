@@ -10,15 +10,19 @@ export class UpdateBreedService {
   constructor(@inject('BreedRepository') private breedRepo: IBreedRepository) {}
 
   async execute(id: number, dto: UpdateBreedDTO): Promise<BreedResponseDTO> {
-    const updated = await this.breedRepo.update(id, {
-      name: dto.name,
-      animal: dto.animalId ? ({ id: dto.animalId } as any) : undefined,
-    });
-
-    if (!updated) {
+    const breed = await this.breedRepo.findById(id);
+    if (!breed) {
       throw new NotFoundError(`Breed with id ${id} not found`);
     }
 
-    return BreedMapper.toDTO(updated);
+    if (dto.name !== undefined) {
+      breed.name = dto.name;
+    }
+    if (dto.animalId !== undefined) {
+      breed.animal = { id: dto.animalId } as any;
+    }
+
+    const saved = await this.breedRepo.save(breed);
+    return BreedMapper.toDTO(saved);
   }
 }

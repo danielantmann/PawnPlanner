@@ -1,17 +1,13 @@
-import { Router } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { container } from 'tsyringe';
 import { GetAllBreedsService } from '../../../application/breeds/services/GetAllBreedsService';
 
-const router = Router();
-
-router.get('/', async (_req, res) => {
+export async function getAllBreeds(_req: Request, res: Response, next: NextFunction) {
   try {
     const service = container.resolve(GetAllBreedsService);
     const breeds = await service.execute();
     res.status(200).json(breeds);
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    next(error);
   }
-});
-
-export default router;
+}

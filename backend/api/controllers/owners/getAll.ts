@@ -1,10 +1,8 @@
-import { Router } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { container } from 'tsyringe';
 import { GetAllOwnersService } from '../../../application/owners/services/GetAllOwnersService';
 
-const router = Router();
-
-router.get('/', async (_req, res, next) => {
+export async function getAllOwners(_req: Request, res: Response, next: NextFunction) {
   try {
     const service = container.resolve(GetAllOwnersService);
     const results = await service.execute();
@@ -12,6 +10,4 @@ router.get('/', async (_req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
-
-export default router;
+}

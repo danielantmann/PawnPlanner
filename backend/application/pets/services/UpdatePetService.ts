@@ -4,22 +4,32 @@ import { PetMapper } from '../mappers/PetMapper';
 import { injectable, inject } from 'tsyringe';
 import { NotFoundError } from '../../../shared/errors/NotFoundError';
 import { UpdatePetDTO } from '../dto/UpdatePetDTO';
+import { Pet } from '../../../core/pets/domain/Pet';
 
 @injectable()
 export class UpdatePetService {
   constructor(@inject('PetRepository') private petRepo: IPetRepository) {}
 
   async execute(id: number, dto: UpdatePetDTO): Promise<PetResponseDTO> {
-    const updated = await this.petRepo.update(id, {
-      name: dto.name,
-      birthDate: dto.birthDate ? new Date(dto.birthDate) : undefined,
-      importantNotes: dto.importantNotes,
-      quickNotes: dto.quickNotes,
-    });
-
-    if (!updated) {
+    const existing = await this.petRepo.findById(id);
+    if (!existing) {
       throw new NotFoundError(`Pet with id ${id} not found`);
     }
+
+    if (dto.name !== undefined) {
+      existing.name = dto.name;
+    }
+    if (dto.birthDate !== undefined) {
+      existing.birthDate = new Date(dto.birthDate);
+    }
+    if (dto.importantNotes !== undefined) {
+      existing.importantNotes = dto.importantNotes;
+    }
+    if (dto.quickNotes !== undefined) {
+      existing.quickNotes = dto.quickNotes;
+    }
+
+    const updated: Pet = await this.petRepo.save(existing);
 
     return PetMapper.toDTO(updated);
   }

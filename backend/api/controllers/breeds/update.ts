@@ -1,13 +1,9 @@
-import { Router } from 'express';
-import { validationMiddleware } from '../../middlewares/validationMiddleware';
-import { UpdateBreedDTO } from '../../../application/breeds/dto/UpdateBreedDTO';
+import { Request, Response, NextFunction } from 'express';
 import { container } from 'tsyringe';
 import { UpdateBreedService } from '../../../application/breeds/services/UpdateBreedService';
 import { NotFoundError } from '../../../shared/errors/NotFoundError';
 
-const router = Router();
-
-router.put('/:id', validationMiddleware(UpdateBreedDTO), async (req, res) => {
+export async function updateBreed(req: Request, res: Response, next: NextFunction) {
   try {
     const service = container.resolve(UpdateBreedService);
     const id = Number(req.params.id);
@@ -17,8 +13,6 @@ router.put('/:id', validationMiddleware(UpdateBreedDTO), async (req, res) => {
     if (error instanceof NotFoundError) {
       return res.status(404).json({ error: error.message });
     }
-    res.status(500).json({ error: 'Internal server error' });
+    next(error);
   }
-});
-
-export default router;
+}

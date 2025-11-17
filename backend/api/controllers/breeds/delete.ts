@@ -1,18 +1,13 @@
-import { Router } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { container } from 'tsyringe';
 import { DeleteBreedService } from '../../../application/breeds/services/DeleteBreedService';
-import { NotFoundError } from '../../../shared/errors/NotFoundError';
 
-const router = Router();
-
-router.delete('/:id', async (req, res, next) => {
+export async function deleteBreed(req: Request, res: Response, next: NextFunction) {
   try {
     const service = container.resolve(DeleteBreedService);
     await service.execute(Number(req.params.id));
     res.status(204).send();
   } catch (error) {
-    next();
+    next(error);
   }
-});
-
-export default router;
+}

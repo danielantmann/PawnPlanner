@@ -1,10 +1,8 @@
+import { Request, Response, NextFunction } from 'express';
 import { container } from 'tsyringe';
 import { GetOwnerByEmailService } from '../../../application/owners/services/GetOwnerByEmailService';
-import { Router } from 'express';
 
-const router = Router();
-
-router.get('/email/:email', async (req, res, next) => {
+export async function getOwnerByEmail(req: Request, res: Response, next: NextFunction) {
   try {
     const service = container.resolve(GetOwnerByEmailService);
     const result = await service.execute(req.params.email);
@@ -12,6 +10,4 @@ router.get('/email/:email', async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
-
-export default router;
+}
