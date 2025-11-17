@@ -8,20 +8,13 @@ import { ConflictError } from '../../../shared/errors/ConflictError';
 
 const router = Router();
 
-router.post('/', validationMiddleware(CreateAnimalDTO), async (req, res) => {
+router.post('/', validationMiddleware(CreateAnimalDTO), async (req, res, next) => {
   try {
     const service = container.resolve(CreateAnimalService);
     const animal = await service.execute(req.body);
     res.status(201).json(animal);
   } catch (error) {
-    if (error instanceof ValidationError) {
-      return res.status(400).json({ error: error.message });
-    }
-    if (error instanceof ConflictError) {
-      return res.status(409).json({ error: error.message });
-    }
-
-    res.status(500).json({ error: 'Internal server error' });
+    next(error);
   }
 });
 

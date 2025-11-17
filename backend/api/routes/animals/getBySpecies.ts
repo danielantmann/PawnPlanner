@@ -5,16 +5,13 @@ import { NotFoundError } from '../../../shared/errors/NotFoundError';
 
 const router = Router();
 
-router.get('/species/:species', async (req, res) => {
+router.get('/species/:species', async (req, res, next) => {
   try {
     const service = container.resolve(GetAnimalBySpeciesService);
     const animals = await service.execute(req.params.species);
     res.status(200).json(animals);
   } catch (error) {
-    if (error instanceof NotFoundError) {
-      res.status(404).json({ error: error.message });
-    }
-    res.status(500).json({ error: 'Internal server error' });
+    next(error);
   }
 });
 

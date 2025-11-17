@@ -4,13 +4,13 @@ import { GetAllAnimalsService } from '../../../application/animals/services/GetA
 
 const router = Router();
 
-router.get('/', async (_req, res) => {
+router.get('/', async (_req, res, next) => {
   try {
     const service = container.resolve(GetAllAnimalsService);
     const animals = await service.execute();
     res.status(200).json(animals);
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    next(error);
   }
 });
 
