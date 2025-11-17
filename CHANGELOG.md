@@ -261,3 +261,27 @@ Ensured routes catch these exceptions and return proper HTTP codes:
 400 → Bad Request (Validation)
 409 → Conflict
 500 → Internal Server Error
+
+## [Refactor api routes and controllers] - 2025-11-18
+
+Separation of routes and controllers in all entities.
+Refactor of update methods to prevent data loss and ensure safe partial updates.
+Changes
+🔹 Separation of Routes and Controllers
+Extracted routing logic into dedicated route files for each entity.
+Controllers now handle request/response logic exclusively, while routes define endpoints and middleware.
+Improves modularity and makes the API easier to extend and test.
+🔹 Refactor of Update Methods
+Replaced direct update(partialEntity) calls with merge + save pattern.
+Ensures optional fields in DTOs do not overwrite existing values with undefined or NULL.
+Applied consistently across Owner, Breed, Pet, and Animal services.
+Added repository save methods where necessary to support this pattern.
+Benefits
+✅ Clearer separation of concerns between routing and business logic.
+✅ Safer update operations that preserve existing data when DTOs are partial.
+✅ Consistent architecture across all entities.
+✅ Easier debugging and future feature development.
+Notes
+All existing tests should continue to pass.
+This refactor does not introduce new endpoints, but improves reliability of current ones.
+Future work: consider adding integration tests specifically for partial updates.
