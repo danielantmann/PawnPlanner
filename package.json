@@ -10,18 +10,14 @@
     "lint": "eslint \"**/*.{js,jsx,ts,tsx}\" && prettier -c \"**/*.{js,jsx,ts,tsx,json}\"",
     "format": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix && prettier \"**/*.{js,jsx,ts,tsx,json}\" --write",
     "web": "expo start --web",
-    "backend": "ts-node-dev --respawn --project backend/tsconfig.json backend/api/server.ts",
+    "backend": "cd backend && npm run dev",
     "frontend": "expo start",
-    "dev": "npm run backend & npm run frontend",
-    "seed": "ts-node backend/infrastructure/seed.ts"
+    "dev": "npm run backend & npm run frontend"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",
     "@react-navigation/native": "^7.1.6",
     "axios": "^1.13.2",
-    "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.2",
-    "dotenv": "^17.2.3",
     "expo": "^54.0.0",
     "expo-constants": "~18.0.9",
     "expo-linking": "~8.0.8",
@@ -29,7 +25,6 @@
     "expo-status-bar": "~3.0.8",
     "expo-system-ui": "~6.0.7",
     "expo-web-browser": "~15.0.7",
-    "express": "^5.1.0",
     "nativewind": "latest",
     "react": "19.1.0",
     "react-dom": "19.1.0",
@@ -39,26 +34,17 @@
     "react-native-safe-area-context": "~5.6.0",
     "react-native-screens": "~4.16.0",
     "react-native-web": "^0.21.0",
-    "react-native-worklets": "0.5.1",
-    "reflect-metadata": "^0.2.2",
-    "sqlite3": "^5.1.7",
-    "tsyringe": "^4.10.0",
-    "typeorm": "^0.3.27"
+    "react-native-worklets": "0.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "@types/express": "^5.0.5",
-    "@types/node": "^24.10.0",
     "@types/react": "~19.1.10",
     "eslint": "^9.25.1",
     "eslint-config-expo": "~10.0.0",
     "eslint-config-prettier": "^10.1.2",
-    "nodemon": "^3.1.10",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.11",
     "tailwindcss": "^3.4.0",
-    "ts-node": "^10.9.2",
-    "ts-node-dev": "^2.0.0",
     "typescript": "~5.9.2"
   },
   "private": true
