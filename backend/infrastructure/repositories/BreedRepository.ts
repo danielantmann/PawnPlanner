@@ -2,14 +2,14 @@ import { injectable } from 'tsyringe';
 import { IBreedRepository } from '../../core/breeds/domain/IBreedRepository';
 import { Breed } from '../../core/breeds/domain/Breed';
 import { Repository } from 'typeorm';
-import { AppDataSource } from '../orm/data-source';
+import { dataSource } from '../orm';
 
 @injectable()
 export class BreedRepository implements IBreedRepository {
   private ormRepo: Repository<Breed>;
 
   constructor() {
-    this.ormRepo = AppDataSource.getRepository(Breed);
+    this.ormRepo = dataSource.getRepository(Breed);
   }
 
   async save(breed: Breed): Promise<Breed> {

@@ -1,23 +1,23 @@
 import { injectable } from 'tsyringe';
 import { IOwnerRepository } from '../../core/owners/domain/IOwnerRepository';
-import { AppDataSource } from '../orm/data-source';
 import { Repository } from 'typeorm';
 import { Owner } from '../../core/owners/domain/Owner';
+import { dataSource } from '../orm';
 
 @injectable()
 export class OwnerRepository implements IOwnerRepository {
   private ormRepo: Repository<Owner>;
 
   constructor() {
-    this.ormRepo = AppDataSource.getRepository(Owner);
+    this.ormRepo = dataSource.getRepository(Owner);
   }
+
   async create(owner: Owner): Promise<Owner> {
     return await this.ormRepo.save(owner);
   }
 
   async update(id: number, owner: Partial<Owner>): Promise<Owner | null> {
     const existingOwner = await this.ormRepo.findOne({ where: { id } });
-
     if (!existingOwner) return null;
 
     const updateOwner = Object.assign(existingOwner, owner);

@@ -6,13 +6,13 @@ export class Owner {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ type: 'varchar', length: 255 })
   name!: string;
 
-  @Column({ unique: true })
+  @Column({ type: 'varchar', length: 255, unique: true })
   email!: string;
 
-  @Column({ unique: true })
+  @Column({ type: 'varchar', length: 20, unique: true })
   phone!: string;
 
   @OneToMany(() => Pet, (pet) => pet.owner)

@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Pet } from '../../pets/domain/Pet';
-import { Service } from '../../services/domian/Service';
+import { Service } from '../../services/domain/Service';
 
 @Entity('appointments')
 export class Appointment {

@@ -16,10 +16,10 @@ export class Breed {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ type: 'varchar', length: 100 })
   name!: string;
 
-  @Column()
+  @Column({ type: 'int' })
   animalId!: number;
 
   @ManyToOne(() => Animal, (animal) => animal.breeds, { onDelete: 'CASCADE' })

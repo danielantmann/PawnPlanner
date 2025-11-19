@@ -6,7 +6,7 @@ export class Animal {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ type: 'varchar', length: 100 })
   species!: string;
 
   @OneToMany(() => Breed, (breed) => breed.animal)

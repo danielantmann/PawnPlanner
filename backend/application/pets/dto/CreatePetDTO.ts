@@ -36,6 +36,7 @@ export class CreatePetDTO {
   @Length(2, 50, { message: 'Name must be between 2 and 50 characters' })
   name!: string;
 
+  @IsOptional()
   @IsDateString({}, { message: 'BirthDate must be a valid date string (YYYY-MM-DD)' })
   birthDate!: string;
 
