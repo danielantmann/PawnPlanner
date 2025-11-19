@@ -8,6 +8,7 @@ export class PetMapper {
       id: id,
       name: name,
       birthDate: birthDate,
+      ownerId: owner?.id ?? null,
       ownerName: owner?.name ?? '',
       ownerPhone: owner?.phone ?? '',
       breed: breed?.name ?? '',

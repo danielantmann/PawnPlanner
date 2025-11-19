@@ -57,7 +57,9 @@ export class CreatePetService {
     // --- Pet ---
     const pet = new Pet();
     pet.name = dto.name;
-    pet.birthDate = new Date(dto.birthDate);
+    if (dto.birthDate) {
+      pet.birthDate = new Date(dto.birthDate);
+    }
     pet.importantNotes = dto.importantNotes;
     pet.quickNotes = dto.quickNotes;
     pet.owner = owner;

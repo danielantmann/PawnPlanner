@@ -38,7 +38,10 @@ export class OwnerRepository implements IOwnerRepository {
   }
 
   async findById(id: number): Promise<Owner | null> {
-    return await this.ormRepo.findOne({ where: { id }, relations: ['pets'] });
+    return await this.ormRepo.findOne({
+      where: { id },
+      relations: ['pets'],
+    });
   }
 
   async findByName(name: string): Promise<Owner[] | null> {
