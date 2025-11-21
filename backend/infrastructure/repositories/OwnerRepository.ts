@@ -52,10 +52,15 @@ export class OwnerRepository implements IOwnerRepository {
   }
 
   async findByEmail(email: string): Promise<Owner | null> {
-    return await this.ormRepo.findOne({ where: { email }, relations: ['pets'] });
+    return await this.ormRepo.findOne({
+      where: { email: email.toLowerCase().trim() },
+      relations: ['pets'],
+    });
   }
 
   async findByPhone(phone: string): Promise<Owner | null> {
-    return await this.ormRepo.findOne({ where: { phone } });
+    return await this.ormRepo.findOne({
+      where: { phone: phone.trim() },
+    });
   }
 }
