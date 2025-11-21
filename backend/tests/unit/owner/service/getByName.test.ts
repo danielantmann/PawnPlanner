@@ -1,11 +1,10 @@
-import { GetPetByNameService } from './../../../../application/pets/services/GetPetByNameService';
 import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import app from '../../../../api/app';
 import '../../../setup/test-setup';
 
 describe('Owner Service - GetByName', () => {
-  it('should return 404 for non-existing owner', async () => {
+  it('should return 200 and empty array, for non-existing owner', async () => {
     const res = await request(app).get('/owners/name/pepe');
     expect(res.status).toBe(200);
     expect(res.body).toEqual([]);
