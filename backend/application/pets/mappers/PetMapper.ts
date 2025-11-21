@@ -1,4 +1,5 @@
 import { Pet } from '../../../core/pets/domain/Pet';
+import { capitalize } from '../../../shared/utils/stringUtils';
 import { PetResponseDTO } from '../dto/PetResponseDTO';
 
 export class PetMapper {
@@ -6,10 +7,10 @@ export class PetMapper {
     const { id, name, birthDate, owner, breed, importantNotes, quickNotes } = pet;
     return {
       id: id,
-      name: name,
+      name: capitalize(name),
       birthDate: birthDate,
       ownerId: owner?.id ?? null,
-      ownerName: owner?.name ?? '',
+      ownerName: capitalize(owner?.name) ?? '',
       ownerPhone: owner?.phone ?? '',
       breed: breed?.name ?? '',
       importantNotes: importantNotes,

@@ -6,6 +6,8 @@ import {
   OneToMany,
   Unique,
   JoinColumn,
+  BeforeInsert,
+  BeforeUpdate,
 } from 'typeorm';
 import { Animal } from '../../animals/domain/Animal';
 import { Pet } from '../../pets/domain/Pet';
@@ -28,4 +30,12 @@ export class Breed {
 
   @OneToMany(() => Pet, (pet) => pet.breed)
   pets!: Pet[];
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  normalizeName() {
+    if (this.name) {
+      this.name = this.name.toLowerCase().trim();
+    }
+  }
 }

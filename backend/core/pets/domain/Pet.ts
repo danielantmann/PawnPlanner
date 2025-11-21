@@ -1,4 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  ManyToOne,
+  BeforeInsert,
+  BeforeUpdate,
+} from 'typeorm';
 import { Owner } from '../../owners/domain/Owner';
 import { Breed } from '../../breeds/domain/Breed';
 import { Appointment } from '../../appointments/domain/Appointment';
@@ -28,4 +36,13 @@ export class Pet {
 
   @OneToMany(() => Appointment, (appointment) => appointment.pet)
   appointments!: Appointment[];
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  normalizeName() {
+    if (this.name) {
+      // aquí puedes decidir: minúsculas o capitalizar
+      this.name = this.name.toLowerCase().trim();
+    }
+  }
 }
