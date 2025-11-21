@@ -1,4 +1,4 @@
-import { GetPetByNameService } from './../../../../application/pets/services/GetPetByNameService';
+import { GetPetByNameService } from '../../../../application/pets/services/GetPetByNameService';
 import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import app from '../../../../api/app';

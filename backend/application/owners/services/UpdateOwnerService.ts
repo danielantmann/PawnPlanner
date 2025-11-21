@@ -3,7 +3,7 @@ import { IOwnerRepository } from '../../../core/owners/domain/IOwnerRepository';
 import { UpdateOwnerDTO } from '../dto/UpdateOwnerDTO';
 import { OwnerResponseDTO } from '../dto/OwnerResponseDTO';
 import { NotFoundError } from '../../../shared/errors/NotFoundError';
-import { Owner } from '../../../core/owners/domain/Owner';
+import { ConflictError } from '../../../shared/errors/ConflictError';
 import { OwnerMapper } from '../mappers/OwnerMapper';
 
 @injectable()
@@ -16,14 +16,26 @@ export class UpdateOwnerService {
       throw new NotFoundError(`Owner with id:${id} not found`);
     }
 
-    if (dto.name !== undefined) {
-      owner.name = dto.name;
+    // comprobación de duplicados antes de actualizar
+    if (dto.email) {
+      const existingByEmail = await this.repo.findByEmail(dto.email);
+      if (existingByEmail && existingByEmail.id !== id) {
+        throw new ConflictError(`Owner with email ${dto.email} already exists`);
+      }
+      owner.email = dto.email;
     }
-    if (dto.phone !== undefined) {
+
+    if (dto.phone) {
+      const existingByPhone = await this.repo.findByPhone(dto.phone);
+      if (existingByPhone && existingByPhone.id !== id) {
+        throw new ConflictError(`Owner with phone ${dto.phone} already exists`);
+      }
       owner.phone = dto.phone;
     }
-    if (dto.email !== undefined) {
-      owner.email = dto.email;
+
+    if (dto.name) {
+      // aquí decides si normalizas o no; si quieres respetar mayúsculas, no toques el valor
+      owner.name = dto.name;
     }
 
     const saved = await this.repo.save(owner);
