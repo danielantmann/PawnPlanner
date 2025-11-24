@@ -285,3 +285,49 @@ Notes
 All existing tests should continue to pass.
 This refactor does not introduce new endpoints, but improves reliability of current ones.
 Future work: consider adding integration tests specifically for partial updates.
+
+# [Unit and Integration Tests for Owner Module] - 2025-11-24
+
+## Overview
+
+This PR introduces a complete testing suite for the **Owner** module, covering both unit and integration layers.  
+The goal is to ensure reproducibility, consistency, and full coverage of business logic and API behavior.
+
+## Unit Tests
+
+- Added unit tests for all Owner services:
+  - `createOwner`
+  - `updateOwner`
+  - `deleteOwner`
+  - `getOwnerById`
+  - `getOwnerByEmail`
+  - `getOwnerByName`
+  - `getAllOwners`
+- Verified that services throw the correct domain errors (`NotFoundError`, `ConflictError`, `ValidationError`).
+- Covered edge cases such as duplicate emails, missing owners, and invalid DTOs.
+- Added unit tests for `OwnerMapper`:
+  - Ensures names are normalized to **TitleCase**.
+  - Handles empty and non-empty pets arrays.
+  - Guarantees DTO consistency across all fields.
+
+## Integration Tests
+
+- Added integration tests for API endpoints (`/owners`):
+  - **Happy paths**: create, update, delete, and fetch owners.
+  - **Error cases**:
+    - `404 Not Found` when owner does not exist.
+    - `409 Conflict` when creating with duplicate email.
+    - `400 Bad Request` when DTO validation fails.
+  - **Normalization**: verified that names are normalized to TitleCase in the real API flow.
+  - **Validation errors**: ensured the API returns proper `errors` array with `property` and `constraints`.
+
+## Benefits
+
+- Ensures the Owner module is fully **blindado** (bulletproof) with both unit and integration coverage.
+- Provides confidence that business logic and API responses behave consistently.
+- Establishes a clear testing pattern for future modules (e.g., pets, breeds, animals).
+
+## Next Steps
+
+- Consider adding JWT authentication to protect endpoints and demonstrate security practices.
+- Update Postman documentation to reflect error formats and normalization behavior.
