@@ -7,7 +7,7 @@ export interface IOwnerRepository {
   save(owner: Owner): Promise<Owner>;
   findAll(): Promise<Owner[]>;
   findById(id: number): Promise<Owner | null>;
-  findByName(name: string): Promise<Owner[] | null>;
+  findByName(name: string): Promise<Owner[]>;
   findByEmail(email: string): Promise<Owner | null>;
   findByPhone(phone: string): Promise<Owner | null>;
 }

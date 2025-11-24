@@ -6,6 +6,8 @@ import {
   OneToMany,
   Unique,
   JoinColumn,
+  BeforeInsert,
+  BeforeUpdate,
 } from 'typeorm';
 import { Animal } from '../../animals/domain/Animal';
 import { Pet } from '../../pets/domain/Pet';
@@ -16,10 +18,10 @@ export class Breed {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ type: 'varchar', length: 100 })
   name!: string;
 
-  @Column()
+  @Column({ type: 'int' })
   animalId!: number;
 
   @ManyToOne(() => Animal, (animal) => animal.breeds, { onDelete: 'CASCADE' })
@@ -28,4 +30,12 @@ export class Breed {
 
   @OneToMany(() => Pet, (pet) => pet.breed)
   pets!: Pet[];
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  normalizeName() {
+    if (this.name) {
+      this.name = this.name.toLowerCase().trim();
+    }
+  }
 }

@@ -1,16 +1,17 @@
 import { Repository } from 'typeorm';
 import { injectable } from 'tsyringe';
 import { IAnimalRepository } from '../../core/animals/domain/IAnimalRepository';
-import { AppDataSource } from '../orm/data-source';
 import { Animal } from '../../core/animals/domain/Animal';
+import { dataSource } from '../orm';
 
 @injectable()
 export class AnimalRepository implements IAnimalRepository {
   private ormRepo: Repository<Animal>;
 
   constructor() {
-    this.ormRepo = AppDataSource.getRepository(Animal);
+    this.ormRepo = dataSource.getRepository(Animal);
   }
+
   async create(animal: Animal): Promise<Animal> {
     return await this.ormRepo.save(animal);
   }
@@ -35,6 +36,7 @@ export class AnimalRepository implements IAnimalRepository {
   async findById(id: number): Promise<Animal | null> {
     return await this.ormRepo.findOne({ where: { id }, relations: ['breeds'] });
   }
+
   async findBySpecies(species: string): Promise<Animal | null> {
     return await this.ormRepo.findOne({ where: { species }, relations: ['breeds'] });
   }

@@ -2,14 +2,14 @@ import { injectable } from 'tsyringe';
 import { Repository } from 'typeorm';
 import { Pet } from '../../core/pets/domain/Pet';
 import { IPetRepository } from '../../core/pets/domain/IPetRepository';
-import { AppDataSource } from '../orm/data-source';
+import { dataSource } from '../orm';
 
 @injectable()
 export class PetRepository implements IPetRepository {
   private ormRepo: Repository<Pet>;
 
   constructor() {
-    this.ormRepo = AppDataSource.getRepository(Pet);
+    this.ormRepo = dataSource.getRepository(Pet);
   }
 
   async save(pet: Pet): Promise<Pet> {

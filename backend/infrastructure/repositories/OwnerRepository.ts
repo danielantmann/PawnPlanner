@@ -1,23 +1,23 @@
 import { injectable } from 'tsyringe';
 import { IOwnerRepository } from '../../core/owners/domain/IOwnerRepository';
-import { AppDataSource } from '../orm/data-source';
 import { Repository } from 'typeorm';
 import { Owner } from '../../core/owners/domain/Owner';
+import { dataSource } from '../orm';
 
 @injectable()
 export class OwnerRepository implements IOwnerRepository {
   private ormRepo: Repository<Owner>;
 
   constructor() {
-    this.ormRepo = AppDataSource.getRepository(Owner);
+    this.ormRepo = dataSource.getRepository(Owner);
   }
+
   async create(owner: Owner): Promise<Owner> {
     return await this.ormRepo.save(owner);
   }
 
   async update(id: number, owner: Partial<Owner>): Promise<Owner | null> {
     const existingOwner = await this.ormRepo.findOne({ where: { id } });
-
     if (!existingOwner) return null;
 
     const updateOwner = Object.assign(existingOwner, owner);
@@ -38,19 +38,29 @@ export class OwnerRepository implements IOwnerRepository {
   }
 
   async findById(id: number): Promise<Owner | null> {
-    return await this.ormRepo.findOne({ where: { id }, relations: ['pets'] });
+    return await this.ormRepo.findOne({
+      where: { id },
+      relations: ['pets'],
+    });
   }
 
-  async findByName(name: string): Promise<Owner[] | null> {
-    const owners = await this.ormRepo.find({ where: { name } });
-    return owners.length > 0 ? owners : null;
+  async findByName(name: string): Promise<Owner[]> {
+    return await this.ormRepo.find({
+      where: { name: name.toLowerCase().trim() },
+      relations: ['pets'],
+    });
   }
 
   async findByEmail(email: string): Promise<Owner | null> {
-    return await this.ormRepo.findOne({ where: { email }, relations: ['pets'] });
+    return await this.ormRepo.findOne({
+      where: { email: email.toLowerCase().trim() },
+      relations: ['pets'],
+    });
   }
 
   async findByPhone(phone: string): Promise<Owner | null> {
-    return await this.ormRepo.findOne({ where: { phone } });
+    return await this.ormRepo.findOne({
+      where: { phone: phone.trim() },
+    });
   }
 }

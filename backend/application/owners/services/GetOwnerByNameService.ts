@@ -10,11 +10,7 @@ export class GetOwnerByNameService {
 
   async execute(name: string): Promise<OwnerResponseDTO[]> {
     const owners = await this.repo.findByName(name);
-
-    if (!owners || owners.length === 0) {
-      throw new NotFoundError(`Owners not found with  the name: ${name}`);
-    }
-
+    // devolvemos array vacío si no hay coincidencias
     return OwnerMapper.toDTOs(owners);
   }
 }
