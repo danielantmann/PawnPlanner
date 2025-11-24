@@ -8,6 +8,7 @@ import { Appointment } from '../../core/appointments/domain/Appointment';
 import { Service } from '../../core/services/domain/Service';
 import { Breed } from '../../core/breeds/domain/Breed';
 import { Animal } from '../../core/animals/domain/Animal';
+import { User } from '../../core/users/domain/User';
 
 dotenv.config();
 export const AppDataSource = new DataSource({
@@ -15,5 +16,5 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_PATH,
   synchronize: process.env.TYPEORM_SYNC === 'true',
   logging: process.env.TYPEORM_LOGGING === 'true',
-  entities: [Pet, Owner, Appointment, Service, Breed, Animal],
+  entities: [Pet, Owner, Appointment, Service, Breed, Animal, User],
 });

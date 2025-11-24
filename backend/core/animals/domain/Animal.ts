@@ -5,8 +5,11 @@ import {
   OneToMany,
   BeforeInsert,
   BeforeUpdate,
+  JoinColumn,
+  ManyToOne,
 } from 'typeorm';
 import { Breed } from '../../breeds/domain/Breed';
+import { User } from '../../users/domain/User';
 
 @Entity('animals')
 export class Animal {
@@ -15,6 +18,13 @@ export class Animal {
 
   @Column({ type: 'varchar', length: 100 })
   species!: string;
+
+  @Column({ type: 'int' })
+  userId!: number;
+
+  @ManyToOne(() => User, (user) => user.animals, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
+  createdByUser!: User;
 
   @OneToMany(() => Breed, (breed) => breed.animal)
   breeds!: Breed[];

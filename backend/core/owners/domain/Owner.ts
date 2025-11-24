@@ -5,8 +5,11 @@ import {
   OneToMany,
   BeforeInsert,
   BeforeUpdate,
+  JoinColumn,
+  ManyToOne,
 } from 'typeorm';
 import { Pet } from '../../pets/domain/Pet';
+import { User } from '../../users/domain/User';
 
 @Entity('owners')
 export class Owner {
@@ -24,6 +27,13 @@ export class Owner {
 
   @OneToMany(() => Pet, (pet) => pet.owner)
   pets!: Pet[];
+
+  @Column({ type: 'int' })
+  userId!: number;
+
+  @ManyToOne(() => User, (user) => user.owners, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
+  createdByUser!: User;
 
   @BeforeInsert()
   @BeforeUpdate()

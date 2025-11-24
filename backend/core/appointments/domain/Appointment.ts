@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { Pet } from '../../pets/domain/Pet';
 import { Service } from '../../services/domain/Service';
+import { User } from '../../users/domain/User';
 
 @Entity('appointments')
 export class Appointment {
@@ -15,6 +16,10 @@ export class Appointment {
 
   @Column({ type: 'text', nullable: true })
   notes?: string;
+
+  @ManyToOne(() => User, (user) => user.animals, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
+  createdByUser!: User;
 
   @ManyToOne(() => Pet, (pet) => pet.appointments, { onDelete: 'CASCADE' })
   pet!: Pet;
