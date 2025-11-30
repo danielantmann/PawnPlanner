@@ -1,4 +1,4 @@
-import { UserResponseDTO } from './UserResponseDTO';
+import { UserResponseDTO } from '../../users/dto/UserResponseDTO';
 
 export class LoginResponseDTO {
   accessToken!: string;

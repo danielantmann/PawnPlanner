@@ -20,6 +20,15 @@ export class User {
   @PrimaryGeneratedColumn()
   id!: number;
 
+  @Column({ type: 'varchar', length: 100 })
+  firstName!: string;
+
+  @Column({ type: 'varchar', length: 100 })
+  lastName!: string;
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  secondLastName?: string;
+
   @Column({ type: 'varchar', length: 150 })
   email!: string;
 
@@ -46,9 +55,18 @@ export class User {
 
   @BeforeInsert()
   @BeforeUpdate()
-  normalizeEmail() {
+  normalizeFields() {
     if (this.email) {
       this.email = this.email.toLowerCase().trim();
+    }
+    if (this.firstName) {
+      this.firstName = this.firstName.toLowerCase().trim();
+    }
+    if (this.lastName) {
+      this.lastName = this.lastName.toLowerCase().trim();
+    }
+    if (this.secondLastName) {
+      this.secondLastName = this.secondLastName.toLowerCase().trim();
     }
   }
 }

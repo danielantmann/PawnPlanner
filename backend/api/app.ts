@@ -7,6 +7,7 @@ import petsRoutes from './routes/pets';
 import breedsRoutes from './routes/breeds';
 import animalsRoutes from './routes/animals';
 import ownersRoutes from './routes/owners';
+import authRoutes from './routes/auth';
 
 import { ValidationError } from '../shared/errors/ValidationError';
 import { ConflictError } from '../shared/errors/ConflictError';
@@ -22,6 +23,7 @@ app.use('/pets', petsRoutes);
 app.use('/breeds', breedsRoutes);
 app.use('/animals', animalsRoutes);
 app.use('/owners', ownersRoutes);
+app.use('/auth', authRoutes);
 
 app.get('/ping', (_req, res) => {
   res.send('pong 🏓');

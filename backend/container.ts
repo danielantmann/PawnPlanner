@@ -43,6 +43,18 @@ import { GetOwnerByIdService } from './application/owners/services/GetOwnerByIdS
 import { GetOwnerByEmailService } from './application/owners/services/GetOwnerByEmailService';
 import { GetOwnerByNameService } from './application/owners/services/GetOwnerByNameService';
 
+// -------------------- USER --------------------
+import { UserRepository } from './infrastructure/repositories/UserRepository';
+import { IUserRepository } from './core/users/domain/IUserRepository';
+
+// -------------------- AUTH --------------------
+import { RegisterUserService } from './application/auth/services/RegisterUserService';
+import { LoginUserService } from './application/auth/services/LoginUserService';
+import { RefreshTokenService } from './application/auth/services/RefreshTokenService';
+import { ForgotPasswordService } from './application/auth/services/ForgotPasswordService';
+import { ResetPasswordService } from './application/auth/services/ResetPasswordService';
+import { ChangePasswordService } from './application/auth/services/ChangePasswordService';
+
 // -------------------- REGISTER --------------------
 
 // Pet
@@ -83,3 +95,14 @@ container.register(GetAllOwnersService, { useClass: GetAllOwnersService });
 container.register(GetOwnerByIdService, { useClass: GetOwnerByIdService });
 container.register(GetOwnerByEmailService, { useClass: GetOwnerByEmailService });
 container.register(GetOwnerByNameService, { useClass: GetOwnerByNameService });
+
+// User
+container.register<IUserRepository>('UserRepository', { useClass: UserRepository });
+
+// Auth
+container.register(RegisterUserService, { useClass: RegisterUserService });
+container.register(LoginUserService, { useClass: LoginUserService });
+container.register(RefreshTokenService, { useClass: RefreshTokenService });
+container.register(ForgotPasswordService, { useClass: ForgotPasswordService });
+container.register(ResetPasswordService, { useClass: ResetPasswordService });
+container.register(ChangePasswordService, { useClass: ChangePasswordService });
