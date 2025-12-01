@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { OwnerMapper } from '../../../application/owners/mappers/OwnerMapper';
 import { Owner } from '../../../core/owners/domain/Owner';
+import { User } from '../../../core/users/domain/User';
 
 describe('OwnerMapper', () => {
   it('should map Owner to DTO with titleCase name', () => {
@@ -10,6 +11,8 @@ describe('OwnerMapper', () => {
       email: 'juan@test.com',
       phone: '1234567',
       pets: [],
+      userId: 99,
+      createdByUser: {} as User,
       normalizeFields: () => {},
     };
 
@@ -17,7 +20,7 @@ describe('OwnerMapper', () => {
 
     expect(dto).toEqual({
       id: 1,
-      name: 'Juan Jose Lopez', // 👈 comprobamos el titleCase
+      name: 'Juan Jose Lopez',
       email: 'juan@test.com',
       phone: '1234567',
       pets: [],
@@ -31,6 +34,8 @@ describe('OwnerMapper', () => {
       email: 'ana@test.com',
       phone: '7654321',
       pets: [],
+      userId: 99,
+      createdByUser: {} as User,
       normalizeFields: () => {},
     };
 
@@ -45,6 +50,8 @@ describe('OwnerMapper', () => {
       email: 'carlos@test.com',
       phone: '9999999',
       pets: [{ id: 1, name: 'Firulais' } as any],
+      userId: 99,
+      createdByUser: {} as User,
       normalizeFields: () => {},
     };
 
@@ -59,6 +66,8 @@ describe('OwnerMapper', () => {
       email: 'maria@test.com',
       phone: '1111111',
       pets: [],
+      userId: 99,
+      createdByUser: {} as User,
       normalizeFields: () => {},
     };
 
@@ -73,6 +82,8 @@ describe('OwnerMapper', () => {
       email: '',
       phone: '',
       pets: [],
+      userId: 99,
+      createdByUser: {} as User,
       normalizeFields: () => {},
     };
 

@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn, ManyToOne } from 'typeorm';
 import { Appointment } from '../../appointments/domain/Appointment';
+import { User } from '../../users/domain/User';
 
 @Entity('services')
 export class Service {
@@ -14,6 +15,10 @@ export class Service {
 
   @Column('decimal', { precision: 10, scale: 2 })
   price!: number;
+
+  @ManyToOne(() => User, (user) => user.services, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
+  createdByUser!: User;
 
   @OneToMany(() => Appointment, (appointment) => appointment.service)
   appointments!: Appointment[];
