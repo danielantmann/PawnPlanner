@@ -1,13 +1,13 @@
-import { Request, Response, NextFunction } from 'express';
+import { RequestHandler } from 'express';
 import { container } from 'tsyringe';
 import { RegisterUserService } from '../../../application/auth/services/RegisterUserService';
 
-export async function register(req: Request, res: Response, next: NextFunction) {
+export const register: RequestHandler = async (req, res, next) => {
   try {
-    const service = container.resolve<RegisterUserService>(RegisterUserService);
+    const service = container.resolve(RegisterUserService);
     const result = await service.execute(req.body);
     res.json(result);
   } catch (err) {
     next(err);
   }
-}
+};

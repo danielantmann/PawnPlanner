@@ -1,13 +1,13 @@
-import { Request, Response, NextFunction } from 'express';
+import { RequestHandler } from 'express';
 import { container } from 'tsyringe';
 import { ForgotPasswordService } from '../../../application/auth/services/ForgotPasswordService';
 
-export async function forgotPassword(req: Request, res: Response, next: NextFunction) {
+export const forgotPassword: RequestHandler = async (req, res, next) => {
   try {
-    const service = container.resolve<ForgotPasswordService>(ForgotPasswordService);
+    const service = container.resolve(ForgotPasswordService);
     const result = await service.execute(req.body);
     res.json(result); // en local devuelve { resetToken }
   } catch (err) {
     next(err);
   }
-}
+};

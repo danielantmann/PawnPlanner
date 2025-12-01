@@ -1,13 +1,13 @@
-import { Request, Response, NextFunction } from 'express';
+import { RequestHandler } from 'express';
 import { container } from 'tsyringe';
 import { LoginUserService } from '../../../application/auth/services/LoginUserService';
 
-export async function login(req: Request, res: Response, next: NextFunction) {
+export const login: RequestHandler = async (req, res, next) => {
   try {
-    const service = container.resolve<LoginUserService>(LoginUserService);
+    const service = container.resolve(LoginUserService);
     const result = await service.execute(req.body);
     res.json(result);
   } catch (err) {
     next(err);
   }
-}
+};

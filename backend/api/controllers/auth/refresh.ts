@@ -1,13 +1,15 @@
-import { Request, Response, NextFunction } from 'express';
+import { RequestHandler } from 'express';
 import { container } from 'tsyringe';
 import { RefreshTokenService } from '../../../application/auth/services/RefreshTokenService';
 
-export async function refresh(req: Request, res: Response, next: NextFunction) {
+export const refresh: RequestHandler = async (req, res, next) => {
   try {
-    const service = container.resolve<RefreshTokenService>(RefreshTokenService);
-    const result = await service.execute(req.body);
+    const service = container.resolve(RefreshTokenService);
+    const result = await service.execute({
+      refreshToken: req.body.refreshToken,
+    });
     res.json(result);
   } catch (err) {
     next(err);
   }
-}
+};

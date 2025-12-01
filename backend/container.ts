@@ -46,6 +46,9 @@ import { GetOwnerByNameService } from './application/owners/services/GetOwnerByN
 // -------------------- USER --------------------
 import { UserRepository } from './infrastructure/repositories/UserRepository';
 import { IUserRepository } from './core/users/domain/IUserRepository';
+import { GetUserByIdService } from './application/users/services/GetUserByIdService';
+import { UpdateUserService } from './application/users/services/UpdateUserService';
+import { DeleteUserService } from './application/users/services/DeleteUserService';
 
 // -------------------- AUTH --------------------
 import { RegisterUserService } from './application/auth/services/RegisterUserService';
@@ -98,6 +101,9 @@ container.register(GetOwnerByNameService, { useClass: GetOwnerByNameService });
 
 // User
 container.register<IUserRepository>('UserRepository', { useClass: UserRepository });
+container.register(GetUserByIdService, { useClass: GetUserByIdService });
+container.register(UpdateUserService, { useClass: UpdateUserService });
+container.register(DeleteUserService, { useClass: DeleteUserService });
 
 // Auth
 container.register(RegisterUserService, { useClass: RegisterUserService });
