@@ -331,3 +331,48 @@ The goal is to ensure reproducibility, consistency, and full coverage of busines
 
 - Consider adding JWT authentication to protect endpoints and demonstrate security practices.
 - Update Postman documentation to reflect error formats and normalization behavior.
+
+## [User and Auth branch] - 2025-12-1
+
+## Summary
+
+This PR introduces the complete implementation of **User** and **Auth** modules.
+
+### User Module
+
+- Added self-service endpoints:
+  - `GET /users/me` → get profile
+  - `PUT /users/me` → update profile
+  - `DELETE /users/me` → delete account
+- Implemented application services:
+  - `GetUserByIdService`
+  - `UpdateUserService`
+  - `DeleteUserService`
+- Registered `UserRepository` and user services in `container.ts`
+- Controllers refactored to use `RequestHandler` with `AuthRequest` casting for JWT-based flows
+
+### Auth Module
+
+- Added endpoints:
+  - `POST /auth/register` → register new user
+  - `POST /auth/login` → login and issue JWT
+  - `POST /auth/forgot-password` → request password reset
+  - `POST /auth/reset-password` → reset password
+  - `POST /auth/change-password` → change password (private)
+  - `POST /auth/refresh` → refresh access token (private)
+- Implemented application services:
+  - `RegisterUserService`
+  - `LoginUserService`
+  - `ForgotPasswordService`
+  - `ResetPasswordService`
+  - `ChangePasswordService`
+  - `RefreshTokenService`
+- Refactored controllers to consistent `RequestHandler` usage
+- Adjusted `RefreshTokenDTO` to only require `refreshToken` (no redundant `userId`)
+- Registered all auth services in `container.ts`
+
+### General
+
+- Ensured consistency in DI container registration
+- Unified controller typing to avoid overload errors
+- Prepared modules for upcoming integration tests
