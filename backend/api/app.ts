@@ -8,10 +8,12 @@ import breedsRoutes from './routes/breeds';
 import animalsRoutes from './routes/animals';
 import ownersRoutes from './routes/owners';
 import authRoutes from './routes/auth';
+import usersRoutes from './routes/users';
 
 import { ValidationError } from '../shared/errors/ValidationError';
 import { ConflictError } from '../shared/errors/ConflictError';
 import { NotFoundError } from '../shared/errors/NotFoundError';
+import { UnauthorizedError } from '../shared/errors/UnauthorizedError';
 
 const app = express();
 
@@ -24,6 +26,7 @@ app.use('/breeds', breedsRoutes);
 app.use('/animals', animalsRoutes);
 app.use('/owners', ownersRoutes);
 app.use('/auth', authRoutes);
+app.use('/users', usersRoutes);
 
 app.get('/ping', (_req, res) => {
   res.send('pong 🏓');
@@ -41,6 +44,9 @@ app.use((err: any, _req: express.Request, res: express.Response, _next: express.
   }
   if (err instanceof NotFoundError) {
     return res.status(404).json({ error: err.message });
+  }
+  if (err instanceof UnauthorizedError) {
+    return res.status(401).json({ error: err.message });
   }
   if (
     (typeof err.message === 'string' && err.message.includes('SQLITE_CONSTRAINT')) ||

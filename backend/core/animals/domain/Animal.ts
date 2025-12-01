@@ -19,12 +19,12 @@ export class Animal {
   @Column({ type: 'varchar', length: 100 })
   species!: string;
 
-  @Column({ type: 'int' })
-  userId!: number;
+  @Column({ type: 'int', nullable: true })
+  userId?: number;
 
   @ManyToOne(() => User, (user) => user.animals, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
-  createdByUser!: User;
+  createdByUser?: User;
 
   @OneToMany(() => Breed, (breed) => breed.animal)
   breeds!: Breed[];
