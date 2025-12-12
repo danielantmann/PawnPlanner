@@ -3,6 +3,7 @@ import { IUserRepository } from '../../../core/users/domain/IUserRepository';
 import { ForgotPasswordDTO } from '../dto/ForgotPasswordDTO';
 import { TokenService } from '../../../shared/utils/TokenService';
 import { NotFoundError } from '../../../shared/errors/NotFoundError';
+import { UnauthorizedError } from '../../../shared/errors/UnauthorizedError';
 
 @injectable()
 export class ForgotPasswordService {
@@ -13,8 +14,7 @@ export class ForgotPasswordService {
     const user = await this.userRepo.findByEmail(email);
 
     if (!user) {
-      // En producción puedes devolver 200 silencioso para no revelar si el email existe
-      throw new NotFoundError('User not found');
+      throw new UnauthorizedError('Invalid email');
     }
 
     // Generamos un reset token corto
