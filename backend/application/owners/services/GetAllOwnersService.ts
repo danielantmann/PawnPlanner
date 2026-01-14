@@ -8,8 +8,8 @@ import { OwnerMapper } from '../mappers/OwnerMapper';
 export class GetAllOwnersService {
   constructor(@inject('OwnerRepository') private repo: IOwnerRepository) {}
 
-  async execute(): Promise<OwnerResponseDTO[]> {
-    const owners = await this.repo.findAll();
+  async execute(userId: number): Promise<OwnerResponseDTO[]> {
+    const owners = await this.repo.findAll(userId);
     return OwnerMapper.toDTOs(owners);
   }
 }

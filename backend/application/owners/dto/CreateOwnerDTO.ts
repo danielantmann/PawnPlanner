@@ -13,4 +13,7 @@ export class CreateOwnerDTO {
 
   @IsEmail({}, { message: 'Email must be a valid email address' })
   email!: string;
+
+  // No se valida porque viene del token, no del cliente
+  userId!: number;
 }

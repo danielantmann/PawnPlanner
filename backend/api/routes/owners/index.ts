@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import { validationMiddleware } from '../../middlewares/validationMiddleware';
+import { authMiddleware } from '../../middlewares/authMiddleware';
+
 import { CreateOwnerDTO } from '../../../application/owners/dto/CreateOwnerDTO';
 import { UpdateOwnerDTO } from '../../../application/owners/dto/UpdateOwnerDTO';
 
@@ -13,13 +15,14 @@ import { getOwnerByName } from '../../controllers/owners/getByName';
 
 const router = Router();
 
-router.post('/', validationMiddleware(CreateOwnerDTO), createOwner);
-router.put('/:id', validationMiddleware(UpdateOwnerDTO), updateOwner);
-router.delete('/:id', deleteOwner);
+// Rutas protegidas por usuario
+router.post('/', authMiddleware, validationMiddleware(CreateOwnerDTO), createOwner);
+router.put('/:id', authMiddleware, validationMiddleware(UpdateOwnerDTO), updateOwner);
+router.delete('/:id', authMiddleware, deleteOwner);
 
-router.get('/', getAllOwners);
-router.get('/:id', getOwnerById);
-router.get('/email/:email', getOwnerByEmail);
-router.get('/name/:name', getOwnerByName);
+router.get('/', authMiddleware, getAllOwners);
+router.get('/:id', authMiddleware, getOwnerById);
+router.get('/email/:email', authMiddleware, getOwnerByEmail);
+router.get('/name/:name', authMiddleware, getOwnerByName);
 
 export default router;

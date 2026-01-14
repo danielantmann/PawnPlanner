@@ -8,9 +8,8 @@ import { OwnerResponseDTO } from '../dto/OwnerResponseDTO';
 export class GetOwnerByNameService {
   constructor(@inject('OwnerRepository') private repo: IOwnerRepository) {}
 
-  async execute(name: string): Promise<OwnerResponseDTO[]> {
-    const owners = await this.repo.findByName(name);
-    // devolvemos array vacío si no hay coincidencias
+  async execute(name: string, userId: number): Promise<OwnerResponseDTO[]> {
+    const owners = await this.repo.findByName(name, userId);
     return OwnerMapper.toDTOs(owners);
   }
 }

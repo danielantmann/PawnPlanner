@@ -2,13 +2,13 @@ import { inject, injectable } from 'tsyringe';
 import { IUserRepository } from '../../../core/users/domain/IUserRepository';
 import { UnauthorizedError } from '../../../shared/errors/UnauthorizedError';
 import { PasswordService } from '../../../shared/utils/PasswordService';
-import { ChangePasswordDTO } from '../dto/ChangePasswordDTO';
+import { ChangePasswordInput } from '../types/ChangePasswordInput';
 
 @injectable()
 export class ChangePasswordService {
   constructor(@inject('UserRepository') private userRepository: IUserRepository) {}
 
-  async execute({ userId, oldPassword, newPassword }: ChangePasswordDTO): Promise<void> {
+  async execute({ userId, oldPassword, newPassword }: ChangePasswordInput): Promise<void> {
     const user = await this.userRepository.findById(userId);
     if (!user) {
       throw new UnauthorizedError('User not found');

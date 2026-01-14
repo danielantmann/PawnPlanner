@@ -6,8 +6,8 @@ import { NotFoundError } from '../../../shared/errors/NotFoundError';
 export class DeleteOwnerService {
   constructor(@inject('OwnerRepository') private repo: IOwnerRepository) {}
 
-  async execute(id: number): Promise<void> {
-    const deleted = await this.repo.delete(id);
+  async execute(id: number, userId: number): Promise<void> {
+    const deleted = await this.repo.delete(id, userId);
 
     if (!deleted) {
       throw new NotFoundError('Owner not found');

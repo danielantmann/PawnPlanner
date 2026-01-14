@@ -16,51 +16,53 @@ export class OwnerRepository implements IOwnerRepository {
     return await this.ormRepo.save(owner);
   }
 
-  async update(id: number, owner: Partial<Owner>): Promise<Owner | null> {
-    const existingOwner = await this.ormRepo.findOne({ where: { id } });
+  async update(id: number, owner: Partial<Owner>, userId: number): Promise<Owner | null> {
+    const existingOwner = await this.ormRepo.findOne({
+      where: { id, userId },
+    });
+
     if (!existingOwner) return null;
 
-    const updateOwner = Object.assign(existingOwner, owner);
-    return await this.ormRepo.save(updateOwner);
+    const updated = Object.assign(existingOwner, owner);
+    return await this.ormRepo.save(updated);
   }
 
-  async delete(id: number): Promise<boolean> {
-    const owner = await this.ormRepo.delete(id);
-    return !!owner.affected && owner.affected > 0;
+  async delete(id: number, userId: number): Promise<boolean> {
+    const result = await this.ormRepo.delete({ id, userId });
+    return !!result.affected && result.affected > 0;
   }
 
-  async save(owner: Owner): Promise<Owner> {
-    return await this.ormRepo.save(owner);
-  }
-
-  async findAll(): Promise<Owner[]> {
-    return await this.ormRepo.find({ relations: ['pets'] });
-  }
-
-  async findById(id: number): Promise<Owner | null> {
-    return await this.ormRepo.findOne({
-      where: { id },
-      relations: ['pets'],
-    });
-  }
-
-  async findByName(name: string): Promise<Owner[]> {
+  async findAll(userId: number): Promise<Owner[]> {
     return await this.ormRepo.find({
-      where: { name: name.toLowerCase().trim() },
+      where: { userId },
       relations: ['pets'],
     });
   }
 
-  async findByEmail(email: string): Promise<Owner | null> {
+  async findById(id: number, userId: number): Promise<Owner | null> {
     return await this.ormRepo.findOne({
-      where: { email: email.toLowerCase().trim() },
+      where: { id, userId },
       relations: ['pets'],
     });
   }
 
-  async findByPhone(phone: string): Promise<Owner | null> {
+  async findByName(name: string, userId: number): Promise<Owner[]> {
+    return await this.ormRepo.find({
+      where: { name: name.toLowerCase().trim(), userId },
+      relations: ['pets'],
+    });
+  }
+
+  async findByEmail(email: string, userId: number): Promise<Owner | null> {
     return await this.ormRepo.findOne({
-      where: { phone: phone.trim() },
+      where: { email: email.toLowerCase().trim(), userId },
+      relations: ['pets'],
+    });
+  }
+
+  async findByPhone(phone: string, userId: number): Promise<Owner | null> {
+    return await this.ormRepo.findOne({
+      where: { phone: phone.trim(), userId },
     });
   }
 }

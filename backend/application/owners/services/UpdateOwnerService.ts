@@ -10,15 +10,14 @@ import { OwnerMapper } from '../mappers/OwnerMapper';
 export class UpdateOwnerService {
   constructor(@inject('OwnerRepository') private repo: IOwnerRepository) {}
 
-  async execute(id: number, dto: UpdateOwnerDTO): Promise<OwnerResponseDTO> {
-    const owner = await this.repo.findById(id);
+  async execute(id: number, dto: UpdateOwnerDTO, userId: number): Promise<OwnerResponseDTO> {
+    const owner = await this.repo.findById(id, userId);
     if (!owner) {
       throw new NotFoundError(`Owner with id:${id} not found`);
     }
 
-    // comprobación de duplicados antes de actualizar
     if (dto.email) {
-      const existingByEmail = await this.repo.findByEmail(dto.email);
+      const existingByEmail = await this.repo.findByEmail(dto.email, userId);
       if (existingByEmail && existingByEmail.id !== id) {
         throw new ConflictError(`Owner with email ${dto.email} already exists`);
       }
@@ -26,7 +25,7 @@ export class UpdateOwnerService {
     }
 
     if (dto.phone) {
-      const existingByPhone = await this.repo.findByPhone(dto.phone);
+      const existingByPhone = await this.repo.findByPhone(dto.phone, userId);
       if (existingByPhone && existingByPhone.id !== id) {
         throw new ConflictError(`Owner with phone ${dto.phone} already exists`);
       }
@@ -34,11 +33,10 @@ export class UpdateOwnerService {
     }
 
     if (dto.name) {
-      // aquí decides si normalizas o no; si quieres respetar mayúsculas, no toques el valor
       owner.name = dto.name;
     }
 
-    const saved = await this.repo.save(owner);
-    return OwnerMapper.toDTO(saved);
+    const updated = await this.repo.update(id, owner, userId);
+    return OwnerMapper.toDTO(updated!);
   }
 }

@@ -4,8 +4,12 @@ import { DeleteOwnerService } from '../../../application/owners/services/DeleteO
 
 export async function deleteOwner(req: Request, res: Response, next: NextFunction) {
   try {
+    const userId = req.user!.id;
+    const id = Number(req.params.id);
+
     const service = container.resolve(DeleteOwnerService);
-    await service.execute(Number(req.params.id));
+    await service.execute(id, userId);
+
     res.status(204).send();
   } catch (error) {
     next(error);

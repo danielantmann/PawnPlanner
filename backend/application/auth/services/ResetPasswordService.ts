@@ -5,6 +5,7 @@ import { ResetPasswordDTO } from '../dto/ResetPasswordDTO';
 import { TokenService } from '../../../shared/utils/TokenService';
 import { UnauthorizedError } from '../../../shared/errors/UnauthorizedError';
 import { PasswordService } from '../../../shared/utils/PasswordService';
+import { BadRequestError } from '../../../shared/errors/BadRequestError';
 
 @injectable()
 export class ResetPasswordService {
@@ -19,6 +20,11 @@ export class ResetPasswordService {
     const user = await this.userRepo.findByEmail(payload.email.toLowerCase().trim());
     if (!user) {
       throw new UnauthorizedError('Invalid reset token');
+    }
+
+    const isSame = await PasswordService.compare(dto.newPassword, user.passwordHash);
+    if (isSame) {
+      throw new BadRequestError('New password must be different from old password');
     }
 
     // Hasheamos la nueva contraseña

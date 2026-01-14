@@ -1,6 +1,8 @@
+import { Transform } from 'class-transformer';
 import { IsEmail, IsString, Matches } from 'class-validator';
 
 export class LoginUserDTO {
+  @Transform(({ value }) => value?.trim().toLowerCase())
   @IsEmail({}, { message: 'Email must be a valid address' })
   email!: string;
 

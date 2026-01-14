@@ -8,12 +8,13 @@ import { OwnerMapper } from '../mappers/OwnerMapper';
 export class GetOwnerByIdService {
   constructor(@inject('OwnerRepository') private repo: IOwnerRepository) {}
 
-  async execute(id: number): Promise<OwnerResponseDTO> {
-    const owner = await this.repo.findById(id);
+  async execute(id: number, userId: number): Promise<OwnerResponseDTO> {
+    const owner = await this.repo.findById(id, userId);
 
     if (!owner) {
       throw new NotFoundError('Owner not found');
     }
+
     return OwnerMapper.toDTO(owner);
   }
 }

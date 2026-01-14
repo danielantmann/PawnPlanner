@@ -8,8 +8,8 @@ import { OwnerMapper } from '../mappers/OwnerMapper';
 export class GetOwnerByEmailService {
   constructor(@inject('OwnerRepository') private repo: IOwnerRepository) {}
 
-  async execute(email: string): Promise<OwnerResponseDTO> {
-    const owner = await this.repo.findByEmail(email);
+  async execute(email: string, userId: number): Promise<OwnerResponseDTO> {
+    const owner = await this.repo.findByEmail(email, userId);
 
     if (!owner) {
       throw new NotFoundError(`Owner not found with email: ${email}`);
