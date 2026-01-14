@@ -1,20 +1,17 @@
 import { inject, injectable } from 'tsyringe';
 import { IAnimalRepository } from '../../../core/animals/domain/IAnimalRepository';
 import { AnimalResponseDTO } from '../dto/AnimalResponseDTO';
-import { NotFoundError } from '../../../shared/errors/NotFoundError';
 import { AnimalMapper } from '../mappers/AnimalMapper';
 
 @injectable()
-export class GetAnimalBySpeciesService {
+export class GetAnimalsBySpeciesService {
   constructor(@inject('AnimalRepository') private repo: IAnimalRepository) {}
 
-  async execute(species: string): Promise<AnimalResponseDTO> {
+  async execute(species: string, userId: number): Promise<AnimalResponseDTO[]> {
     const normalized = species.toLowerCase();
-    const animal = await this.repo.findBySpecies(normalized);
 
-    if (!animal) {
-      throw new NotFoundError(`Animal with species:  ${species} not found`);
-    }
-    return AnimalMapper.toDTO(animal);
+    const animals = await this.repo.findBySpecies(normalized, userId);
+
+    return AnimalMapper.toDTOs(animals);
   }
 }

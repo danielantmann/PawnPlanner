@@ -7,8 +7,8 @@ import { BreedMapper } from '../mappers/BreedMapper';
 export class GetAllBreedsService {
   constructor(@inject('BreedRepository') private breedRepo: IBreedRepository) {}
 
-  async execute(): Promise<BreedResponseDTO[]> {
-    const breeds = await this.breedRepo.findAll();
+  async execute(userId: number): Promise<BreedResponseDTO[]> {
+    const breeds = await this.breedRepo.findAll(userId);
     return breeds.map(BreedMapper.toDTO);
   }
 }

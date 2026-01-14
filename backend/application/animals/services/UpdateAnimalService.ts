@@ -9,13 +9,17 @@ import { AnimalResponseDTO } from '../dto/AnimalResponseDTO';
 export class UpdateAnimalService {
   constructor(@inject('AnimalRepository') private repo: IAnimalRepository) {}
 
-  async execute(id: number, dto: UpdateAnimalDTO): Promise<AnimalResponseDTO> {
-    const updated = await this.repo.update(id, {
-      species: dto.species.toLowerCase(),
-    });
+  async execute(id: number, dto: UpdateAnimalDTO, userId: number): Promise<AnimalResponseDTO> {
+    const updated = await this.repo.update(
+      id,
+      {
+        species: dto.species.toLowerCase(),
+      },
+      userId
+    );
 
     if (!updated) {
-      throw new NotFoundError(`Animal with id ${id} not found`);
+      throw new NotFoundError(`Animal with id ${id} not found or cannot edit global animal`);
     }
 
     return AnimalMapper.toDTO(updated);

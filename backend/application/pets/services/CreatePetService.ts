@@ -46,7 +46,8 @@ export class CreatePetService {
       breed.name = dto.breedData.name;
       breed.userId = userId;
 
-      const animal = await this.animalRepo.findById(dto.breedData.animalId);
+      const animal = await this.animalRepo.findById(dto.breedData.animalId, userId);
+
       if (!animal) throw new Error(`Animal with id ${dto.breedData.animalId} not found`);
       breed.animal = animal;
 
