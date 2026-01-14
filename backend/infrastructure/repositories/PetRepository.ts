@@ -16,41 +16,48 @@ export class PetRepository implements IPetRepository {
     return await this.ormRepo.save(pet);
   }
 
-  async update(id: number, data: Partial<Pet>): Promise<Pet | null> {
-    const existing = await this.ormRepo.findOne({ where: { id }, relations: ['owner', 'breed'] });
+  async update(id: number, data: Partial<Pet>, userId: number): Promise<Pet | null> {
+    const existing = await this.ormRepo.findOne({
+      where: { id, userId },
+      relations: ['owner', 'breed'],
+    });
+
     if (!existing) return null;
 
     Object.assign(existing, data);
     return await this.ormRepo.save(existing);
   }
 
-  async findById(id: number): Promise<Pet | null> {
+  async findById(id: number, userId: number): Promise<Pet | null> {
     return await this.ormRepo.findOne({
-      where: { id },
+      where: { id, userId },
       relations: ['owner', 'breed'],
     });
   }
 
-  async findAll(): Promise<Pet[]> {
-    return await this.ormRepo.find({ relations: ['owner', 'breed'] });
-  }
-
-  async findByName(name: string): Promise<Pet[]> {
+  async findAll(userId: number): Promise<Pet[]> {
     return await this.ormRepo.find({
-      where: { name },
+      where: { userId },
       relations: ['owner', 'breed'],
     });
   }
 
-  async findByBreed(breedId: number): Promise<Pet[]> {
+  async findByName(name: string, userId: number): Promise<Pet[]> {
     return await this.ormRepo.find({
-      where: { breed: { id: breedId } },
+      where: { name, userId },
       relations: ['owner', 'breed'],
     });
   }
 
-  async delete(id: number): Promise<boolean> {
-    const result = await this.ormRepo.delete(id);
+  async findByBreed(breedId: number, userId: number): Promise<Pet[]> {
+    return await this.ormRepo.find({
+      where: { breed: { id: breedId }, userId },
+      relations: ['owner', 'breed'],
+    });
+  }
+
+  async delete(id: number, userId: number): Promise<boolean> {
+    const result = await this.ormRepo.delete({ id, userId });
     return !!result.affected && result.affected > 0;
   }
 }

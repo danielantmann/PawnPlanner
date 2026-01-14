@@ -7,8 +7,8 @@ import { PetMapper } from '../mappers/PetMapper';
 export class GetPetByNameService {
   constructor(@inject('PetRepository') private petRepo: IPetRepository) {}
 
-  async execute(name: string): Promise<PetResponseDTO[]> {
-    const pets = await this.petRepo.findByName(name);
+  async execute(name: string, userId: number): Promise<PetResponseDTO[]> {
+    const pets = await this.petRepo.findByName(name, userId);
     return pets.map(PetMapper.toDTO);
   }
 }

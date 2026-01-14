@@ -7,8 +7,8 @@ import { PetMapper } from '../mappers/PetMapper';
 export class GetPetByIdService {
   constructor(@inject('PetRepository') private petRepo: IPetRepository) {}
 
-  async execute(id: number): Promise<PetResponseDTO | null> {
-    const pet = await this.petRepo.findById(id);
+  async execute(id: number, userId: number): Promise<PetResponseDTO | null> {
+    const pet = await this.petRepo.findById(id, userId);
     return pet ? PetMapper.toDTO(pet) : null;
   }
 }

@@ -19,17 +19,18 @@ export class CreatePetService {
     @inject('AnimalRepository') private animalRepo: IAnimalRepository
   ) {}
 
-  async execute(dto: CreatePetDTO): Promise<PetResponseDTO> {
+  async execute(dto: CreatePetDTO, userId: number): Promise<PetResponseDTO> {
     // --- Owner ---
     let owner;
     if (dto.ownerId) {
-      owner = await this.ownerRepo.findById(dto.ownerId);
+      owner = await this.ownerRepo.findById(dto.ownerId, userId);
       if (!owner) throw new Error(`Owner with id ${dto.ownerId} not found`);
     } else if (dto.ownerData) {
       owner = new Owner();
       owner.name = dto.ownerData.name;
       owner.email = dto.ownerData.email;
       owner.phone = dto.ownerData.phone;
+      owner.userId = userId;
       owner = await this.ownerRepo.create(owner);
     } else {
       throw new Error('Owner information is required');
@@ -38,13 +39,13 @@ export class CreatePetService {
     // --- Breed ---
     let breed;
     if (dto.breedId) {
-      breed = await this.breedRepo.findById(dto.breedId);
+      breed = await this.breedRepo.findById(dto.breedId, userId);
       if (!breed) throw new Error(`Breed with id ${dto.breedId} not found`);
     } else if (dto.breedData) {
       breed = new Breed();
       breed.name = dto.breedData.name;
+      breed.userId = userId;
 
-      // Buscar el Animal por id y asignarlo a la relación
       const animal = await this.animalRepo.findById(dto.breedData.animalId);
       if (!animal) throw new Error(`Animal with id ${dto.breedData.animalId} not found`);
       breed.animal = animal;
@@ -57,13 +58,12 @@ export class CreatePetService {
     // --- Pet ---
     const pet = new Pet();
     pet.name = dto.name;
-    if (dto.birthDate) {
-      pet.birthDate = new Date(dto.birthDate);
-    }
+    if (dto.birthDate) pet.birthDate = new Date(dto.birthDate);
     pet.importantNotes = dto.importantNotes;
     pet.quickNotes = dto.quickNotes;
     pet.owner = owner;
     pet.breed = breed;
+    pet.userId = userId;
 
     const saved = await this.petRepo.save(pet);
     return PetMapper.toDTO(saved);
