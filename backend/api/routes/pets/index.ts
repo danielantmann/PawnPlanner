@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import { validationMiddleware } from '../../middlewares/validationMiddleware';
+import { authMiddleware } from '../../middlewares/authMiddleware';
+
 import { CreatePetDTO } from '../../../application/pets/dto/CreatePetDTO';
 import { UpdatePetDTO } from '../../../application/pets/dto/UpdatePetDTO';
 
@@ -12,6 +14,9 @@ import { getPetsByName } from '../../controllers/pets/getByName';
 import { getPetsByBreed } from '../../controllers/pets/getByBreed';
 
 const router = Router();
+
+// 🔐 PROTEGER TODAS LAS RUTAS
+router.use(authMiddleware);
 
 router.post('/', validationMiddleware(CreatePetDTO), createPet);
 router.put('/:id', validationMiddleware(UpdatePetDTO), updatePet);
