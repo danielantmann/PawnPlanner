@@ -5,6 +5,7 @@ import { refresh } from '../../controllers/auth/refresh';
 import { forgotPassword } from '../../controllers/auth/forgotPassword';
 import { resetPassword } from '../../controllers/auth/resetPassword';
 import { changePassword } from '../../controllers/auth/changePassword';
+import { authMiddleware } from '../../middlewares/authMiddleware';
 
 const router = Router();
 
@@ -13,6 +14,7 @@ router.post('/login', login);
 router.post('/refresh', refresh);
 router.post('/forgot-password', forgotPassword);
 router.post('/reset-password', resetPassword);
-router.post('/change-password', changePassword);
+
+router.post('/change-password', authMiddleware, changePassword);
 
 export default router;

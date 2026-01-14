@@ -11,14 +11,14 @@ export class CreateOwnerService {
   constructor(@inject('OwnerRepository') private repo: IOwnerRepository) {}
 
   async execute(dto: CreateOwnerDTO): Promise<OwnerResponseDTO> {
-    // Validar duplicados por email
-    const existingByEmail = await this.repo.findByEmail(dto.email);
+    // Validar duplicados por email (por usuario)
+    const existingByEmail = await this.repo.findByEmail(dto.email, dto.userId);
     if (existingByEmail) {
       throw new ConflictError(`Owner with email ${dto.email} already exists`);
     }
 
-    // Validar duplicados por phone
-    const existingByPhone = await this.repo.findByPhone(dto.phone);
+    // Validar duplicados por phone (por usuario)
+    const existingByPhone = await this.repo.findByPhone(dto.phone, dto.userId);
     if (existingByPhone) {
       throw new ConflictError(`Owner with phone ${dto.phone} already exists`);
     }
@@ -28,6 +28,7 @@ export class CreateOwnerService {
     owner.name = dto.name;
     owner.phone = dto.phone;
     owner.email = dto.email;
+    owner.userId = dto.userId;
 
     const saved = await this.repo.create(owner);
     return OwnerMapper.toDTO(saved);

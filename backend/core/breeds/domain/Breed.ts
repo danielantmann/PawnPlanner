@@ -25,12 +25,12 @@ export class Breed {
   @Column({ type: 'int' })
   animalId!: number;
 
-  @Column({ type: 'int' })
-  userId!: number;
+  @Column({ type: 'int', nullable: true })
+  userId?: number;
 
   @ManyToOne(() => User, (user) => user.breeds, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
-  createdByUser!: User;
+  createdByUser?: User;
 
   @ManyToOne(() => Animal, (animal) => animal.breeds, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'animalId' })

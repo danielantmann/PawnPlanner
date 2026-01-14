@@ -4,8 +4,11 @@ import { GetOwnerByEmailService } from '../../../application/owners/services/Get
 
 export async function getOwnerByEmail(req: Request, res: Response, next: NextFunction) {
   try {
+    const userId = req.user!.id;
+
     const service = container.resolve(GetOwnerByEmailService);
-    const result = await service.execute(req.params.email);
+    const result = await service.execute(req.params.email, userId);
+
     res.status(200).json(result);
   } catch (error) {
     next(error);
