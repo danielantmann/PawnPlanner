@@ -4,8 +4,9 @@ import { DeletePetService } from '../../../application/pets/services/DeletePetSe
 
 export async function deletePet(req: Request, res: Response, next: NextFunction) {
   try {
+    const userId = req.user.id;
     const service = container.resolve(DeletePetService);
-    await service.execute(Number(req.params.id));
+    await service.execute(Number(req.params.id), userId);
     res.status(204).send();
   } catch (error) {
     next(error);
