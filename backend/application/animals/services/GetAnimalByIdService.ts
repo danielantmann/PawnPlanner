@@ -8,8 +8,9 @@ import { AnimalMapper } from '../mappers/AnimalMapper';
 export class GetAnimalByIdService {
   constructor(@inject('AnimalRepository') private repo: IAnimalRepository) {}
 
-  async execute(id: number): Promise<AnimalResponseDTO> {
-    const animal = await this.repo.findById(id);
+  async execute(id: number, userId: number): Promise<AnimalResponseDTO> {
+    const animal = await this.repo.findById(id, userId);
+
     if (!animal) {
       throw new NotFoundError(`Animal with id ${id} not found`);
     }

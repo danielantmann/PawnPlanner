@@ -30,7 +30,7 @@ import { UpdateAnimalService } from './application/animals/services/UpdateAnimal
 import { DeleteAnimalService } from './application/animals/services/DeleteAnimalService';
 import { GetAllAnimalsService } from './application/animals/services/GetAllAnimalsService';
 import { GetAnimalByIdService } from './application/animals/services/GetAnimalByIdService';
-import { GetAnimalBySpeciesService } from './application/animals/services/GetAnimalBySpeciesService';
+import { GetAnimalsBySpeciesService } from './application/animals/services/GetAnimalsBySpeciesService';
 
 // -------------------- OWNER --------------------
 import { OwnerRepository } from './infrastructure/repositories/OwnerRepository';
@@ -87,7 +87,7 @@ container.register(UpdateAnimalService, { useClass: UpdateAnimalService });
 container.register(DeleteAnimalService, { useClass: DeleteAnimalService });
 container.register(GetAllAnimalsService, { useClass: GetAllAnimalsService });
 container.register(GetAnimalByIdService, { useClass: GetAnimalByIdService });
-container.register(GetAnimalBySpeciesService, { useClass: GetAnimalBySpeciesService });
+container.register(GetAnimalsBySpeciesService, { useClass: GetAnimalsBySpeciesService });
 
 // Owner
 container.register<IOwnerRepository>('OwnerRepository', { useClass: OwnerRepository });

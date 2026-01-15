@@ -7,8 +7,8 @@ import { AnimalMapper } from '../mappers/AnimalMapper';
 export class GetAllAnimalsService {
   constructor(@inject('AnimalRepository') private repo: IAnimalRepository) {}
 
-  async execute(): Promise<AnimalResponseDTO[]> {
-    const animals = await this.repo.findAll();
+  async execute(userId: number): Promise<AnimalResponseDTO[]> {
+    const animals = await this.repo.findAll(userId);
     return AnimalMapper.toDTOs(animals);
   }
 }

@@ -21,6 +21,9 @@ export class Pet {
   @Column({ type: 'varchar', length: 100 })
   name!: string;
 
+  @Column({ type: 'varchar', length: 255 })
+  searchName!: string;
+
   @Column({ type: 'date', nullable: true })
   birthDate?: Date;
 
@@ -48,10 +51,19 @@ export class Pet {
 
   @BeforeInsert()
   @BeforeUpdate()
-  normalizeName() {
+  normalizeFields() {
     if (this.name) {
-      // aquí puedes decidir: minúsculas o capitalizar
-      this.name = this.name.toLowerCase().trim();
+      // Normalización para búsqueda flexible
+      const normalized = this.name
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/\s+/g, '');
+
+      this.searchName = normalized;
+
+      // Nombre visible limpio
+      this.name = this.name.trim();
     }
   }
 }

@@ -10,15 +10,17 @@ import { AnimalResponseDTO } from '../dto/AnimalResponseDTO';
 export class CreateAnimalService {
   constructor(@inject('AnimalRepository') private repo: IAnimalRepository) {}
 
-  async execute(dto: CreateAnimalDTO): Promise<AnimalResponseDTO> {
-    const existing = await this.repo.findBySpecies(dto.species);
+  async execute(dto: CreateAnimalDTO, userId: number): Promise<AnimalResponseDTO> {
+    const normalized = dto.species.toLowerCase();
 
-    if (existing) {
+    const existing = await this.repo.findBySpecies(normalized, userId);
+    if (existing.length > 0) {
       throw new ConflictError(`Animal with species '${dto.species}' already exists`);
     }
 
     const animal = new Animal();
-    animal.species = dto.species.toLowerCase();
+    animal.species = normalized;
+    animal.userId = userId;
 
     const saved = await this.repo.create(animal);
     return AnimalMapper.toDTO(saved);
