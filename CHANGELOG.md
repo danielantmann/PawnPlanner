@@ -470,3 +470,80 @@ Established a consistent testing pattern for authenticated integration tests
 Prepared the codebase for the upcoming Pets multi‑user refactor
 
 Ensured all Auth and User flows are stable before extending multi‑user logic to Pets
+
+## [Pets Refactor Branch] – 2025-12-01
+
+## Overview
+
+The **pets** branch introduces a full refactor of the Pet module, including entity normalization, repository improvements, service restructuring, and alignment with the Owner and Animal modules.  
+This update modernizes search behavior, standardizes error handling, and ensures consistent multi‑tenant behavior across the domain.
+
+---
+
+## Key Changes
+
+### 1. Domain Layer
+
+- Added the **searchName** field to `core/pets/domain/Pet.ts` for normalized search.
+- Implemented the **normalizeFields()** lifecycle hook to:
+  - Normalize `name`
+  - Generate `searchName`
+  - Ensure consistent data on insert/update
+- Removed legacy or duplicated normalization logic.
+
+---
+
+### 2. Repository Layer
+
+- Updated **PetRepository** to use normalized partial search:
+  - `findByName` now uses `LIKE %searchName%`
+  - Search is case‑insensitive, accent‑insensitive, and user‑friendly
+- Added `userId` filtering to enforce multi‑tenant isolation.
+- Fully aligned search behavior with Owner, Animal, and Breed repositories.
+
+---
+
+### 3. Application Layer
+
+#### DTOs & Mappers
+
+- No structural changes, but updated to support normalized fields and improved service flow.
+
+#### Services
+
+- Refactored **CreatePetService**:
+  - Extracted logic into helper methods:
+    - `resolveOwner()`
+    - `resolveBreed()`
+  - Improved readability, maintainability, and testability.
+  - Added typed exceptions:
+    - `NotFoundError` for missing Owner/Breed/Animal
+    - `BadRequestError` for incomplete input
+  - Enhanced creation flow:
+    - Owner can be selected or created
+    - Breed can be selected or created (with Animal validation)
+    - All relationships validated against the authenticated user
+
+- Updated **UpdatePetService**:
+  - Added proper 404 handling when the Pet does not belong to the user
+  - Restricted updates to Pet‑specific fields only
+  - Owner/Breed reassignment intentionally excluded (future “transfer ownership” feature)
+
+---
+
+### 4. Owner & Animal Adjustments
+
+- Minor updates to ensure compatibility with the new Pet behavior:
+  - Normalization alignment
+  - Consistent repository behavior
+  - Validation improvements
+
+---
+
+## Outcome
+
+- The Pet module is now fully aligned with the rest of the domain architecture.
+- Search is modern, flexible, and consistent with real grooming/vet systems.
+- Services are cleaner, safer, and easier to maintain.
+- Error handling is standardized across modules using typed exceptions.
+- The entire flow is production‑ready and supports multi‑tenant environments reliably.
