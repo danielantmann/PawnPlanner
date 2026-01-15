@@ -14,7 +14,7 @@ export class CreateAnimalService {
     const normalized = dto.species.toLowerCase();
 
     const existing = await this.repo.findBySpecies(normalized, userId);
-    if (existing) {
+    if (existing.length > 0) {
       throw new ConflictError(`Animal with species '${dto.species}' already exists`);
     }
 

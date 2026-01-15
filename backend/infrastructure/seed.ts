@@ -19,62 +19,59 @@ async function seed() {
   await AppDataSource.getRepository(User).clear();
   console.log('🧹 All tables cleared');
 
-  // Crear usuario inicial (admin)
-  const hashedPassword = await bcrypt.hash('admin123', 10);
-  const user1 = AppDataSource.getRepository(User).create({
-    firstName: 'Admin',
+  // Crear usuario principal (Daniel)
+  const hashedPassword = await bcrypt.hash('Daniel123!', 10);
+  const user = AppDataSource.getRepository(User).create({
+    firstName: 'Daniel',
     lastName: 'User',
-    secondLastName: '', // opcional
-    email: 'admin@example.com',
+    secondLastName: '',
+    email: 'daniel123@example.com',
     passwordHash: hashedPassword,
   });
-  await AppDataSource.getRepository(User).save(user1);
+  await AppDataSource.getRepository(User).save(user);
 
-  // Crear Owner ligado al User
-  const owner1 = AppDataSource.getRepository(Owner).create({
-    name: 'daniel',
-    email: 'daniel@example.com',
-    phone: '+34123456789',
-    userId: user1.id, // 👈 relación con el User creado
-  });
-  await AppDataSource.getRepository(Owner).save(owner1);
+  // Crear Owners ligados al usuario
+  const owners = [
+    { name: 'Carlos Pérez', email: 'carlos@example.com', phone: '+34111111111' },
+    { name: 'María López', email: 'maria@example.com', phone: '+34222222222' },
+    { name: 'Juan García', email: 'juan@example.com', phone: '+34333333333' },
+  ].map((o) => AppDataSource.getRepository(Owner).create({ ...o, userId: user.id }));
 
-  // Insertar Animals globales (userId = NULL)
-  const animalDog = AppDataSource.getRepository(Animal).create({
-    species: 'dog',
-  });
-  const animalCat = AppDataSource.getRepository(Animal).create({
-    species: 'cat',
-  });
-  await AppDataSource.getRepository(Animal).save([animalDog, animalCat]);
+  await AppDataSource.getRepository(Owner).save(owners);
 
-  // Insertar Breeds globales (userId = NULL)
-  const breedLabrador = AppDataSource.getRepository(Breed).create({
-    name: 'labrador',
-    animal: animalDog,
-  });
-  const breedSiamese = AppDataSource.getRepository(Breed).create({
-    name: 'siamese',
-    animal: animalCat,
-  });
-  await AppDataSource.getRepository(Breed).save([breedLabrador, breedSiamese]);
+  // Insertar Animals globales (userId = null)
+  const animals = [{ species: 'dog' }, { species: 'cat' }].map((a) =>
+    AppDataSource.getRepository(Animal).create({ ...a, userId: null })
+  );
 
-  // Insertar Pets ligados al Owner y al User
-  const pet1 = AppDataSource.getRepository(Pet).create({
-    name: 'firulais',
-    owner: owner1,
-    breed: breedLabrador,
-    userId: user1.id,
-  });
-  const pet2 = AppDataSource.getRepository(Pet).create({
-    name: 'luna',
-    owner: owner1,
-    breed: breedSiamese,
-    userId: user1.id,
-  });
-  await AppDataSource.getRepository(Pet).save([pet1, pet2]);
+  await AppDataSource.getRepository(Animal).save(animals);
 
-  console.log('✅ Seed data inserted');
+  const [dog, cat] = animals;
+
+  // Insertar Breeds globales
+  const breeds = [
+    { name: 'labrador', animal: dog },
+    { name: 'golden retriever', animal: dog },
+    { name: 'bulldog', animal: dog },
+    { name: 'siamese', animal: cat },
+    { name: 'persian', animal: cat },
+    { name: 'maine coon', animal: cat },
+  ].map((b) => AppDataSource.getRepository(Breed).create({ ...b, userId: null }));
+
+  await AppDataSource.getRepository(Breed).save(breeds);
+
+  // Insertar Pets ligados a Owners y al User
+  const pets = [
+    { name: 'Firulais', owner: owners[0], breed: breeds[0] }, // labrador
+    { name: 'Toby', owner: owners[0], breed: breeds[1] }, // golden
+    { name: 'Luna', owner: owners[1], breed: breeds[3] }, // siamese
+    { name: 'Misu', owner: owners[1], breed: breeds[4] }, // persian
+    { name: 'Rocky', owner: owners[2], breed: breeds[2] }, // bulldog
+  ].map((p) => AppDataSource.getRepository(Pet).create({ ...p, userId: user.id }));
+
+  await AppDataSource.getRepository(Pet).save(pets);
+
+  console.log('✅ Seed data inserted successfully');
   await AppDataSource.destroy();
 }
 

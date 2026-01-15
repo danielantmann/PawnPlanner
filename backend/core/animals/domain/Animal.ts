@@ -20,7 +20,7 @@ export class Animal {
   species!: string;
 
   @Column({ type: 'int', nullable: true })
-  userId?: number;
+  userId!: number | null; // 👈 CAMBIO IMPORTANTE
 
   @ManyToOne(() => User, (user) => user.animals, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })

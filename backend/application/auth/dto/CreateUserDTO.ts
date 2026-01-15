@@ -1,4 +1,3 @@
-// CreateUserDTO.ts
 import { Transform } from 'class-transformer';
 import { IsEmail, IsOptional, IsString, Length, Matches } from 'class-validator';
 
@@ -12,6 +11,7 @@ export class CreateUserDTO {
   lastName!: string;
 
   @IsOptional()
+  @Transform(({ value }) => (value === '' ? undefined : value))
   @IsString({ message: 'Second last name must be a string' })
   @Length(2, 100, { message: 'Second last name must be between 2 and 100 characters' })
   secondLastName?: string;

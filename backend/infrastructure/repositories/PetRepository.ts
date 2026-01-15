@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { Pet } from '../../core/pets/domain/Pet';
 import { IPetRepository } from '../../core/pets/domain/IPetRepository';
 import { dataSource } from '../orm';
@@ -43,8 +43,14 @@ export class PetRepository implements IPetRepository {
   }
 
   async findByName(name: string, userId: number): Promise<Pet[]> {
+    const normalized = name
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, '');
+
     return await this.ormRepo.find({
-      where: { name, userId },
+      where: [{ searchName: Like(`%${normalized}%`), userId }],
       relations: ['owner', 'breed'],
     });
   }
