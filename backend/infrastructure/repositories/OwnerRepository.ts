@@ -1,6 +1,6 @@
 import { injectable } from 'tsyringe';
 import { IOwnerRepository } from '../../core/owners/domain/IOwnerRepository';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { Owner } from '../../core/owners/domain/Owner';
 import { dataSource } from '../orm';
 
@@ -47,8 +47,17 @@ export class OwnerRepository implements IOwnerRepository {
   }
 
   async findByName(name: string, userId: number): Promise<Owner[]> {
+    const normalized = name
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, '');
+
     return await this.ormRepo.find({
-      where: { name: name.toLowerCase().trim(), userId },
+      where: {
+        searchName: Like(`%${normalized}%`),
+        userId,
+      },
       relations: ['pets'],
     });
   }

@@ -15,14 +15,15 @@ import { getOwnerByName } from '../../controllers/owners/getByName';
 
 const router = Router();
 
-// Rutas protegidas por usuario
-router.post('/', authMiddleware, validationMiddleware(CreateOwnerDTO), createOwner);
-router.put('/:id', authMiddleware, validationMiddleware(UpdateOwnerDTO), updateOwner);
-router.delete('/:id', authMiddleware, deleteOwner);
+router.use(authMiddleware);
 
-router.get('/', authMiddleware, getAllOwners);
-router.get('/:id', authMiddleware, getOwnerById);
-router.get('/email/:email', authMiddleware, getOwnerByEmail);
-router.get('/name/:name', authMiddleware, getOwnerByName);
+router.post('/', validationMiddleware(CreateOwnerDTO), createOwner);
+router.put('/:id', validationMiddleware(UpdateOwnerDTO), updateOwner);
+router.delete('/:id', deleteOwner);
+
+router.get('/', getAllOwners);
+router.get('/:id', getOwnerById);
+router.get('/email/:email', getOwnerByEmail);
+router.get('/name/:name', getOwnerByName);
 
 export default router;

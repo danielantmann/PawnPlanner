@@ -15,12 +15,14 @@ export class CreateBreedService {
     @inject('AnimalRepository') private animalRepo: IAnimalRepository
   ) {}
 
-  async execute(dto: CreateBreedDTO): Promise<BreedResponseDTO> {
-    const animal = await this.animalRepo.findById(dto.animalId);
+  async execute(dto: CreateBreedDTO, userId: number): Promise<BreedResponseDTO> {
+    const animal = await this.animalRepo.findById(dto.animalId, userId);
     if (!animal) throw new NotFoundError('Animal not found');
+
     const normalizedName = dto.name.toLowerCase();
 
-    const existing = await this.breedRepo.findByNameAndAnimal(normalizedName, dto.animalId);
+    const existing = await this.breedRepo.findByNameAndAnimal(normalizedName, dto.animalId, userId);
+
     if (existing) {
       throw new ConflictError(`Breed '${dto.name}' already exists for this animal`);
     }
@@ -28,6 +30,7 @@ export class CreateBreedService {
     const breed = new Breed();
     breed.name = normalizedName;
     breed.animal = animal;
+    breed.userId = userId;
 
     const saved = await this.breedRepo.save(breed);
     return BreedMapper.toDTO(saved);

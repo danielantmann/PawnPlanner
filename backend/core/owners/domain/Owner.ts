@@ -19,6 +19,9 @@ export class Owner {
   @Column({ type: 'varchar', length: 255 })
   name!: string;
 
+  @Column({ type: 'varchar', length: 255 })
+  searchName!: string; // NUEVO
+
   @Column({ type: 'varchar', length: 255, unique: true })
   email!: string;
 
@@ -39,10 +42,29 @@ export class Owner {
   @BeforeUpdate()
   normalizeFields() {
     if (this.name) {
-      this.name = this.name.toLowerCase().trim();
+      const normalizedName = this.normalizeName(this.name);
+      this.name = normalizedName;
+      this.searchName = this.normalizeSearch(normalizedName);
     }
+
     if (this.email) {
       this.email = this.email.toLowerCase().trim();
     }
+  }
+
+  private normalizeName(value: string): string {
+    return value
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // quita tildes
+      .replace(/\s+/g, ' ') // colapsa espacios
+      .trim();
+  }
+
+  private normalizeSearch(value: string): string {
+    return value
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, '');
   }
 }

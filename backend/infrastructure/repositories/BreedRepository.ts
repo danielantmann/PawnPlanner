@@ -1,7 +1,7 @@
 import { injectable } from 'tsyringe';
 import { IBreedRepository } from '../../core/breeds/domain/IBreedRepository';
 import { Breed } from '../../core/breeds/domain/Breed';
-import { Repository } from 'typeorm';
+import { Repository, IsNull } from 'typeorm';
 import { dataSource } from '../orm';
 
 @injectable()
@@ -16,47 +16,73 @@ export class BreedRepository implements IBreedRepository {
     return await this.ormRepo.save(breed);
   }
 
-  async update(id: number, data: Partial<Breed>): Promise<Breed | null> {
-    const existing = await this.ormRepo.findOne({ where: { id }, relations: ['animal', 'pets'] });
+  async update(id: number, data: Partial<Breed>, userId: number): Promise<Breed | null> {
+    const existing = await this.ormRepo.findOne({
+      where: [
+        { id, userId }, // privadas
+        { id, userId: IsNull() }, // globales
+      ],
+      relations: ['animal', 'pets'],
+    });
+
     if (!existing) return null;
 
     Object.assign(existing, data);
     return await this.ormRepo.save(existing);
   }
 
-  async delete(id: number): Promise<boolean> {
-    const result = await this.ormRepo.delete(id);
+  async delete(id: number, userId: number): Promise<boolean> {
+    // Solo borra privadas
+    const result = await this.ormRepo.delete({ id, userId });
     return !!result.affected && result.affected > 0;
   }
 
-  async findById(id: number): Promise<Breed | null> {
+  async findById(id: number, userId: number): Promise<Breed | null> {
     return await this.ormRepo.findOne({
-      where: { id },
+      where: [
+        { id, userId }, // privadas
+        { id, userId: IsNull() }, // globales
+      ],
       relations: ['animal'],
     });
   }
 
-  async findByName(name: string): Promise<Breed[]> {
+  async findByName(name: string, userId: number): Promise<Breed[]> {
     return await this.ormRepo.find({
-      where: { name },
+      where: [
+        { name, userId },
+        { name, userId: IsNull() },
+      ],
       relations: ['animal'],
     });
   }
 
-  async findAll(): Promise<Breed[]> {
-    return await this.ormRepo.find({ relations: ['animal'] });
-  }
-
-  async findByAnimal(animalId: number): Promise<Breed[]> {
-    return this.ormRepo.find({
-      where: { animal: { id: animalId } },
+  async findAll(userId: number): Promise<Breed[]> {
+    return await this.ormRepo.find({
+      where: [
+        { userId }, // privadas
+        { userId: IsNull() }, // globales
+      ],
       relations: ['animal'],
     });
   }
 
-  async findByNameAndAnimal(name: string, animalId: number): Promise<Breed | null> {
+  async findByAnimal(animalId: number, userId: number): Promise<Breed[]> {
+    return await this.ormRepo.find({
+      where: [
+        { animalId, userId },
+        { animalId, userId: IsNull() },
+      ],
+      relations: ['animal'],
+    });
+  }
+
+  async findByNameAndAnimal(name: string, animalId: number, userId: number): Promise<Breed | null> {
     return await this.ormRepo.findOne({
-      where: { name, animalId },
+      where: [
+        { name, animalId, userId },
+        { name, animalId, userId: IsNull() },
+      ],
     });
   }
 }

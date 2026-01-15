@@ -6,12 +6,12 @@ import { NotFoundError } from '../../../shared/errors/NotFoundError';
 export class DeletePetService {
   constructor(@inject('PetRepository') private petRepo: IPetRepository) {}
 
-  async execute(id: number): Promise<void> {
-    const pet = await this.petRepo.findById(id);
+  async execute(id: number, userId: number): Promise<void> {
+    const pet = await this.petRepo.findById(id, userId);
     if (!pet) {
       throw new NotFoundError(`Pet with id ${id} not found`);
     }
 
-    await this.petRepo.delete(id);
+    await this.petRepo.delete(id, userId);
   }
 }

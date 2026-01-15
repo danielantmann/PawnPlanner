@@ -26,7 +26,7 @@ export class Breed {
   animalId!: number;
 
   @Column({ type: 'int', nullable: true })
-  userId?: number;
+  userId!: number | null;
 
   @ManyToOne(() => User, (user) => user.breeds, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })

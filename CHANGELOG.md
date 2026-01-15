@@ -376,3 +376,97 @@ This PR introduces the complete implementation of **User** and **Auth** modules.
 - Ensured consistency in DI container registration
 - Unified controller typing to avoid overload errors
 - Prepared modules for upcoming integration tests
+
+[Auth Tests & Owner Auth Integration] – 2026-01-14
+Summary
+This PR introduces full authentication test coverage (unit + integration) and updates the Owner module to operate under authenticated, multi‑user flows. It also includes minor refactors in the User module to support these changes.
+
+Auth Module – Test Coverage
+Unit Tests
+Added complete unit test suites for all authentication services:
+
+RegisterUserService
+
+LoginUserService
+
+RefreshTokenService
+
+ForgotPasswordService
+
+ResetPasswordService
+
+ChangePasswordService
+
+Coverage includes:
+
+password hashing and validation
+
+token generation and expiration
+
+invalid credentials handling
+
+reset token flows
+
+edge‑case validation
+
+Integration Tests
+Implemented full end‑to‑end tests validating real HTTP flows:
+
+POST /auth/register
+
+POST /auth/login
+
+POST /auth/refresh
+
+POST /auth/forgot-password
+
+POST /auth/reset-password
+
+POST /auth/change-password
+
+Auth middleware protecting private routes
+
+These tests ensure controllers, middleware, services, and database interactions behave consistently.
+
+Owner Module – Auth Integration
+Integration Test Refactor
+Updated all Owner integration tests to operate under authenticated, multi‑user behavior:
+
+Added createTestUser() helper to generate isolated test users
+
+All Owner endpoints now tested with Authorization: Bearer <token>
+
+Ensured isolation between users:
+
+Owners created by User A are not visible to User B
+
+Updated tests:
+
+createOwner
+
+deleteOwner
+
+getAllOwners
+
+Owner–Pet relationship test (pending Pet refactor)
+
+Multi‑User Behavior Validation
+Added new test ensuring:
+
+Users cannot access or delete owners belonging to another user
+
+Owner queries return only resources scoped to the authenticated user
+
+User Module – Minor Refactor
+Small adjustments to improve testability and consistency with new auth flows
+
+Ensured controllers use AuthRequest typing for JWT‑based access
+
+Cleaned up DTO usage and error handling
+
+General
+Established a consistent testing pattern for authenticated integration tests
+
+Prepared the codebase for the upcoming Pets multi‑user refactor
+
+Ensured all Auth and User flows are stable before extending multi‑user logic to Pets

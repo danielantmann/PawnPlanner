@@ -5,9 +5,10 @@ import { UpdateAnimalDTO } from '../../../application/animals/dto/UpdateAnimalDT
 
 export async function updateAnimal(req: Request, res: Response, next: NextFunction) {
   try {
+    const userId = req.user.id;
     const service = container.resolve(UpdateAnimalService);
     const id = Number(req.params.id);
-    const animal = await service.execute(id, req.body as UpdateAnimalDTO);
+    const animal = await service.execute(id, req.body as UpdateAnimalDTO, userId);
     res.status(200).json(animal);
   } catch (error) {
     next(error);

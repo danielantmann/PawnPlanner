@@ -10,27 +10,18 @@ import { Pet } from '../../../core/pets/domain/Pet';
 export class UpdatePetService {
   constructor(@inject('PetRepository') private petRepo: IPetRepository) {}
 
-  async execute(id: number, dto: UpdatePetDTO): Promise<PetResponseDTO> {
-    const existing = await this.petRepo.findById(id);
+  async execute(id: number, dto: UpdatePetDTO, userId: number): Promise<PetResponseDTO> {
+    const existing = await this.petRepo.findById(id, userId);
     if (!existing) {
       throw new NotFoundError(`Pet with id ${id} not found`);
     }
 
-    if (dto.name !== undefined) {
-      existing.name = dto.name;
-    }
-    if (dto.birthDate !== undefined) {
-      existing.birthDate = new Date(dto.birthDate);
-    }
-    if (dto.importantNotes !== undefined) {
-      existing.importantNotes = dto.importantNotes;
-    }
-    if (dto.quickNotes !== undefined) {
-      existing.quickNotes = dto.quickNotes;
-    }
+    if (dto.name !== undefined) existing.name = dto.name;
+    if (dto.birthDate !== undefined) existing.birthDate = new Date(dto.birthDate);
+    if (dto.importantNotes !== undefined) existing.importantNotes = dto.importantNotes;
+    if (dto.quickNotes !== undefined) existing.quickNotes = dto.quickNotes;
 
-    const updated: Pet = await this.petRepo.save(existing);
-
+    const updated = await this.petRepo.save(existing);
     return PetMapper.toDTO(updated);
   }
 }
