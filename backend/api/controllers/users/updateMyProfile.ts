@@ -2,21 +2,18 @@ import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../../../types/AuthRequest';
 import { container } from 'tsyringe';
 import { UpdateUserService } from '../../../application/users/services/UpdateUserService';
+import { UpdateUserDTO } from '../../../application/users/dto/UpdateUserDTO';
 import { UserMapper } from '../../../application/users/mappers/UserMapper';
 
 export const updateMyProfile = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
+    // El validationMiddleware ya validó el DTO antes de llegar aquí
+    const dto = req.body as UpdateUserDTO;
+
     const service = container.resolve(UpdateUserService);
+    const updatedUser = await service.execute(req.user!.id, dto);
 
-    const data: any = {};
-    if (req.body.firstName !== undefined) data.firstName = req.body.firstName;
-    if (req.body.lastName !== undefined) data.lastName = req.body.lastName;
-    if (req.body.secondLastName !== undefined) data.secondLastName = req.body.secondLastName;
-    if (req.body.email !== undefined) data.email = req.body.email;
-
-    const updatedUser = await service.execute(req.user!.id, data);
-
-    res.status(200).json(UserMapper.toDTO(updatedUser)); // ← aquí se filtra y se devuelve DTO
+    return res.status(200).json(UserMapper.toDTO(updatedUser));
   } catch (err) {
     next(err);
   }
