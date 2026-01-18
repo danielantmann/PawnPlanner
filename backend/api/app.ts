@@ -1,6 +1,5 @@
 import 'reflect-metadata';
 import express from 'express';
-import { AppDataSource } from '../infrastructure/orm/data-source';
 import '../container';
 
 import petsRoutes from './routes/pets';
@@ -13,8 +12,8 @@ import usersRoutes from './routes/users';
 import { ConflictError } from '../shared/errors/ConflictError';
 import { NotFoundError } from '../shared/errors/NotFoundError';
 import { UnauthorizedError } from '../shared/errors/UnauthorizedError';
-import { ValidationError as ClassValidationError } from 'class-validator';
 import { BadRequestError } from '../shared/errors/BadRequestError';
+import { ValidationError } from 'class-validator';
 
 const app = express();
 
@@ -33,39 +32,76 @@ app.get('/ping', (_req, res) => {
   res.send('pong 🏓');
 });
 
-// Middleware global de errores
+// ------------------------------
+// 🔥 Middleware global de errores
+// ------------------------------
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
-  console.error('Error capturado en middleware:', err);
+  console.error('🔥 Error capturado en middleware:', err);
 
-  // Errores de class-validator
-  if (Array.isArray(err) && err[0] instanceof ClassValidationError) {
+  // 👉 Helper para aplanar errores anidados de class-validator
+  function flattenValidationErrors(errors: any[]) {
+    const result: any[] = [];
+
+    const recurse = (error: any, parentPath = '') => {
+      const field = parentPath ? `${parentPath}.${error.property}` : error.property;
+
+      if (error.constraints) {
+        result.push({
+          field,
+          constraints: error.constraints,
+        });
+      }
+
+      if (error.children && error.children.length > 0) {
+        error.children.forEach((child: any) => recurse(child, field));
+      }
+    };
+
+    errors.forEach((e) => recurse(e));
+    return result;
+  }
+
+  // 1. Errores de class-validator
+  if (Array.isArray(err) && err.every((e) => e instanceof ValidationError)) {
+    const flatErrors = flattenValidationErrors(err);
+
     return res.status(400).json({
-      errors: err.map((e) => e.constraints),
+      status: 400,
+      message: 'Validation failed',
+      errors: flatErrors,
     });
   }
 
-  if (err instanceof ConflictError) {
-    return res.status(409).json({ error: err.message });
-  }
-  if (err instanceof NotFoundError) {
-    return res.status(404).json({ error: err.message });
-  }
-  if (err instanceof UnauthorizedError) {
-    return res.status(401).json({ error: err.message });
-  }
-
-  if (err instanceof BadRequestError) {
-    return res.status(err.statusCode).json({ error: err.message });
-  }
+  // 2. Errores de dominio personalizados
   if (
-    (typeof err.message === 'string' && err.message.includes('SQLITE_CONSTRAINT')) ||
-    err.code === 'SQLITE_CONSTRAINT' ||
-    err.driverError?.code === 'SQLITE_CONSTRAINT'
+    err instanceof BadRequestError ||
+    err instanceof ConflictError ||
+    err instanceof NotFoundError ||
+    err instanceof UnauthorizedError
   ) {
-    return res.status(409).json({ error: 'Duplicate entry violates unique constraint' });
+    return res.status(err.statusCode).json({
+      status: err.statusCode,
+      message: err.message,
+    });
   }
 
-  res.status(500).json({ error: 'Internal server error' });
+  // 3. Errores de SQLite (unique constraint)
+  if (
+    err?.code === 'SQLITE_CONSTRAINT' ||
+    err?.driverError?.code === 'SQLITE_CONSTRAINT' ||
+    (typeof err.message === 'string' && err.message.includes('SQLITE_CONSTRAINT'))
+  ) {
+    return res.status(409).json({
+      status: 409,
+      message: 'Duplicate entry violates unique constraint',
+    });
+  }
+
+  // 4. Errores inesperados
+  return res.status(500).json({
+    status: 500,
+    message: 'Internal server error',
+  });
 });
 
 export default app;

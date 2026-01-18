@@ -33,10 +33,18 @@ export class Pet {
   @Column({ type: 'text', nullable: true })
   quickNotes?: string;
 
+  @Column({ type: 'int' })
+  ownerId!: number;
+
   @ManyToOne(() => Owner, (owner) => owner.pets)
+  @JoinColumn({ name: 'ownerId' })
   owner!: Owner;
 
+  @Column({ type: 'int' })
+  breedId!: number;
+
   @ManyToOne(() => Breed, (breed) => breed.pets)
+  @JoinColumn({ name: 'breedId' })
   breed!: Breed;
 
   @Column({ type: 'int' })
@@ -53,7 +61,6 @@ export class Pet {
   @BeforeUpdate()
   normalizeFields() {
     if (this.name) {
-      // Normalización para búsqueda flexible
       const normalized = this.name
         .toLowerCase()
         .normalize('NFD')
@@ -61,8 +68,6 @@ export class Pet {
         .replace(/\s+/g, '');
 
       this.searchName = normalized;
-
-      // Nombre visible limpio
       this.name = this.name.trim();
     }
   }

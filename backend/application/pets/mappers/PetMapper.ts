@@ -5,16 +5,17 @@ import { PetResponseDTO } from '../dto/PetResponseDTO';
 export class PetMapper {
   static toDTO(pet: Pet): PetResponseDTO {
     const { id, name, birthDate, owner, breed, importantNotes, quickNotes } = pet;
+
     return {
-      id: id,
-      name: capitalize(name),
-      birthDate: birthDate,
+      id,
+      name: name ? capitalize(name) : '',
+      birthDate,
       ownerId: owner?.id ?? null,
-      ownerName: capitalize(owner?.name) ?? '',
+      ownerName: owner ? capitalize(owner.name) : '',
       ownerPhone: owner?.phone ?? '',
-      breed: breed?.name ?? '',
-      importantNotes: importantNotes,
-      quickNotes: quickNotes,
+      breed: breed ? capitalize(breed.name) : '',
+      importantNotes,
+      quickNotes,
     };
   }
 }

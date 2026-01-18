@@ -10,46 +10,47 @@ import {
 import { Type } from 'class-transformer';
 
 class OwnerDataDTO {
-  @IsString({ message: 'Owner name must be a string' })
-  @Length(2, 50, { message: 'Owner name must be between 2 and 50 characters' })
+  @IsString()
+  @Length(2, 50)
   name!: string;
 
-  @IsEmail({}, { message: 'Owner email must be valid' })
+  @IsEmail()
   email!: string;
 
-  @IsString({ message: 'Owner phone must be a string' })
-  @Length(5, 20, { message: 'Owner phone must be between 5 and 20 characters' })
+  @IsString()
+  @Length(5, 20)
   phone!: string;
 }
 
 class BreedDataDTO {
-  @IsString({ message: 'Breed name must be a string' })
-  @Length(2, 50, { message: 'Breed name must be between 2 and 50 characters' })
+  @IsString()
+  @Length(2, 50)
   name!: string;
 
-  @IsInt({ message: 'AnimalId must be an integer' })
+  @Type(() => Number)
+  @IsInt()
   animalId!: number;
 }
 
 export class CreatePetDTO {
-  @IsString({ message: 'Name must be a string' })
-  @Length(2, 50, { message: 'Name must be between 2 and 50 characters' })
+  @IsString()
+  @Length(2, 50)
   name!: string;
 
   @IsOptional()
-  @IsDateString({}, { message: 'BirthDate must be a valid date string (YYYY-MM-DD)' })
-  birthDate!: string;
+  @IsDateString()
+  birthDate?: string;
 
-  // Opción 1: usar IDs existentes
   @IsOptional()
-  @IsInt({ message: 'OwnerId must be an integer' })
+  @Type(() => Number)
+  @IsInt()
   ownerId?: number;
 
   @IsOptional()
-  @IsInt({ message: 'BreedId must be an integer' })
+  @Type(() => Number)
+  @IsInt()
   breedId?: number;
 
-  // Opción 2: crear Owner/Breed "on the fly"
   @IsOptional()
   @ValidateNested()
   @Type(() => OwnerDataDTO)
@@ -61,12 +62,12 @@ export class CreatePetDTO {
   breedData?: BreedDataDTO;
 
   @IsOptional()
-  @IsString({ message: 'Important notes must be a string' })
-  @Length(0, 1000, { message: 'Important notes must be up to 1000 characters' })
+  @IsString()
+  @Length(0, 1000)
   importantNotes?: string;
 
   @IsOptional()
-  @IsString({ message: 'Quick notes must be a string' })
-  @Length(0, 1000, { message: 'Quick notes must be up to 1000 characters' })
+  @IsString()
+  @Length(0, 1000)
   quickNotes?: string;
 }

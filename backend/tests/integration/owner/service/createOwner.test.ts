@@ -49,8 +49,7 @@ describe('Owner service - createOwner', () => {
       .send({ name: 'Laura2', phone: '6666666', email: 'laura@test.com' });
 
     expect(res.status).toBe(409);
-    expect(res.body).toHaveProperty('error');
-    expect(res.body.error).toContain('email');
+    expect(res.body.message).toContain('email');
   });
 
   it('should throw ConflictError if phone already exists', async () => {
@@ -67,8 +66,7 @@ describe('Owner service - createOwner', () => {
       .send({ name: 'Mario2', phone: '7777777', email: 'mario2@test.com' });
 
     expect(res.status).toBe(409);
-    expect(res.body).toHaveProperty('error');
-    expect(res.body.error).toContain('phone');
+    expect(res.body.message).toContain('phone');
   });
 
   it('should return DTO with correct types', async () => {
@@ -96,8 +94,7 @@ describe('Owner service - createOwner', () => {
       .send({ name: '', phone: '1234567', email: 'emptyname@test.com' });
 
     expect(res.status).toBe(400);
-    expect(Array.isArray(res.body.errors)).toBe(true);
-    expect(res.body.errors.some((e: any) => e.property === 'name')).toBe(true);
+    expect(res.body.errors.some((e: any) => e.field === 'name')).toBe(true);
   });
 
   it('should return 400 if phone is too short', async () => {
@@ -109,7 +106,7 @@ describe('Owner service - createOwner', () => {
       .send({ name: 'Daniel', phone: '123', email: 'shortphone@test.com' });
 
     expect(res.status).toBe(400);
-    expect(res.body.errors.some((e: any) => e.property === 'phone')).toBe(true);
+    expect(res.body.errors.some((e: any) => e.field === 'phone')).toBe(true);
   });
 
   it('should return 400 if email is invalid', async () => {
@@ -121,7 +118,7 @@ describe('Owner service - createOwner', () => {
       .send({ name: 'Daniel', phone: '1234567', email: 'not-an-email' });
 
     expect(res.status).toBe(400);
-    expect(res.body.errors.some((e: any) => e.property === 'email')).toBe(true);
+    expect(res.body.errors.some((e: any) => e.field === 'email')).toBe(true);
   });
 
   it('should return 400 if name is too short', async () => {
@@ -133,7 +130,7 @@ describe('Owner service - createOwner', () => {
       .send({ name: 'A', phone: '1234567', email: 'shortname@test.com' });
 
     expect(res.status).toBe(400);
-    expect(res.body.errors.some((e: any) => e.property === 'name')).toBe(true);
+    expect(res.body.errors.some((e: any) => e.field === 'name')).toBe(true);
   });
 
   it('should return 400 if phone is missing', async () => {
@@ -145,7 +142,7 @@ describe('Owner service - createOwner', () => {
       .send({ name: 'Daniel', email: 'missingphone@test.com' });
 
     expect(res.status).toBe(400);
-    expect(res.body.errors.some((e: any) => e.property === 'phone')).toBe(true);
+    expect(res.body.errors.some((e: any) => e.field === 'phone')).toBe(true);
   });
 
   it('should return 400 if email is missing', async () => {
@@ -157,7 +154,7 @@ describe('Owner service - createOwner', () => {
       .send({ name: 'Daniel', phone: '1234567' });
 
     expect(res.status).toBe(400);
-    expect(res.body.errors.some((e: any) => e.property === 'email')).toBe(true);
+    expect(res.body.errors.some((e: any) => e.field === 'email')).toBe(true);
   });
 
   it('should include constraints in validation error for invalid email', async () => {
@@ -169,7 +166,7 @@ describe('Owner service - createOwner', () => {
       .send({ name: 'Daniel', phone: '1234567', email: 'not-an-email' });
 
     expect(res.status).toBe(400);
-    const emailError = res.body.errors.find((e: any) => e.property === 'email');
+    const emailError = res.body.errors.find((e: any) => e.field === 'email');
     expect(emailError).toBeDefined();
     expect(emailError.constraints).toHaveProperty('isEmail');
   });
@@ -188,6 +185,6 @@ describe('Owner service - createOwner', () => {
       .send({ name: 'Daniel', phone: '7654321', email: 'DAN@GOOGLE.COM' });
 
     expect(res.status).toBe(409);
-    expect(res.body.error).toContain('email');
+    expect(res.body.message).toContain('email');
   });
 });

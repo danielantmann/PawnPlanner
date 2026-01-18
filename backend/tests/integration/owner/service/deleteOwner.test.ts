@@ -21,7 +21,6 @@ describe('Owner service - deleteOwner', () => {
   it('should delete an existing owner successfully', async () => {
     const token = await createTestUser();
 
-    // Crear owner
     const createRes = await request(app)
       .post('/owners')
       .set('Authorization', `Bearer ${token}`)
@@ -29,14 +28,12 @@ describe('Owner service - deleteOwner', () => {
 
     const ownerId = createRes.body.id;
 
-    // Borrar owner
     const deleteRes = await request(app)
       .delete(`/owners/${ownerId}`)
       .set('Authorization', `Bearer ${token}`);
 
     expect(deleteRes.status).toBe(204);
 
-    // Verificar que ya no existe
     const getRes = await request(app)
       .get(`/owners/${ownerId}`)
       .set('Authorization', `Bearer ${token}`);
@@ -50,17 +47,13 @@ describe('Owner service - deleteOwner', () => {
     const res = await request(app).delete('/owners/9999').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(404);
-    expect(res.body.error).toContain('not found');
+    expect(res.body.message).toContain('not found');
   });
 
   it('should not allow deleting an owner belonging to another user', async () => {
-    // Usuario A
     const tokenA = await createTestUser();
-
-    // Usuario B
     const tokenB = await createTestUser();
 
-    // Usuario A crea un owner
     const createRes = await request(app)
       .post('/owners')
       .set('Authorization', `Bearer ${tokenA}`)
@@ -68,13 +61,11 @@ describe('Owner service - deleteOwner', () => {
 
     const ownerId = createRes.body.id;
 
-    // Usuario B intenta borrarlo
     const deleteRes = await request(app)
       .delete(`/owners/${ownerId}`)
       .set('Authorization', `Bearer ${tokenB}`);
 
-    // Debe devolver 404 (no existe para ese usuario)
     expect(deleteRes.status).toBe(404);
-    expect(deleteRes.body.error).toContain('not found');
+    expect(deleteRes.body.message).toContain('not found');
   });
 });
