@@ -547,3 +547,67 @@ This update modernizes search behavior, standardizes error handling, and ensures
 - Services are cleaner, safer, and easier to maintain.
 - Error handling is standardized across modules using typed exceptions.
 - The entire flow is production‑ready and supports multi‑tenant environments reliably.
+
+## [Testing & Error Handling Stabilization] – 2025‑01‑18
+
+## Overview
+
+This branch finalizes the backend’s testing layer and stabilizes global error handling across all modules.  
+It introduces a unified validation‑error format, completes missing integration tests, and ensures consistent behavior across Pets, Owners, Animals, Breeds, Auth, and Users.  
+The update brings the backend to a production‑ready state before beginning the Clean Architecture refactor and the upcoming Appointments/Services modules.
+
+---
+
+## Key Changes
+
+### 1. Global Error Handling
+
+- Added a nested validation error flattener to standardize class‑validator output.
+- Ensures all validation errors follow a consistent structure:
+  - `status`
+  - `message`
+  - `errors[]` with fully‑qualified field paths (e.g., `ownerData.phone`)
+- Prevents unnecessary 500 errors by correctly mapping:
+  - Validation errors → 400
+  - Domain errors → 400/404/409
+  - Auth errors → 401
+  - SQLite constraint errors → 409
+- Improved logging for debugging and traceability.
+
+---
+
+### 2. Integration Test Suite Completion
+
+- Added missing tests across all modules:
+  - Pets
+  - Owners
+  - Animals
+  - Breeds
+  - Auth
+  - Users
+- Updated existing tests to match the new global error format.
+- Added tests for nested DTO validation (e.g., `ownerData.phone`).
+- Ensured all endpoints behave consistently under invalid input.
+- Removed unused or empty test files to avoid false negatives.
+
+---
+
+### 3. Stability & Consistency Improvements
+
+- Ensured all controllers return standardized error responses.
+- Validated that all services throw typed domain exceptions.
+- Confirmed that multi‑tenant filtering and ownership checks behave consistently.
+- Improved normalization behavior across modules to avoid mismatches in tests.
+
+---
+
+## Outcome
+
+- **91%+ total test coverage**, with full coverage on all critical modules.
+- A stable, predictable API surface ready for the next architectural phase.
+- Validation and error handling are now fully standardized across the backend.
+- The system is significantly more robust, easier to debug, and safer for future refactors.
+- The codebase is now ready for:
+  - Clean Architecture / SRP refactor (module‑by‑module)
+  - Implementation of Services (catalog)
+  - Implementation of Appointments (core scheduling module)
