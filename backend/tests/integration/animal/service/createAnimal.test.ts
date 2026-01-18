@@ -41,7 +41,7 @@ describe('Animal - CreateAnimal (integration)', () => {
       .send({ species: 'a' }); // too short
 
     expect(res.status).toBe(400);
-    expect(res.body.errors.some((e: any) => e.property === 'species')).toBe(true);
+    expect(res.body.errors.some((e: any) => e.field === 'species')).toBe(true);
   });
 
   it('should return 409 for duplicate species', async () => {
@@ -58,7 +58,7 @@ describe('Animal - CreateAnimal (integration)', () => {
       .send({ species: 'cat' }); // normalized duplicate
 
     expect(res.status).toBe(409);
-    expect(res.body.error).toContain('already exists');
+    expect(res.body.message).toContain('already exists');
   });
 
   it('should return 401 if no token is provided', async () => {

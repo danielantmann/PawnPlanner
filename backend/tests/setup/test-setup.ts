@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { beforeEach, afterAll, vi } from 'vitest';
-import { TestDataSource } from '../../infrastructure/orm/data-source.test';
+import { TestDataSource } from '../../infrastructure/orm/data-source.helper';
 
 beforeEach(async () => {
   if (TestDataSource.isInitialized) {

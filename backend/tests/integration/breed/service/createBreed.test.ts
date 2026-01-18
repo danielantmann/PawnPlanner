@@ -53,7 +53,7 @@ describe('Breed - CreateBreed (integration)', () => {
       .send({ name: 'a', animalId });
 
     expect(res.status).toBe(400);
-    expect(res.body.errors.some((e: any) => e.property === 'name')).toBe(true);
+    expect(res.body.errors.some((e: any) => e.field === 'name')).toBe(true);
   });
 
   it('should return 404 if animal does not exist', async () => {
@@ -82,7 +82,7 @@ describe('Breed - CreateBreed (integration)', () => {
       .send({ name: 'labrador', animalId });
 
     expect(res.status).toBe(409);
-    expect(res.body.error).toContain('already exists');
+    expect(res.body.message).toContain('already exists');
   });
 
   it('should return 401 if no token is provided', async () => {

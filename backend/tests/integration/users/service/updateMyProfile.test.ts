@@ -39,7 +39,7 @@ describe('User integration - updateMyProfile', () => {
       .send({ email: 'not-an-email' });
 
     expect(res.status).toBe(400);
-    expect(res.body.errors.some((e: any) => e.property === 'email')).toBe(true);
+    expect(res.body.errors.some((e: any) => e.field === 'email')).toBe(true);
   });
 
   it('should return 409 for duplicate email', async () => {
@@ -52,7 +52,7 @@ describe('User integration - updateMyProfile', () => {
       .send({ email: 'a@test.com' });
 
     expect(res.status).toBe(409);
-    expect(res.body.error).toContain('already in use');
+    expect(res.body.message).toContain('already in use');
   });
 
   it('should return 401 if token is missing', async () => {

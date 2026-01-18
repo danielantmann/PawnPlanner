@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import app from './app';
 import { AppDataSource } from '../infrastructure/orm/data-source';
-import { TestDataSource } from '../infrastructure/orm/data-source.test';
+import { TestDataSource } from '../infrastructure/orm/data-source.helper';
 
 const dataSource = process.env.NODE_ENV === 'test' ? TestDataSource : AppDataSource;
 

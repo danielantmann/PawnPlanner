@@ -21,10 +21,9 @@ router.use(authMiddleware);
 router.post('/', validationMiddleware(CreatePetDTO), createPet);
 router.put('/:id', validationMiddleware(UpdatePetDTO), updatePet);
 router.delete('/:id', deletePet);
-
-router.get('/', getAllPets);
-router.get('/:id', getPetById);
 router.get('/name/:name', getPetsByName);
 router.get('/breed/:breedId', getPetsByBreed);
+router.get('/:id', getPetById);
+router.get('/', getAllPets);
 
 export default router;

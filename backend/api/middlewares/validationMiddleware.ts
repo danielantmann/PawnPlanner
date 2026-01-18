@@ -3,20 +3,17 @@ import { validate } from 'class-validator';
 import { Request, Response, NextFunction } from 'express';
 
 export function validationMiddleware(type: any) {
-  return async (req: Request, res: Response, next: NextFunction) => {
+  return async (req: Request, _res: Response, next: NextFunction) => {
     const dto = plainToInstance(type, req.body);
-    console.log('🐛 [validationMiddleware] dto creado:', dto);
 
-    const errors = await validate(dto);
-    console.log('🐛 [validationMiddleware] errores:', errors);
+    const errors = await validate(dto, {
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      skipMissingProperties: false,
+    });
 
     if (errors.length > 0) {
-      return res.status(400).json({
-        errors: errors.map((err) => ({
-          property: err.property,
-          constraints: err.constraints,
-        })),
-      });
+      return next(errors); // 🔥 PASA EL ERROR AL MIDDLEWARE GLOBAL
     }
 
     req.body = dto;

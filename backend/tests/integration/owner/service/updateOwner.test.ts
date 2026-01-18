@@ -48,7 +48,7 @@ describe('Owner service - updateOwner', () => {
       .send({ name: 'Ghost' });
 
     expect(res.status).toBe(404);
-    expect(res.body.error).toContain('not found');
+    expect(res.body.message).toContain('not found');
   });
 
   it('should return 400 if new email is invalid', async () => {
@@ -67,7 +67,7 @@ describe('Owner service - updateOwner', () => {
       .send({ email: 'not-an-email' });
 
     expect(res.status).toBe(400);
-    expect(res.body.errors.some((e: any) => e.property === 'email')).toBe(true);
+    expect(res.body.errors.some((e: any) => e.field === 'email')).toBe(true);
   });
 
   it('should return 400 if new phone is invalid', async () => {
@@ -86,13 +86,13 @@ describe('Owner service - updateOwner', () => {
       .send({ phone: '12' });
 
     expect(res.status).toBe(400);
-    expect(res.body.errors.some((e: any) => e.property === 'phone')).toBe(true);
+    expect(res.body.errors.some((e: any) => e.field === 'phone')).toBe(true);
   });
 
   it('should detect duplicate email on update', async () => {
     const token = await createTestUser();
 
-    const owner1 = await request(app)
+    await request(app)
       .post('/owners')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Laura', phone: '3333333', email: 'laura@test.com' });
@@ -108,13 +108,13 @@ describe('Owner service - updateOwner', () => {
       .send({ email: 'laura@test.com' });
 
     expect(res.status).toBe(409);
-    expect(res.body.error).toContain('email');
+    expect(res.body.message).toContain('email');
   });
 
   it('should detect duplicate phone on update', async () => {
     const token = await createTestUser();
 
-    const owner1 = await request(app)
+    await request(app)
       .post('/owners')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Carlos', phone: '5555555', email: 'carlos@test.com' });
@@ -130,6 +130,6 @@ describe('Owner service - updateOwner', () => {
       .send({ phone: '5555555' });
 
     expect(res.status).toBe(409);
-    expect(res.body.error).toContain('phone');
+    expect(res.body.message).toContain('phone');
   });
 });

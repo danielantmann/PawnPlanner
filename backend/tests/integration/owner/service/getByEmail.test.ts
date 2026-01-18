@@ -26,7 +26,7 @@ describe('Owner service - getOwnerByEmail', () => {
       .set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(404);
-    expect(res.body).toHaveProperty('error');
+    expect(res.body.message).toContain('not found');
   });
 
   it('should return owner by email', async () => {
