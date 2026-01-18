@@ -61,7 +61,7 @@ import { ChangePasswordService } from './application/auth/services/ChangePasswor
 // -------------------- REGISTER --------------------
 
 // Pet
-container.register<IPetRepository>('PetRepository', { useClass: PetRepository });
+container.register<IPetRepository>('IPetRepository', { useClass: PetRepository });
 container.register(CreatePetService, { useClass: CreatePetService });
 container.register(UpdatePetService, { useClass: UpdatePetService });
 container.register(DeletePetService, { useClass: DeletePetService });
@@ -71,7 +71,7 @@ container.register(GetPetByNameService, { useClass: GetPetByNameService });
 container.register(GetPetByBreedService, { useClass: GetPetByBreedService });
 
 // Breed
-container.register<IBreedRepository>('BreedRepository', { useClass: BreedRepository });
+container.register<IBreedRepository>('IBreedRepository', { useClass: BreedRepository });
 container.register(CreateBreedService, { useClass: CreateBreedService });
 container.register(UpdateBreedService, { useClass: UpdateBreedService });
 container.register(DeleteBreedService, { useClass: DeleteBreedService });
@@ -81,7 +81,7 @@ container.register(GetBreedByNameService, { useClass: GetBreedByNameService });
 container.register(GetBreedsByAnimalService, { useClass: GetBreedsByAnimalService });
 
 // Animal
-container.register<IAnimalRepository>('AnimalRepository', { useClass: AnimalRepository });
+container.register<IAnimalRepository>('IAnimalRepository', { useClass: AnimalRepository });
 container.register(CreateAnimalService, { useClass: CreateAnimalService });
 container.register(UpdateAnimalService, { useClass: UpdateAnimalService });
 container.register(DeleteAnimalService, { useClass: DeleteAnimalService });
@@ -90,7 +90,7 @@ container.register(GetAnimalByIdService, { useClass: GetAnimalByIdService });
 container.register(GetAnimalsBySpeciesService, { useClass: GetAnimalsBySpeciesService });
 
 // Owner
-container.register<IOwnerRepository>('OwnerRepository', { useClass: OwnerRepository });
+container.register<IOwnerRepository>('IOwnerRepository', { useClass: OwnerRepository });
 container.register(CreateOwnerService, { useClass: CreateOwnerService });
 container.register(UpdateOwnerService, { useClass: UpdateOwnerService });
 container.register(DeleteOwnerService, { useClass: DeleteOwnerService });
@@ -100,7 +100,7 @@ container.register(GetOwnerByEmailService, { useClass: GetOwnerByEmailService })
 container.register(GetOwnerByNameService, { useClass: GetOwnerByNameService });
 
 // User
-container.register<IUserRepository>('UserRepository', { useClass: UserRepository });
+container.register<IUserRepository>('IUserRepository', { useClass: UserRepository });
 container.register(GetUserByIdService, { useClass: GetUserByIdService });
 container.register(UpdateUserService, { useClass: UpdateUserService });
 container.register(DeleteUserService, { useClass: DeleteUserService });

@@ -1,88 +1,114 @@
 import { injectable } from 'tsyringe';
-import { IBreedRepository } from '../../core/breeds/domain/IBreedRepository';
-import { Breed } from '../../core/breeds/domain/Breed';
 import { Repository, IsNull } from 'typeorm';
-import { dataSource } from '../orm';
+
+import { BreedEntity } from '../orm/entities/BreedEntity';
+import { Breed } from '../../core/breeds/domain/Breed';
+import { IBreedRepository } from '../../core/breeds/domain/IBreedRepository';
+import { AppDataSource } from '../orm/data-source';
 
 @injectable()
 export class BreedRepository implements IBreedRepository {
-  private ormRepo: Repository<Breed>;
+  private ormRepo: Repository<BreedEntity>;
 
   constructor() {
-    this.ormRepo = dataSource.getRepository(Breed);
+    this.ormRepo = AppDataSource.getRepository(BreedEntity);
+  }
+
+  // ORM → Dominio
+  private toDomain(entity: BreedEntity): Breed {
+    return new Breed(entity.id, entity.name, entity.animalId, entity.userId);
+  }
+
+  // Dominio → ORM
+  private toEntity(domain: Breed): BreedEntity {
+    const entity = new BreedEntity();
+
+    if (domain.id !== null) {
+      entity.id = domain.id;
+    }
+
+    entity.name = domain.name;
+    entity.animalId = domain.animalId;
+    entity.userId = domain.userId;
+
+    return entity;
   }
 
   async save(breed: Breed): Promise<Breed> {
-    return await this.ormRepo.save(breed);
+    const entity = this.toEntity(breed);
+    const saved = await this.ormRepo.save(entity);
+    return this.toDomain(saved);
   }
 
   async update(id: number, data: Partial<Breed>, userId: number): Promise<Breed | null> {
     const existing = await this.ormRepo.findOne({
       where: [
-        { id, userId }, // privadas
-        { id, userId: IsNull() }, // globales
+        { id, userId },
+        { id, userId: IsNull() },
       ],
-      relations: ['animal', 'pets'],
     });
 
     if (!existing) return null;
 
     Object.assign(existing, data);
-    return await this.ormRepo.save(existing);
+    const saved = await this.ormRepo.save(existing);
+    return this.toDomain(saved);
   }
 
   async delete(id: number, userId: number): Promise<boolean> {
-    // Solo borra privadas
     const result = await this.ormRepo.delete({ id, userId });
     return !!result.affected && result.affected > 0;
   }
 
   async findById(id: number, userId: number): Promise<Breed | null> {
-    return await this.ormRepo.findOne({
+    const entity = await this.ormRepo.findOne({
       where: [
-        { id, userId }, // privadas
-        { id, userId: IsNull() }, // globales
+        { id, userId },
+        { id, userId: IsNull() },
       ],
-      relations: ['animal'],
     });
+
+    return entity ? this.toDomain(entity) : null;
   }
 
   async findByName(name: string, userId: number): Promise<Breed[]> {
-    return await this.ormRepo.find({
+    const entities = await this.ormRepo.find({
       where: [
         { name, userId },
         { name, userId: IsNull() },
       ],
-      relations: ['animal'],
     });
+
+    return entities.map((e) => this.toDomain(e));
   }
 
   async findAll(userId: number): Promise<Breed[]> {
-    return await this.ormRepo.find({
-      where: [
-        { userId }, // privadas
-        { userId: IsNull() }, // globales
-      ],
-      relations: ['animal'],
+    const entities = await this.ormRepo.find({
+      where: [{ userId }, { userId: IsNull() }],
     });
+
+    return entities.map((e) => this.toDomain(e));
   }
 
   async findByAnimal(animalId: number, userId: number): Promise<Breed[]> {
-    return await this.ormRepo.find({
+    const entities = await this.ormRepo.find({
       where: [
         { animalId, userId },
         { animalId, userId: IsNull() },
       ],
-      relations: ['animal'],
     });
+
+    return entities.map((e) => this.toDomain(e));
   }
 
   async findByNameAndAnimal(name: string, animalId: number, userId: number): Promise<Breed | null> {
-    return await this.ormRepo.findOne({
+    const entity = await this.ormRepo.findOne({
       where: [
         { name, animalId, userId },
         { name, animalId, userId: IsNull() },
       ],
     });
+
+    return entity ? this.toDomain(entity) : null;
   }
 }

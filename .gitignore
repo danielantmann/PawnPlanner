@@ -9,18 +9,22 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
-# expo router
+
+# Expo router
 expo-env.d.ts
 
-
-
+# Native platforms
 ios
 android
 
 # macOS
 .DS_Store
 
-# Temporary files created by Metro to check the health of the file watcher
+# Metro temporary files
 .metro-health-check*
 
+# Environment variables
 .env
+
+# Test coverage
+coverage/
