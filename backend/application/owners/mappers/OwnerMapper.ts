@@ -9,12 +9,6 @@ export class OwnerMapper {
       name: capitalize(owner.name),
       email: owner.email,
       phone: owner.phone,
-      pets: owner.pets
-        ? owner.pets.map((pet) => ({
-            id: pet.id,
-            name: capitalize(pet.name),
-          }))
-        : [],
     };
   }
 

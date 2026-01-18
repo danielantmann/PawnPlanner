@@ -114,4 +114,12 @@ export class PetRepository implements IPetRepository {
     const result = await this.ormRepo.delete({ id, userId });
     return !!result.affected && result.affected > 0;
   }
+
+  async findByOwner(ownerId: number, userId: number): Promise<Pet[]> {
+    const entities = await this.ormRepo.find({
+      where: { ownerId, userId },
+    });
+
+    return entities.map((e) => this.toDomain(e));
+  }
 }
