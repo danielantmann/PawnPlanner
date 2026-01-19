@@ -16,6 +16,7 @@ import { UserEntity } from './UserEntity';
 
 // Normalizadores (si quieres aplicarlos aquí también)
 import { normalizeName } from '../../../shared/normalizers/normalizeName';
+import { normalizeSearch } from '../../../shared/normalizers/normalizeSearch';
 
 @Entity('breeds')
 @Unique(['name', 'animalId'])
@@ -43,11 +44,16 @@ export class BreedEntity {
   @OneToMany(() => PetEntity, (pet) => pet.breed)
   pets!: PetEntity[];
 
+  @Column({ type: 'varchar', length: 255 })
+  searchName!: string;
+
   @BeforeInsert()
   @BeforeUpdate()
-  normalizeName() {
+  normalizeFields() {
     if (this.name) {
-      this.name = normalizeName(this.name);
+      const normalized = normalizeName(this.name);
+      this.name = normalized;
+      this.searchName = normalizeSearch(normalized);
     }
   }
 }

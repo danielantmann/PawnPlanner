@@ -9,6 +9,6 @@ export class GetBreedsByAnimalService {
 
   async execute(animalId: number, userId: number): Promise<BreedResponseDTO[]> {
     const breeds = await this.breedRepo.findByAnimal(animalId, userId);
-    return breeds.map(BreedMapper.toDTO);
+    return breeds.map((b) => BreedMapper.toDTO(b));
   }
 }

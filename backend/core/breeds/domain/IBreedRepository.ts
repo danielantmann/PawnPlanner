@@ -1,8 +1,9 @@
 import { Breed } from './Breed';
+import { BreedEntity } from '../../../infrastructure/orm/entities/BreedEntity';
 
 export interface IBreedRepository {
   save(breed: Breed): Promise<Breed>;
-  update(id: number, data: Partial<Breed>, userId: number): Promise<Breed | null>;
+  update(id: number, data: Partial<BreedEntity>, userId: number): Promise<Breed | null>;
   delete(id: number, userId: number): Promise<boolean>;
 
   findById(id: number, userId: number): Promise<Breed | null>;

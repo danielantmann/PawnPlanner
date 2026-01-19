@@ -4,6 +4,6 @@ export class Breed {
     public name: string,
     public searchName: string,
     public animalId: number,
-    public userId: number
+    public userId: number | null
   ) {}
 }

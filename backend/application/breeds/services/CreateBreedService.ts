@@ -7,6 +7,7 @@ import { Breed } from '../../../core/breeds/domain/Breed';
 import { IAnimalRepository } from '../../../core/animals/domain/IAnimalRepository';
 import { NotFoundError } from '../../../shared/errors/NotFoundError';
 import { ConflictError } from '../../../shared/errors/ConflictError';
+import { normalizeSearch } from '../../../shared/normalizers/normalizeSearch';
 
 @injectable()
 export class CreateBreedService {
@@ -19,7 +20,7 @@ export class CreateBreedService {
     const animal = await this.animalRepo.findById(dto.animalId, userId);
     if (!animal) throw new NotFoundError('Animal not found');
 
-    const normalizedName = dto.name.toLowerCase();
+    const normalizedName = dto.name.toLowerCase().trim();
 
     const existing = await this.breedRepo.findByNameAndAnimal(normalizedName, dto.animalId, userId);
 
@@ -27,12 +28,15 @@ export class CreateBreedService {
       throw new ConflictError(`Breed '${dto.name}' already exists for this animal`);
     }
 
-    const breed = new Breed();
-    breed.name = normalizedName;
-    breed.animal = animal;
-    breed.userId = userId;
+    const breed = new Breed(
+      null,
+      normalizedName,
+      normalizeSearch(normalizedName),
+      animal.id!,
+      userId
+    );
 
     const saved = await this.breedRepo.save(breed);
-    return BreedMapper.toDTO(saved);
+    return BreedMapper.toDTO(saved, animal);
   }
 }

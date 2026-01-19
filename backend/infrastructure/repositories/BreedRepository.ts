@@ -14,12 +14,10 @@ export class BreedRepository implements IBreedRepository {
     this.ormRepo = AppDataSource.getRepository(BreedEntity);
   }
 
-  // ORM → Dominio
   private toDomain(entity: BreedEntity): Breed {
-    return new Breed(entity.id, entity.name, entity.animalId, entity.userId);
+    return new Breed(entity.id, entity.name, entity.searchName, entity.animalId, entity.userId);
   }
 
-  // Dominio → ORM
   private toEntity(domain: Breed): BreedEntity {
     const entity = new BreedEntity();
 
@@ -28,6 +26,7 @@ export class BreedRepository implements IBreedRepository {
     }
 
     entity.name = domain.name;
+    entity.searchName = domain.searchName;
     entity.animalId = domain.animalId;
     entity.userId = domain.userId;
 
@@ -40,7 +39,7 @@ export class BreedRepository implements IBreedRepository {
     return this.toDomain(saved);
   }
 
-  async update(id: number, data: Partial<Breed>, userId: number): Promise<Breed | null> {
+  async update(id: number, data: Partial<BreedEntity>, userId: number): Promise<Breed | null> {
     const existing = await this.ormRepo.findOne({
       where: [
         { id, userId },
