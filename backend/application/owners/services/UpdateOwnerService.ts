@@ -46,7 +46,7 @@ export class UpdateOwnerService {
 
     const saved = await this.owners.update(id, updated, userId);
     const ownerPets = await this.pets.findByOwner(id, userId);
-    
+
     return OwnerWithPetsMapper.toDTO(saved!, ownerPets);
   }
 }

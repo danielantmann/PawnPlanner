@@ -12,7 +12,7 @@ export class GetAllOwnersService {
 
   async execute(userId: number) {
     const ownerList = await this.owners.findAll(userId);
-    
+
     return Promise.all(
       ownerList.map(async (owner) => {
         const ownerPets = await this.pets.findByOwner(owner.id!, userId);

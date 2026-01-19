@@ -23,7 +23,7 @@ describe('UpdateBreedService (unit)', () => {
 
     const updatedBreed = new Breed(1, 'labrador', 'labrador', 10, 1);
     const animal = new Animal(10, 'dog', 1);
-    
+
     breedRepo.update.mockResolvedValue(updatedBreed);
     animalRepo.findById.mockResolvedValue(animal);
 

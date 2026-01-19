@@ -26,7 +26,7 @@ describe('CreateBreedService (unit)', () => {
     const animal = new Animal(10, 'dog', 1);
     animalRepo.findById.mockResolvedValue(animal);
     breedRepo.findByNameAndAnimal.mockResolvedValue(null);
-    
+
     const savedBreed = new Breed(1, 'labrador', 'labrador', 10, 1);
     breedRepo.save.mockResolvedValue(savedBreed);
 
@@ -53,7 +53,7 @@ describe('CreateBreedService (unit)', () => {
 
     const animal = new Animal(10, 'dog', 1);
     animalRepo.findById.mockResolvedValue(animal);
-    
+
     const existingBreed = new Breed(1, 'labrador', 'labrador', 10, 1);
     breedRepo.findByNameAndAnimal.mockResolvedValue(existingBreed);
 

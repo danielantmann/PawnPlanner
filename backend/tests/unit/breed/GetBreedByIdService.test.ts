@@ -23,7 +23,7 @@ describe('GetBreedByIdService (unit)', () => {
 
     const breed = new Breed(1, 'labrador', 'labrador', 10, 1);
     const animal = new Animal(10, 'dog', 1);
-    
+
     breedRepo.findById.mockResolvedValue(breed);
     animalRepo.findById.mockResolvedValue(animal);
 

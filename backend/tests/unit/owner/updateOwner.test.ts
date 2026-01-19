@@ -22,7 +22,14 @@ describe('UpdateOwnerService', () => {
 
   it('should update owner successfully', async () => {
     const existingOwner = new Owner(1, 'Daniel', 'daniel', 'dan@test.com', '123', userId);
-    const updatedOwner = new Owner(1, 'Daniel Updated', 'daniel updated', 'dan@test.com', '456', userId);
+    const updatedOwner = new Owner(
+      1,
+      'Daniel Updated',
+      'daniel updated',
+      'dan@test.com',
+      '456',
+      userId
+    );
 
     mockOwnerRepo.findById.mockResolvedValue(existingOwner);
     mockOwnerRepo.findByEmail.mockResolvedValue(null);
@@ -48,7 +55,9 @@ describe('UpdateOwnerService', () => {
     const owner = new Owner(1, 'Daniel', 'daniel', 'dan@test.com', '123', userId);
 
     mockOwnerRepo.findById.mockResolvedValue(owner);
-    mockOwnerRepo.findByEmail.mockResolvedValue(new Owner(2, 'Other', 'other', 'other@test.com', '999', userId));
+    mockOwnerRepo.findByEmail.mockResolvedValue(
+      new Owner(2, 'Other', 'other', 'other@test.com', '999', userId)
+    );
 
     await expect(service.execute(1, { email: 'other@test.com' }, userId)).rejects.toThrow(
       ConflictError
@@ -59,7 +68,9 @@ describe('UpdateOwnerService', () => {
     const owner = new Owner(1, 'Daniel', 'daniel', 'dan@test.com', '123', userId);
 
     mockOwnerRepo.findById.mockResolvedValue(owner);
-    mockOwnerRepo.findByPhone.mockResolvedValue(new Owner(2, 'Other', 'other', 'other@test.com', '999', userId));
+    mockOwnerRepo.findByPhone.mockResolvedValue(
+      new Owner(2, 'Other', 'other', 'other@test.com', '999', userId)
+    );
 
     await expect(service.execute(1, { phone: '999' }, userId)).rejects.toThrow(ConflictError);
   });

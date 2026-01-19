@@ -8,10 +8,11 @@ export class AnimalMapper {
     return {
       id: animal.id!,
       species: capitalize(animal.species),
-      breeds: breeds?.map((b) => ({
-        id: b.id,
-        name: capitalize(b.name),
-      })) || [],
+      breeds:
+        breeds?.map((b) => ({
+          id: b.id,
+          name: capitalize(b.name),
+        })) || [],
     };
   }
 

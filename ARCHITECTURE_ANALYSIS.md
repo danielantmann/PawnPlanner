@@ -9,6 +9,7 @@
 ## ✅ FORTALEZAS
 
 ### 1. **Separación de Capas Clara (Clean Architecture)** ⭐⭐⭐
+
 ```
 core/             → Domain Layer (Entidades puras, Interfaces)
 application/      → Business Logic (Servicios, DTOs, Mappers)
@@ -26,6 +27,7 @@ shared/           → Utilidades (Errors, Normalizadores)
 ---
 
 ### 2. **Domain-Driven Design (DDD) Bien Implementado** ⭐⭐⭐⭐
+
 ```typescript
 // core/owners/domain/Owner.ts
 export class Owner {
@@ -43,11 +45,13 @@ export class Owner {
 ✅ **Entidades de Dominio Puras**: No heredan de TypeORM, no tienen decoradores, son plain TypeScript.
 
 ✅ **Agregados Bien Definidos**:
+
 - `Pet` = Agregado con Owner + Breed
 - `Owner` = Agregado con sus Pets
 - `Animal` = Agregado con sus Breeds
 
 ✅ **Interfaces de Repositorio en el Dominio**:
+
 ```typescript
 // core/owners/domain/IOwnerRepository
 export interface IOwnerRepository {
@@ -56,6 +60,7 @@ export interface IOwnerRepository {
   // ... métodos del repositorio
 }
 ```
+
 Esto es textbook DDD: el dominio define qué necesita, la infraestructura lo implementa.
 
 ---
@@ -63,7 +68,9 @@ Esto es textbook DDD: el dominio define qué necesita, la infraestructura lo imp
 ### 3. **Principios SOLID Correctamente Aplicados** ⭐⭐⭐⭐
 
 #### **S - Single Responsibility Principle** ✅
+
 Cada servicio tiene UNA responsabilidad:
+
 ```
 CreateOwnerService     → Crear propietarios
 GetOwnerByIdService    → Buscar por ID
@@ -75,18 +82,22 @@ DeleteOwnerService     → Eliminar
 **No hay**: Servicios "god" que hacen todo.
 
 #### **O - Open/Closed Principle** ✅
+
 ```typescript
 @injectable()
 export class CreateOwnerService {
   constructor(@inject('OwnerRepository') private repo: IOwnerRepository) {}
 }
 ```
+
 Abierto para extensión (nuevas implementaciones de `IOwnerRepository`), cerrado para modificación.
 
 #### **L - Liskov Substitution Principle** ✅
+
 Cualquier `IOwnerRepository` se puede pasar a los servicios sin problemas.
 
 #### **I - Interface Segregation Principle** ✅
+
 ```typescript
 export interface IOwnerRepository {
   create(owner: Owner): Promise<Owner>;
@@ -97,13 +108,16 @@ export interface IOwnerRepository {
   // etc.
 }
 ```
+
 La interfaz es clara, no es gigante ni tiene métodos no necesarios.
 
 #### **D - Dependency Inversion Principle** ✅
+
 ```typescript
 // Los servicios dependen de ABSTRACCIONES, no de implementaciones
 constructor(@inject('OwnerRepository') private repo: IOwnerRepository) {}
 ```
+
 Se inyecta la interfaz, no la clase concreta. ✅
 
 ---
@@ -111,6 +125,7 @@ Se inyecta la interfaz, no la clase concreta. ✅
 ### 4. **Patrón Repository y Mapper Excelente** ⭐⭐⭐⭐
 
 #### **Separación ORM ↔ Dominio**:
+
 ```typescript
 // Repository mapea automáticamente
 private toDomain(entity: OwnerEntity): Owner {
@@ -130,11 +145,13 @@ private toEntity(domain: Owner): OwnerEntity {
 ```
 
 **Ventajas**:
+
 - ✅ El dominio no sabe sobre TypeORM
 - ✅ Fácil cambiar de BD sin tocar la lógica de negocio
 - ✅ Testeable sin necesidad de BD
 
 #### **Mappers entre Servicios y DTOs**:
+
 ```typescript
 // OwnerWithPetsMapper
 static toDTO(owner: Owner, pets: Pet[]): OwnerResponseDTO {
@@ -153,6 +170,7 @@ static toDTO(owner: Owner, pets: Pet[]): OwnerResponseDTO {
 ---
 
 ### 5. **Inyección de Dependencias con Tsyringe** ⭐⭐⭐
+
 ```typescript
 // container.ts
 container.register<IPetRepository>('PetRepository', {
@@ -169,12 +187,21 @@ container.register(CreatePetService, { useClass: CreatePetService });
 ---
 
 ### 6. **Manejo de Errores Tipado** ⭐⭐⭐⭐
+
 ```typescript
 // shared/errors/
-export class NotFoundError extends HttpError { /* 404 */ }
-export class ConflictError extends HttpError { /* 409 */ }
-export class UnauthorizedError extends HttpError { /* 401 */ }
-export class ValidationError extends HttpError { /* 400 */ }
+export class NotFoundError extends HttpError {
+  /* 404 */
+}
+export class ConflictError extends HttpError {
+  /* 409 */
+}
+export class UnauthorizedError extends HttpError {
+  /* 401 */
+}
+export class ValidationError extends HttpError {
+  /* 400 */
+}
 ```
 
 ✅ Errores específicos por tipo
@@ -184,6 +211,7 @@ export class ValidationError extends HttpError { /* 400 */ }
 ---
 
 ### 7. **DTOs con Validación Declarativa** ⭐⭐⭐
+
 ```typescript
 export class CreateOwnerDTO {
   @IsString()
@@ -205,6 +233,7 @@ export class CreateOwnerDTO {
 ---
 
 ### 8. **Tests Completos** ⭐⭐⭐⭐
+
 - 82 Unit tests ✅
 - 140 Integration tests ✅
 - 222 tests totales pasando
@@ -214,6 +243,7 @@ El refactor mantuvo 100% de cobertura de tests.
 ---
 
 ### 9. **Multi-tenancy Implementado** ⭐⭐⭐
+
 ```typescript
 async execute(id: number, userId: number): Promise<Owner | null> {
   return this.repo.findById(id, userId); // userId añadido automáticamente
@@ -227,6 +257,7 @@ Cada operación verifica el `userId`. Excelente para seguridad.
 ## ⚠️ ÁREAS DE MEJORA
 
 ### 1. **Container.ts Muy Largo** 🟡
+
 **Líneas**: ~128
 **Problema**: Importa y registra TODO en un archivo.
 
@@ -239,6 +270,7 @@ import { CreatePetService } from './application/pets/services/CreatePetService';
 ```
 
 **Solución recomendada**:
+
 ```typescript
 // container.ts
 import { setupPetContainer } from './container/pet.container';
@@ -254,26 +286,29 @@ setupOwnerContainer(container);
 ---
 
 ### 2. **Entidades de Dominio Podrían Tener Métodos de Validación** 🟡
+
 **Ahora**:
+
 ```typescript
 // Owner es solo una estructura de datos
 export class Owner {
   constructor(
     public id: number | null,
-    public name: string,
+    public name: string
     // ...
   ) {}
 }
 ```
 
 **Mejor en DDD Puro**:
+
 ```typescript
 export class Owner {
   constructor(
     public id: number | null,
     public name: string,
     public email: string,
-    public phone: string,
+    public phone: string
   ) {
     this.validateEmail(email);
     this.validatePhone(phone);
@@ -299,7 +334,9 @@ export class Owner {
 ---
 
 ### 3. **Falta Inversión de Control en Controllers** 🟡
+
 **Ahora**:
+
 ```typescript
 export async function createOwner(req: Request, res: Response, next: NextFunction) {
   const service = container.resolve(CreateOwnerService); // Manual
@@ -309,6 +346,7 @@ export async function createOwner(req: Request, res: Response, next: NextFunctio
 ```
 
 **Podría ser** (con decoradores):
+
 ```typescript
 @Controller('/owners')
 @Injectable()
@@ -329,13 +367,16 @@ export class OwnerController {
 ---
 
 ### 4. **Mappers Podrían Ser Más Reutilizables** 🟡
+
 **Ahora**:
+
 ```typescript
 // OwnerWithPetsMapper.toDTO(owner, pets)
 // OwnerMapper.toDTO(owner) // ¿Cuándo se usa esto?
 ```
 
 Tienes mappers duplicados. Podrías combinarlos:
+
 ```typescript
 export class OwnerMapper {
   static toDTO(owner: Owner, pets?: Pet[]): OwnerResponseDTO {
@@ -352,7 +393,9 @@ export class OwnerMapper {
 ---
 
 ### 5. **Logging Limitado** 🟡
+
 No veo logging en servicios. En producción querrías:
+
 ```typescript
 @injectable()
 export class CreateOwnerService {
@@ -373,7 +416,9 @@ export class CreateOwnerService {
 ---
 
 ### 6. **Falta Patrón Unit of Work** 🟡
+
 Si necesitas transacciones con múltiples repos:
+
 ```typescript
 // Ahora (sin control transaccional)
 await this.petRepo.create(pet);
@@ -396,7 +441,9 @@ try {
 ---
 
 ### 7. **EventSourcing / Domain Events - No Implementados** 🟡
+
 En DDD puro, las entidades emiten eventos:
+
 ```typescript
 export class Owner {
   private events: DomainEvent[] = [];
@@ -421,19 +468,19 @@ export class Owner {
 
 ## 📊 PUNTUACIÓN POR PRINCIPIO
 
-| Principio | Cumplimiento | Notas |
-|-----------|--------------|-------|
-| **DDD** | 9/10 | Entidades puras, agregados claros. Falta: validación de dominio en entidades |
-| **Clean Arch** | 9/10 | Capas bien separadas. Falta: mejor organización de container |
-| **SOLID - S** | 10/10 | Cada servicio = 1 responsabilidad |
-| **SOLID - O** | 10/10 | Abierto/Cerrado respetado |
-| **SOLID - L** | 10/10 | Liskov OK |
-| **SOLID - I** | 10/10 | Interfaces segregadas |
-| **SOLID - D** | 10/10 | Inversión de dependencias perfecta |
-| **Testability** | 10/10 | 222 tests pasando, mocks fáciles |
-| **Mantenibilidad** | 8.5/10 | Buena, pero container podría mejorarse |
-| **Escalabilidad** | 8/10 | Buena estructura, podría mejorarse con logging |
-| **Seguridad** | 9/10 | Multi-tenancy OK, validación OK |
+| Principio          | Cumplimiento | Notas                                                                        |
+| ------------------ | ------------ | ---------------------------------------------------------------------------- |
+| **DDD**            | 9/10         | Entidades puras, agregados claros. Falta: validación de dominio en entidades |
+| **Clean Arch**     | 9/10         | Capas bien separadas. Falta: mejor organización de container                 |
+| **SOLID - S**      | 10/10        | Cada servicio = 1 responsabilidad                                            |
+| **SOLID - O**      | 10/10        | Abierto/Cerrado respetado                                                    |
+| **SOLID - L**      | 10/10        | Liskov OK                                                                    |
+| **SOLID - I**      | 10/10        | Interfaces segregadas                                                        |
+| **SOLID - D**      | 10/10        | Inversión de dependencias perfecta                                           |
+| **Testability**    | 10/10        | 222 tests pasando, mocks fáciles                                             |
+| **Mantenibilidad** | 8.5/10       | Buena, pero container podría mejorarse                                       |
+| **Escalabilidad**  | 8/10         | Buena estructura, podría mejorarse con logging                               |
+| **Seguridad**      | 9/10         | Multi-tenancy OK, validación OK                                              |
 
 ---
 
@@ -444,6 +491,7 @@ export class Owner {
 **SÍ. 100% Excelente.** ✅
 
 **Por qué**:
+
 1. ✅ De ORM-centric → Domain-centric
 2. ✅ De entidades anémicas → Entidades de dominio puras
 3. ✅ De lazy-loading implícito → Carga explícita
@@ -452,6 +500,7 @@ export class Owner {
 6. ✅ Mantuvo 100% compatibilidad con API
 
 **Lo mejor del refactor**:
+
 - Las entidades de dominio son puras (sin decoradores ORM)
 - El patrón Repository mapea automáticamente ORM ↔ Dominio
 - Los mappers reciben explícitamente todas las dependencias
@@ -463,15 +512,16 @@ export class Owner {
 ## 💡 RECOMENDACIONES PARA MEJORAR (Opcional)
 
 ### **Prioridad ALTA** (Hacer pronto):
+
 1. **Refactorizar `container.ts`** en submódulos por dominio
    - Impacto: Mantenibilidad +20%
    - Esfuerzo: 1-2 horas
-   
 2. **Agregar logging**
    - Impacto: Debugging en prod +50%
    - Esfuerzo: 2-3 horas
 
 ### **Prioridad MEDIA** (Considerar):
+
 3. **Agregar validación de dominio** en entidades
    - Impacto: DDD +1 punto
    - Esfuerzo: 3-4 horas
@@ -481,6 +531,7 @@ export class Owner {
    - Esfuerzo: 1 hora
 
 ### **Prioridad BAJA** (Futuro):
+
 5. **Patrón Unit of Work** si necesitas transacciones complejas
 6. **Domain Events** si quieres event sourcing
 7. **Decoradores en controllers** (si cambias a framework con soporte)
@@ -489,16 +540,16 @@ export class Owner {
 
 ## 📈 COMPARACIÓN: Antes vs Después del Refactor
 
-| Aspecto | Antes (master) | Después (refactor) |
-|---------|----------------|-------------------|
-| Entidades | @Entity + Decoradores ORM | Clases puras |
-| Dependencias | Circulares posibles | Siempre hacia el core |
-| Lazy-loading | Implícito (@OneToMany) | Explícito (inyectar repos) |
-| DTOs | Opcionales | Obligatorios |
-| Tests | 0 | 222 ✅ |
-| Testabilidad | Difícil (BD requerida) | Fácil (mocks) |
-| SOLID | Parcial | Completo ✅ |
-| DDD | No | Sí ✅ |
+| Aspecto      | Antes (master)            | Después (refactor)         |
+| ------------ | ------------------------- | -------------------------- |
+| Entidades    | @Entity + Decoradores ORM | Clases puras               |
+| Dependencias | Circulares posibles       | Siempre hacia el core      |
+| Lazy-loading | Implícito (@OneToMany)    | Explícito (inyectar repos) |
+| DTOs         | Opcionales                | Obligatorios               |
+| Tests        | 0                         | 222 ✅                     |
+| Testabilidad | Difícil (BD requerida)    | Fácil (mocks)              |
+| SOLID        | Parcial                   | Completo ✅                |
+| DDD          | No                        | Sí ✅                      |
 
 ---
 
@@ -507,8 +558,9 @@ export class Owner {
 **La arquitectura del backend es de calidad profesional.**
 
 Es un caso de estudio excelente de:
+
 - ✅ Clean Architecture bien aplicada
-- ✅ DDD correctamente implementado  
+- ✅ DDD correctamente implementado
 - ✅ SOLID completamente respetado
 - ✅ Código testeable y mantenible
 - ✅ Escalable para nuevas funcionalidades
@@ -530,4 +582,3 @@ Ejemplos de buenas prácticas que implementaste:
 5. **Servicios con SRP**: `backend/application/*/services/`
 6. **Errores tipados**: `backend/shared/errors/`
 7. **Multi-tenancy**: Cada servicio filtra por `userId`
-
