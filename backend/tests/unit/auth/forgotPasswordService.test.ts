@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { describe, it, expect } from 'vitest';
 import { ForgotPasswordService } from '../../../application/auth/services/ForgotPasswordService';
 import { User } from '../../../core/users/domain/User';

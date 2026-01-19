@@ -8,7 +8,7 @@ import { BadRequestError } from '../../../shared/errors/BadRequestError';
 
 @injectable()
 export class ResetPasswordService {
-  constructor(@inject('IUserRepository') private readonly userRepo: IUserRepository) {}
+  constructor(@inject('UserRepository') private readonly userRepo: IUserRepository) {}
 
   async execute(dto: ResetPasswordDTO): Promise<void> {
     const payload = TokenService.verifyResetToken(dto.resetToken);

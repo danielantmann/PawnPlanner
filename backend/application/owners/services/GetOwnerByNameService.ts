@@ -1,13 +1,23 @@
 import { inject, injectable } from 'tsyringe';
 import { IOwnerRepository } from '../../../core/owners/domain/IOwnerRepository';
-import { OwnerMapper } from '../mappers/OwnerMapper';
+import { IPetRepository } from '../../../core/pets/domain/IPetRepository';
+import { OwnerWithPetsMapper } from '../mappers/OwnerWithPetsMapper';
 
 @injectable()
 export class GetOwnerByNameService {
-  constructor(@inject('IOwnerRepository') private repo: IOwnerRepository) {}
+  constructor(
+    @inject('OwnerRepository') private owners: IOwnerRepository,
+    @inject('PetRepository') private pets: IPetRepository
+  ) {}
 
   async execute(name: string, userId: number) {
-    const owners = await this.repo.findByName(name, userId);
-    return OwnerMapper.toDTOs(owners);
+    const ownerList = await this.owners.findByName(name, userId);
+    
+    return Promise.all(
+      ownerList.map(async (owner) => {
+        const ownerPets = await this.pets.findByOwner(owner.id!, userId);
+        return OwnerWithPetsMapper.toDTO(owner, ownerPets);
+      })
+    );
   }
 }

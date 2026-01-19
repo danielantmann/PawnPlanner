@@ -4,20 +4,27 @@ import app from '../../../../api/app';
 import '../../../setup/test-setup';
 
 import { TestDataSource } from '../../../../infrastructure/orm/data-source.helper';
-import { Pet } from '../../../../core/pets/domain/Pet';
+import { PetEntity } from '../../../../infrastructure/orm/entities/PetEntity';
 
 async function createUser() {
   const email = `user-${Date.now()}@test.com`;
   const password = 'Password123!';
 
-  const res = await request(app).post('/auth/register').send({
+  // Primero registramos
+  await request(app).post('/auth/register').send({
     email,
     password,
     firstName: 'Test',
     lastName: 'User',
   });
 
-  return res.body.accessToken;
+  // Luego hacemos login (token válido)
+  const login = await request(app).post('/auth/login').send({
+    email,
+    password,
+  });
+
+  return login.body.accessToken;
 }
 
 async function createAnimal(token: string) {
@@ -70,7 +77,7 @@ describe('Pet - GetPetById (integration)', () => {
     // 🐛 DEBUG REAL
     console.log(
       '🐛 columnas pets:',
-      TestDataSource.getRepository(Pet).metadata.columns.map((c) => c.propertyName)
+      TestDataSource.getRepository(PetEntity).metadata.columns.map((c) => c.propertyName)
     );
 
     const petId = await createPet(token, ownerId, breedId);

@@ -1,6 +1,5 @@
 import 'reflect-metadata';
 import express from 'express';
-import '../container';
 
 import petsRoutes from './routes/pets';
 import breedsRoutes from './routes/breeds';
@@ -26,7 +25,6 @@ app.get('/ping', (_req, res) => {
   res.send('pong 🏓');
 });
 
-// Middleware global de errores
 app.use(errorHandler);
 
 export default app;

@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe';
-import { Repository, Like } from 'typeorm';
+import { Repository, Like, DataSource } from 'typeorm';
 
 import { OwnerEntity } from '../orm/entities/OwnerEntity';
 import { Owner } from '../../core/owners/domain/Owner';
@@ -10,8 +10,8 @@ import { AppDataSource } from '../orm/data-source';
 export class OwnerRepository implements IOwnerRepository {
   private ormRepo: Repository<OwnerEntity>;
 
-  constructor() {
-    this.ormRepo = AppDataSource.getRepository(OwnerEntity);
+  constructor(private dataSource: DataSource) {
+    this.ormRepo = dataSource.getRepository(OwnerEntity);
   }
 
   // ORM → Dominio

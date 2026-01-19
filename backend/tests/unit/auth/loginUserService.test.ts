@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { LoginUserService } from '../../../application/auth/services/LoginUserService';
 import { describe, expect, it } from 'vitest';
 import { User } from '../../../core/users/domain/User';

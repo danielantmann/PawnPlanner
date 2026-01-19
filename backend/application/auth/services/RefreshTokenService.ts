@@ -6,7 +6,7 @@ import { User } from '../../../core/users/domain/User';
 
 @injectable()
 export class RefreshTokenService {
-  constructor(@inject('IUserRepository') private readonly userRepo: IUserRepository) {}
+  constructor(@inject('UserRepository') private readonly userRepo: IUserRepository) {}
 
   async execute({ refreshToken }: { refreshToken: string }) {
     const payload = TokenService.verifyRefreshToken(refreshToken);

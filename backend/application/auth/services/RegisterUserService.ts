@@ -8,7 +8,7 @@ import { ConflictError } from '../../../shared/errors/ConflictError';
 
 @injectable()
 export class RegisterUserService {
-  constructor(@inject('IUserRepository') private readonly userRepo: IUserRepository) {}
+  constructor(@inject('UserRepository') private readonly userRepo: IUserRepository) {}
 
   async execute(dto: CreateUserDTO) {
     const email = dto.email.toLowerCase().trim();

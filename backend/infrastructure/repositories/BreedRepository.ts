@@ -1,17 +1,16 @@
 import { injectable } from 'tsyringe';
-import { Repository, IsNull } from 'typeorm';
+import { Repository, IsNull, DataSource } from 'typeorm';
 
 import { BreedEntity } from '../orm/entities/BreedEntity';
 import { Breed } from '../../core/breeds/domain/Breed';
 import { IBreedRepository } from '../../core/breeds/domain/IBreedRepository';
-import { AppDataSource } from '../orm/data-source';
 
 @injectable()
 export class BreedRepository implements IBreedRepository {
   private ormRepo: Repository<BreedEntity>;
 
-  constructor() {
-    this.ormRepo = AppDataSource.getRepository(BreedEntity);
+  constructor(private dataSource: DataSource) {
+    this.ormRepo = dataSource.getRepository(BreedEntity);
   }
 
   private toDomain(entity: BreedEntity): Breed {

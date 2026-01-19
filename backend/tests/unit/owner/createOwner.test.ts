@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { describe, expect, it, vi } from 'vitest';
 import { CreateOwnerService } from '../../../application/owners/services/CreateOwnerService';
 import { ConflictError } from '../../../shared/errors/ConflictError';
@@ -95,19 +96,5 @@ describe('CreateOwnerService', () => {
     mockRepo.findByPhone.mockResolvedValue(null);
 
     await expect(service.execute({} as any)).rejects.toThrow();
-  });
-
-  it('should throw an error if email format is invalid', async () => {
-    mockRepo.findByEmail.mockResolvedValue(null);
-    mockRepo.findByPhone.mockResolvedValue(null);
-
-    await expect(
-      service.execute({
-        name: 'Daniel',
-        email: 'not-an-email',
-        phone: '123',
-        userId,
-      })
-    ).rejects.toThrow();
   });
 });

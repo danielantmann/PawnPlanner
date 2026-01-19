@@ -4,7 +4,7 @@ import { NotFoundError } from '../../../shared/errors/NotFoundError';
 
 @injectable()
 export class DeleteOwnerService {
-  constructor(@inject('IOwnerRepository') private repo: IOwnerRepository) {}
+  constructor(@inject('OwnerRepository') private repo: IOwnerRepository) {}
 
   async execute(id: number, userId: number): Promise<void> {
     const deleted = await this.repo.delete(id, userId);

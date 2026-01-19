@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { describe, it, expect } from 'vitest';
 import { ResetPasswordService } from '../../../application/auth/services/ResetPasswordService';
 import { User } from '../../../core/users/domain/User';
@@ -57,7 +58,7 @@ describe('ResetPasswordService', () => {
     // Generamos un token con expiración inmediata
     const expiredToken = jwt.sign(
       { email: 'test@example.com' },
-      (TokenService as any).RESET_SECRET,
+      process.env.JWT_RESET_SECRET || 'reset-secret',
       { expiresIn: '1ms' }
     );
 

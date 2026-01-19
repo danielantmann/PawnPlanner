@@ -7,7 +7,7 @@ import { TokenService } from '../../../shared/utils/TokenService';
 
 @injectable()
 export class LoginUserService {
-  constructor(@inject('IUserRepository') private readonly userRepo: IUserRepository) {}
+  constructor(@inject('UserRepository') private readonly userRepo: IUserRepository) {}
 
   async execute(dto: LoginUserDTO) {
     const email = dto.email.toLowerCase().trim();

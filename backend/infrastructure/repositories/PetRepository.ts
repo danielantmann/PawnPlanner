@@ -1,17 +1,16 @@
 import { injectable } from 'tsyringe';
-import { Repository, Like } from 'typeorm';
+import { Repository, Like, DataSource } from 'typeorm';
 
 import { PetEntity } from '../orm/entities/PetEntity';
 import { Pet } from '../../core/pets/domain/Pet';
 import { IPetRepository } from '../../core/pets/domain/IPetRepository';
-import { AppDataSource } from '../orm/data-source';
 
 @injectable()
 export class PetRepository implements IPetRepository {
   private ormRepo: Repository<PetEntity>;
 
-  constructor() {
-    this.ormRepo = AppDataSource.getRepository(PetEntity);
+  constructor(private dataSource: DataSource) {
+    this.ormRepo = dataSource.getRepository(PetEntity);
   }
 
   // ORM → Dominio

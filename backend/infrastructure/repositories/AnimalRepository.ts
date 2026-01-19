@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe';
-import { Repository, IsNull } from 'typeorm';
+import { Repository, IsNull, DataSource } from 'typeorm';
 
 import { AnimalEntity } from '../orm/entities/AnimalEntity';
 import { Animal } from '../../core/animals/domain/Animal';
@@ -10,8 +10,8 @@ import { AppDataSource } from '../orm/data-source';
 export class AnimalRepository implements IAnimalRepository {
   private ormRepo: Repository<AnimalEntity>;
 
-  constructor() {
-    this.ormRepo = AppDataSource.getRepository(AnimalEntity);
+  constructor(private dataSource: DataSource) {
+    this.ormRepo = dataSource.getRepository(AnimalEntity);
   }
 
   private toDomain(entity: AnimalEntity): Animal {

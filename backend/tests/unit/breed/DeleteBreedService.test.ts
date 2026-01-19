@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { describe, it, expect, vi } from 'vitest';
 import { DeleteBreedService } from '../../../application/breeds/services/DeleteBreedService';
 import { NotFoundError } from '../../../shared/errors/NotFoundError';

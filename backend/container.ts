@@ -1,5 +1,11 @@
 import { container } from 'tsyringe';
 
+import { AppDataSource } from './infrastructure/orm/data-source';
+import { TestDataSource } from './infrastructure/orm/data-source.helper';
+
+// Elegir DataSource según entorno
+const dataSource = process.env.NODE_ENV === 'test' ? TestDataSource : AppDataSource;
+
 // -------------------- PET --------------------
 import { PetRepository } from './infrastructure/repositories/PetRepository';
 import { IPetRepository } from './core/pets/domain/IPetRepository';
@@ -10,6 +16,18 @@ import { GetAllPetsService } from './application/pets/services/GetAllPetsService
 import { GetPetByIdService } from './application/pets/services/GetPetByIdService';
 import { GetPetByNameService } from './application/pets/services/GetPetByNameService';
 import { GetPetByBreedService } from './application/pets/services/GetPetByBreedService';
+
+container.register<IPetRepository>('PetRepository', {
+  useFactory: () => new PetRepository(dataSource),
+});
+
+container.register(CreatePetService, { useClass: CreatePetService });
+container.register(UpdatePetService, { useClass: UpdatePetService });
+container.register(DeletePetService, { useClass: DeletePetService });
+container.register(GetAllPetsService, { useClass: GetAllPetsService });
+container.register(GetPetByIdService, { useClass: GetPetByIdService });
+container.register(GetPetByNameService, { useClass: GetPetByNameService });
+container.register(GetPetByBreedService, { useClass: GetPetByBreedService });
 
 // -------------------- BREED --------------------
 import { BreedRepository } from './infrastructure/repositories/BreedRepository';
@@ -22,6 +40,18 @@ import { GetBreedByIdService } from './application/breeds/services/GetBreedByIdS
 import { GetBreedByNameService } from './application/breeds/services/GetBreedByNameService';
 import { GetBreedsByAnimalService } from './application/breeds/services/GetBreedsByAnimalService';
 
+container.register<IBreedRepository>('BreedRepository', {
+  useFactory: () => new BreedRepository(dataSource),
+});
+
+container.register(CreateBreedService, { useClass: CreateBreedService });
+container.register(UpdateBreedService, { useClass: UpdateBreedService });
+container.register(DeleteBreedService, { useClass: DeleteBreedService });
+container.register(GetAllBreedsService, { useClass: GetAllBreedsService });
+container.register(GetBreedByIdService, { useClass: GetBreedByIdService });
+container.register(GetBreedByNameService, { useClass: GetBreedByNameService });
+container.register(GetBreedsByAnimalService, { useClass: GetBreedsByAnimalService });
+
 // -------------------- ANIMAL --------------------
 import { AnimalRepository } from './infrastructure/repositories/AnimalRepository';
 import { IAnimalRepository } from './core/animals/domain/IAnimalRepository';
@@ -31,6 +61,17 @@ import { DeleteAnimalService } from './application/animals/services/DeleteAnimal
 import { GetAllAnimalsService } from './application/animals/services/GetAllAnimalsService';
 import { GetAnimalByIdService } from './application/animals/services/GetAnimalByIdService';
 import { GetAnimalsBySpeciesService } from './application/animals/services/GetAnimalsBySpeciesService';
+
+container.register<IAnimalRepository>('AnimalRepository', {
+  useFactory: () => new AnimalRepository(dataSource),
+});
+
+container.register(CreateAnimalService, { useClass: CreateAnimalService });
+container.register(UpdateAnimalService, { useClass: UpdateAnimalService });
+container.register(DeleteAnimalService, { useClass: DeleteAnimalService });
+container.register(GetAllAnimalsService, { useClass: GetAllAnimalsService });
+container.register(GetAnimalByIdService, { useClass: GetAnimalByIdService });
+container.register(GetAnimalsBySpeciesService, { useClass: GetAnimalsBySpeciesService });
 
 // -------------------- OWNER --------------------
 import { OwnerRepository } from './infrastructure/repositories/OwnerRepository';
@@ -43,12 +84,32 @@ import { GetOwnerByIdService } from './application/owners/services/GetOwnerByIdS
 import { GetOwnerByEmailService } from './application/owners/services/GetOwnerByEmailService';
 import { GetOwnerByNameService } from './application/owners/services/GetOwnerByNameService';
 
+container.register<IOwnerRepository>('OwnerRepository', {
+  useFactory: () => new OwnerRepository(dataSource),
+});
+
+container.register(CreateOwnerService, { useClass: CreateOwnerService });
+container.register(UpdateOwnerService, { useClass: UpdateOwnerService });
+container.register(DeleteOwnerService, { useClass: DeleteOwnerService });
+container.register(GetAllOwnersService, { useClass: GetAllOwnersService });
+container.register(GetOwnerByIdService, { useClass: GetOwnerByIdService });
+container.register(GetOwnerByEmailService, { useClass: GetOwnerByEmailService });
+container.register(GetOwnerByNameService, { useClass: GetOwnerByNameService });
+
 // -------------------- USER --------------------
 import { UserRepository } from './infrastructure/repositories/UserRepository';
 import { IUserRepository } from './core/users/domain/IUserRepository';
 import { GetUserByIdService } from './application/users/services/GetUserByIdService';
 import { UpdateUserService } from './application/users/services/UpdateUserService';
 import { DeleteUserService } from './application/users/services/DeleteUserService';
+
+container.register<IUserRepository>('UserRepository', {
+  useFactory: () => new UserRepository(dataSource),
+});
+
+container.register(GetUserByIdService, { useClass: GetUserByIdService });
+container.register(UpdateUserService, { useClass: UpdateUserService });
+container.register(DeleteUserService, { useClass: DeleteUserService });
 
 // -------------------- AUTH --------------------
 import { RegisterUserService } from './application/auth/services/RegisterUserService';
@@ -58,54 +119,6 @@ import { ForgotPasswordService } from './application/auth/services/ForgotPasswor
 import { ResetPasswordService } from './application/auth/services/ResetPasswordService';
 import { ChangePasswordService } from './application/auth/services/ChangePasswordService';
 
-// -------------------- REGISTER --------------------
-
-// Pet
-container.register<IPetRepository>('IPetRepository', { useClass: PetRepository });
-container.register(CreatePetService, { useClass: CreatePetService });
-container.register(UpdatePetService, { useClass: UpdatePetService });
-container.register(DeletePetService, { useClass: DeletePetService });
-container.register(GetAllPetsService, { useClass: GetAllPetsService });
-container.register(GetPetByIdService, { useClass: GetPetByIdService });
-container.register(GetPetByNameService, { useClass: GetPetByNameService });
-container.register(GetPetByBreedService, { useClass: GetPetByBreedService });
-
-// Breed
-container.register<IBreedRepository>('IBreedRepository', { useClass: BreedRepository });
-container.register(CreateBreedService, { useClass: CreateBreedService });
-container.register(UpdateBreedService, { useClass: UpdateBreedService });
-container.register(DeleteBreedService, { useClass: DeleteBreedService });
-container.register(GetAllBreedsService, { useClass: GetAllBreedsService });
-container.register(GetBreedByIdService, { useClass: GetBreedByIdService });
-container.register(GetBreedByNameService, { useClass: GetBreedByNameService });
-container.register(GetBreedsByAnimalService, { useClass: GetBreedsByAnimalService });
-
-// Animal
-container.register<IAnimalRepository>('IAnimalRepository', { useClass: AnimalRepository });
-container.register(CreateAnimalService, { useClass: CreateAnimalService });
-container.register(UpdateAnimalService, { useClass: UpdateAnimalService });
-container.register(DeleteAnimalService, { useClass: DeleteAnimalService });
-container.register(GetAllAnimalsService, { useClass: GetAllAnimalsService });
-container.register(GetAnimalByIdService, { useClass: GetAnimalByIdService });
-container.register(GetAnimalsBySpeciesService, { useClass: GetAnimalsBySpeciesService });
-
-// Owner
-container.register<IOwnerRepository>('IOwnerRepository', { useClass: OwnerRepository });
-container.register(CreateOwnerService, { useClass: CreateOwnerService });
-container.register(UpdateOwnerService, { useClass: UpdateOwnerService });
-container.register(DeleteOwnerService, { useClass: DeleteOwnerService });
-container.register(GetAllOwnersService, { useClass: GetAllOwnersService });
-container.register(GetOwnerByIdService, { useClass: GetOwnerByIdService });
-container.register(GetOwnerByEmailService, { useClass: GetOwnerByEmailService });
-container.register(GetOwnerByNameService, { useClass: GetOwnerByNameService });
-
-// User
-container.register<IUserRepository>('IUserRepository', { useClass: UserRepository });
-container.register(GetUserByIdService, { useClass: GetUserByIdService });
-container.register(UpdateUserService, { useClass: UpdateUserService });
-container.register(DeleteUserService, { useClass: DeleteUserService });
-
-// Auth
 container.register(RegisterUserService, { useClass: RegisterUserService });
 container.register(LoginUserService, { useClass: LoginUserService });
 container.register(RefreshTokenService, { useClass: RefreshTokenService });

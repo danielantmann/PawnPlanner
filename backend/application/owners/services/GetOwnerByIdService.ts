@@ -7,8 +7,8 @@ import { OwnerWithPetsMapper } from '../mappers/OwnerWithPetsMapper';
 @injectable()
 export class GetOwnerByIdService {
   constructor(
-    @inject('IOwnerRepository') private owners: IOwnerRepository,
-    @inject('IPetRepository') private pets: IPetRepository
+    @inject('OwnerRepository') private owners: IOwnerRepository,
+    @inject('PetRepository') private pets: IPetRepository
   ) {}
 
   async execute(id: number, userId: number) {

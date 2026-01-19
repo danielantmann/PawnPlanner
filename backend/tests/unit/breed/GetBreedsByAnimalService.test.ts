@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { describe, it, expect, vi } from 'vitest';
 import { GetBreedsByAnimalService } from '../../../application/breeds/services/GetBreedsByAnimalService';
 

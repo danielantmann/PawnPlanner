@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 
 import { UserEntity } from '../orm/entities/UserEntity';
 import { User } from '../../core/users/domain/User';
@@ -10,8 +10,8 @@ import { AppDataSource } from '../orm/data-source';
 export class UserRepository implements IUserRepository {
   private ormRepo: Repository<UserEntity>;
 
-  constructor() {
-    this.ormRepo = AppDataSource.getRepository(UserEntity);
+  constructor(private dataSource: DataSource) {
+    this.ormRepo = dataSource.getRepository(UserEntity);
   }
 
   private toDomain(entity: UserEntity): User {

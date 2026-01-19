@@ -6,7 +6,7 @@ import { UnauthorizedError } from '../../../shared/errors/UnauthorizedError';
 
 @injectable()
 export class ForgotPasswordService {
-  constructor(@inject('IUserRepository') private readonly userRepo: IUserRepository) {}
+  constructor(@inject('UserRepository') private readonly userRepo: IUserRepository) {}
 
   async execute(dto: ForgotPasswordDTO): Promise<{ resetToken: string }> {
     const email = dto.email.toLowerCase().trim();
