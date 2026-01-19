@@ -1,9 +1,8 @@
-export class NotFoundError extends Error {
-  public readonly statusCode = 404;
+import { HttpError } from './HttpError';
 
+export class NotFoundError extends HttpError {
   constructor(message: string) {
-    super(message);
+    super(404, message);
     this.name = 'NotFoundError';
-    Error.captureStackTrace(this, this.constructor);
   }
 }

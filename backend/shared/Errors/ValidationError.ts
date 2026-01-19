@@ -1,9 +1,8 @@
-export class ValidationError extends Error {
-  public readonly statusCode = 400;
+import { HttpError } from './HttpError';
 
+export class ValidationError extends HttpError {
   constructor(message: string) {
-    super(message);
+    super(400, message);
     this.name = 'ValidationError';
-    Error.captureStackTrace(this, this.constructor);
   }
 }

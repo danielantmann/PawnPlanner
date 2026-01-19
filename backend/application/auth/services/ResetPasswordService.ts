@@ -1,4 +1,3 @@
-// application/auth/services/ResetPasswordService.ts
 import { inject, injectable } from 'tsyringe';
 import { IUserRepository } from '../../../core/users/domain/IUserRepository';
 import { ResetPasswordDTO } from '../dto/ResetPasswordDTO';
@@ -9,7 +8,7 @@ import { BadRequestError } from '../../../shared/errors/BadRequestError';
 
 @injectable()
 export class ResetPasswordService {
-  constructor(@inject('UserRepository') private readonly userRepo: IUserRepository) {}
+  constructor(@inject('IUserRepository') private readonly userRepo: IUserRepository) {}
 
   async execute(dto: ResetPasswordDTO): Promise<void> {
     const payload = TokenService.verifyResetToken(dto.resetToken);
@@ -27,12 +26,7 @@ export class ResetPasswordService {
       throw new BadRequestError('New password must be different from old password');
     }
 
-    // Hasheamos la nueva contraseña
-    const hash = await PasswordService.hash(dto.newPassword);
-    user.passwordHash = hash;
-
+    user.passwordHash = await PasswordService.hash(dto.newPassword);
     await this.userRepo.save(user);
-
-    // Opcional: invalidar el reset token si lo persistes en DB
   }
 }

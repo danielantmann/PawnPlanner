@@ -6,7 +6,7 @@ import { ChangePasswordInput } from '../types/ChangePasswordInput';
 
 @injectable()
 export class ChangePasswordService {
-  constructor(@inject('UserRepository') private userRepository: IUserRepository) {}
+  constructor(@inject('IUserRepository') private userRepository: IUserRepository) {}
 
   async execute({ userId, oldPassword, newPassword }: ChangePasswordInput): Promise<void> {
     const user = await this.userRepository.findById(userId);
