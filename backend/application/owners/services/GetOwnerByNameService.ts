@@ -1,7 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 import { IOwnerRepository } from '../../../core/owners/domain/IOwnerRepository';
 import { IPetRepository } from '../../../core/pets/domain/IPetRepository';
-import { OwnerWithPetsMapper } from '../mappers/OwnerWithPetsMapper';
+import { OwnerMapper } from '../mappers/OwnerMapper';
 
 @injectable()
 export class GetOwnerByNameService {
@@ -16,7 +16,7 @@ export class GetOwnerByNameService {
     return Promise.all(
       ownerList.map(async (owner) => {
         const ownerPets = await this.pets.findByOwner(owner.id!, userId);
-        return OwnerWithPetsMapper.toDTO(owner, ownerPets);
+        return OwnerMapper.toDTO(owner, ownerPets);
       })
     );
   }

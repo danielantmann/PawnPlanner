@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { describe, it, expect } from 'vitest';
-import { OwnerWithPetsMapper } from '../../../application/owners/mappers/OwnerWithPetsMapper';
+import { OwnerMapper } from '../../../application/owners/mappers/OwnerMapper';
 import { Owner } from '../../../core/owners/domain/Owner';
 import { Pet } from '../../../core/pets/domain/Pet';
 
@@ -9,7 +9,7 @@ describe('OwnerMapper', () => {
     const owner = new Owner(1, 'juan jose lopez', 'juanjoselopez', 'juan@test.com', '1234567', 99);
     const pets: Pet[] = [];
 
-    const dto = OwnerWithPetsMapper.toDTO(owner, pets);
+    const dto = OwnerMapper.toDTO(owner, pets);
 
     expect(dto).toEqual({
       id: 1,
@@ -24,7 +24,7 @@ describe('OwnerMapper', () => {
     const owner = new Owner(2, 'ana', 'ana', 'ana@test.com', '7654321', 99);
     const pets: Pet[] = [];
 
-    const dto = OwnerWithPetsMapper.toDTO(owner, pets);
+    const dto = OwnerMapper.toDTO(owner, pets);
     expect(dto.pets).toEqual([]);
   });
 
@@ -32,7 +32,7 @@ describe('OwnerMapper', () => {
     const owner = new Owner(3, 'carlos', 'carlos', 'carlos@test.com', '9999999', 99);
     const pets = [new Pet(1, 'Firulais', 'firulais', null, null, null, 3, 1, 99)];
 
-    const dto = OwnerWithPetsMapper.toDTO(owner, pets);
+    const dto = OwnerMapper.toDTO(owner, pets);
     expect(dto.pets).toEqual([{ id: 1, name: 'Firulais' }]);
   });
 
@@ -40,7 +40,7 @@ describe('OwnerMapper', () => {
     const owner = new Owner(4, 'Maria Lopez', 'marialopez', 'maria@test.com', '1111111', 99);
     const pets: Pet[] = [];
 
-    const dto = OwnerWithPetsMapper.toDTO(owner, pets);
+    const dto = OwnerMapper.toDTO(owner, pets);
     expect(dto.name).toBe('Maria Lopez');
   });
 
@@ -48,7 +48,7 @@ describe('OwnerMapper', () => {
     const owner = new Owner(5, 'pedro', 'pedro', 'pedro@test.com', '5555555', 99);
     const pets: Pet[] = [];
 
-    const dto = OwnerWithPetsMapper.toDTO(owner, pets);
+    const dto = OwnerMapper.toDTO(owner, pets);
     expect(dto).toHaveProperty('id');
     expect(dto).toHaveProperty('name');
     expect(dto).toHaveProperty('email');

@@ -2,7 +2,7 @@ import { inject, injectable } from 'tsyringe';
 import { IOwnerRepository } from '../../../core/owners/domain/IOwnerRepository';
 import { CreateOwnerDTO } from '../dto/CreateOwnerDTO';
 import { Owner } from '../../../core/owners/domain/Owner';
-import { OwnerWithPetsMapper } from '../mappers/OwnerWithPetsMapper';
+import { OwnerMapper } from '../mappers/OwnerMapper';
 import { ConflictError } from '../../../shared/errors/ConflictError';
 import { normalizeSearch } from '../../../shared/normalizers/normalizeSearch';
 
@@ -32,6 +32,6 @@ export class CreateOwnerService {
 
     const saved = await this.repo.create(owner);
     // Newly created owner has no pets
-    return OwnerWithPetsMapper.toDTO(saved, []);
+    return OwnerMapper.toDTO(saved, []);
   }
 }

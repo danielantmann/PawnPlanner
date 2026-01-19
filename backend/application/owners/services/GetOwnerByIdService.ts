@@ -2,7 +2,7 @@ import { inject, injectable } from 'tsyringe';
 import { IOwnerRepository } from '../../../core/owners/domain/IOwnerRepository';
 import { IPetRepository } from '../../../core/pets/domain/IPetRepository';
 import { NotFoundError } from '../../../shared/errors/NotFoundError';
-import { OwnerWithPetsMapper } from '../mappers/OwnerWithPetsMapper';
+import { OwnerMapper } from '../mappers/OwnerMapper';
 
 @injectable()
 export class GetOwnerByIdService {
@@ -19,6 +19,6 @@ export class GetOwnerByIdService {
 
     const ownerPets = await this.pets.findByOwner(id, userId);
 
-    return OwnerWithPetsMapper.toDTO(owner, ownerPets);
+    return OwnerMapper.toDTO(owner, ownerPets);
   }
 }

@@ -4,7 +4,7 @@ import { IPetRepository } from '../../../core/pets/domain/IPetRepository';
 import { UpdateOwnerDTO } from '../dto/UpdateOwnerDTO';
 import { NotFoundError } from '../../../shared/errors/NotFoundError';
 import { ConflictError } from '../../../shared/errors/ConflictError';
-import { OwnerWithPetsMapper } from '../mappers/OwnerWithPetsMapper';
+import { OwnerMapper } from '../mappers/OwnerMapper';
 import { Owner } from '../../../core/owners/domain/Owner';
 import { normalizeSearch } from '../../../shared/normalizers/normalizeSearch';
 
@@ -47,6 +47,6 @@ export class UpdateOwnerService {
     const saved = await this.owners.update(id, updated, userId);
     const ownerPets = await this.pets.findByOwner(id, userId);
 
-    return OwnerWithPetsMapper.toDTO(saved!, ownerPets);
+    return OwnerMapper.toDTO(saved!, ownerPets);
   }
 }

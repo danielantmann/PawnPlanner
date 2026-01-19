@@ -8,9 +8,7 @@ import jwt from 'jsonwebtoken';
 
 describe('RefreshTokenService', () => {
   it('should refresh tokens for valid user', async () => {
-    const user = new User();
-    user.id = 1;
-    user.email = 'test@example.com';
+    const user = new User(1, 'Test', 'User', null, 'test@example.com', 'hash');
 
     const mockRepo = { findByEmail: async () => user } as any;
     const service = new RefreshTokenService(mockRepo);
@@ -47,9 +45,7 @@ describe('RefreshTokenService', () => {
   });
 
   it('should throw UnauthorizedError if token is expired', async () => {
-    const user = new User();
-    user.id = 1;
-    user.email = 'test@example.com';
+    const user = new User(1, 'Test', 'User', null, 'test@example.com', 'hash');
 
     const mockRepo = { findByEmail: async () => user } as any;
     const service = new RefreshTokenService(mockRepo);
