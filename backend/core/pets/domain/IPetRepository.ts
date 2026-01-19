@@ -9,4 +9,5 @@ export interface IPetRepository {
   findByName(name: string, userId: number): Promise<Pet[]>;
   findByBreed(breedId: number, userId: number): Promise<Pet[]>;
   delete(id: number, userId: number): Promise<boolean>;
+  findByOwner(ownerId: number, userId: number): Promise<Pet[]>;
 }

@@ -1,42 +1,52 @@
 import { inject, injectable } from 'tsyringe';
 import { IOwnerRepository } from '../../../core/owners/domain/IOwnerRepository';
+import { IPetRepository } from '../../../core/pets/domain/IPetRepository';
 import { UpdateOwnerDTO } from '../dto/UpdateOwnerDTO';
-import { OwnerResponseDTO } from '../dto/OwnerResponseDTO';
 import { NotFoundError } from '../../../shared/errors/NotFoundError';
 import { ConflictError } from '../../../shared/errors/ConflictError';
 import { OwnerMapper } from '../mappers/OwnerMapper';
+import { Owner } from '../../../core/owners/domain/Owner';
+import { normalizeSearch } from '../../../shared/normalizers/normalizeSearch';
 
 @injectable()
 export class UpdateOwnerService {
-  constructor(@inject('OwnerRepository') private repo: IOwnerRepository) {}
+  constructor(
+    @inject('OwnerRepository') private owners: IOwnerRepository,
+    @inject('PetRepository') private pets: IPetRepository
+  ) {}
 
-  async execute(id: number, dto: UpdateOwnerDTO, userId: number): Promise<OwnerResponseDTO> {
-    const owner = await this.repo.findById(id, userId);
-    if (!owner) {
+  async execute(id: number, dto: UpdateOwnerDTO, userId: number) {
+    const existing = await this.owners.findById(id, userId);
+    if (!existing) {
       throw new NotFoundError(`Owner with id:${id} not found`);
     }
 
     if (dto.email) {
-      const existingByEmail = await this.repo.findByEmail(dto.email, userId);
-      if (existingByEmail && existingByEmail.id !== id) {
+      const dup = await this.owners.findByEmail(dto.email, userId);
+      if (dup && dup.id !== id) {
         throw new ConflictError(`Owner with email ${dto.email} already exists`);
       }
-      owner.email = dto.email;
     }
 
     if (dto.phone) {
-      const existingByPhone = await this.repo.findByPhone(dto.phone, userId);
-      if (existingByPhone && existingByPhone.id !== id) {
+      const dup = await this.owners.findByPhone(dto.phone, userId);
+      if (dup && dup.id !== id) {
         throw new ConflictError(`Owner with phone ${dto.phone} already exists`);
       }
-      owner.phone = dto.phone;
     }
 
-    if (dto.name) {
-      owner.name = dto.name;
-    }
+    const updated = new Owner(
+      id,
+      dto.name ?? existing.name,
+      normalizeSearch(dto.name ?? existing.name),
+      dto.email ?? existing.email,
+      dto.phone ?? existing.phone,
+      userId
+    );
 
-    const updated = await this.repo.update(id, owner, userId);
-    return OwnerMapper.toDTO(updated!);
+    const saved = await this.owners.update(id, updated, userId);
+    const ownerPets = await this.pets.findByOwner(id, userId);
+
+    return OwnerMapper.toDTO(saved!, ownerPets);
   }
 }

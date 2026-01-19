@@ -1,20 +1,25 @@
-import { OwnerResponseDTO } from './../dto/OwnerResponseDTO';
 import { inject, injectable } from 'tsyringe';
 import { IOwnerRepository } from '../../../core/owners/domain/IOwnerRepository';
+import { IPetRepository } from '../../../core/pets/domain/IPetRepository';
 import { NotFoundError } from '../../../shared/errors/NotFoundError';
 import { OwnerMapper } from '../mappers/OwnerMapper';
 
 @injectable()
 export class GetOwnerByEmailService {
-  constructor(@inject('OwnerRepository') private repo: IOwnerRepository) {}
+  constructor(
+    @inject('OwnerRepository') private owners: IOwnerRepository,
+    @inject('PetRepository') private pets: IPetRepository
+  ) {}
 
-  async execute(email: string, userId: number): Promise<OwnerResponseDTO> {
-    const owner = await this.repo.findByEmail(email, userId);
+  async execute(email: string, userId: number) {
+    const owner = await this.owners.findByEmail(email, userId);
 
     if (!owner) {
       throw new NotFoundError(`Owner not found with email: ${email}`);
     }
 
-    return OwnerMapper.toDTO(owner);
+    const ownerPets = await this.pets.findByOwner(owner.id!, userId);
+
+    return OwnerMapper.toDTO(owner, ownerPets);
   }
 }

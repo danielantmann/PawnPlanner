@@ -1,9 +1,8 @@
-export class BadRequestError extends Error {
-  public readonly statusCode = 400;
+import { HttpError } from './HttpError';
 
+export class BadRequestError extends HttpError {
   constructor(message: string) {
-    super(message);
+    super(400, message);
     this.name = 'BadRequestError';
-    Error.captureStackTrace(this, this.constructor);
   }
 }

@@ -1,25 +1,33 @@
 import * as jwt from 'jsonwebtoken';
 
 export class TokenService {
-  private static ACCESS_SECRET = process.env.JWT_SECRET || 'access-secret';
-  private static REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'refresh-secret';
-  private static RESET_SECRET = process.env.JWT_RESET_SECRET || 'reset-secret';
+  private static getAccessSecret(): string {
+    return process.env.JWT_SECRET || 'access-secret';
+  }
+
+  private static getRefreshSecret(): string {
+    return process.env.JWT_REFRESH_SECRET || 'refresh-secret';
+  }
+
+  private static getResetSecret(): string {
+    return process.env.JWT_RESET_SECRET || 'reset-secret';
+  }
 
   static generateAccessToken(payload: object): string {
-    return jwt.sign(payload, this.ACCESS_SECRET, { expiresIn: '15m' });
+    return jwt.sign(payload, this.getAccessSecret(), { expiresIn: '15m' });
   }
 
   static generateRefreshToken(payload: object): string {
-    return jwt.sign(payload, this.REFRESH_SECRET, { expiresIn: '7d' });
+    return jwt.sign(payload, this.getRefreshSecret(), { expiresIn: '7d' });
   }
 
   static generateResetToken(payload: object): string {
-    return jwt.sign(payload, this.RESET_SECRET, { expiresIn: '15m' });
+    return jwt.sign(payload, this.getResetSecret(), { expiresIn: '15m' });
   }
 
   static verifyAccessToken(token: string): any {
     try {
-      return jwt.verify(token, this.ACCESS_SECRET);
+      return jwt.verify(token, this.getAccessSecret());
     } catch {
       return null;
     }
@@ -27,7 +35,7 @@ export class TokenService {
 
   static verifyRefreshToken(token: string): any {
     try {
-      return jwt.verify(token, this.REFRESH_SECRET);
+      return jwt.verify(token, this.getRefreshSecret());
     } catch {
       return null;
     }
@@ -35,7 +43,7 @@ export class TokenService {
 
   static verifyResetToken(token: string): any {
     try {
-      return jwt.verify(token, this.RESET_SECRET);
+      return jwt.verify(token, this.getResetSecret());
     } catch {
       return null;
     }

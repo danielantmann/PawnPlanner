@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { describe, it, expect, vi } from 'vitest';
 import { DeleteOwnerService } from '../../../application/owners/services/DeleteOwnerService';
 import { NotFoundError } from '../../../shared/errors/NotFoundError';

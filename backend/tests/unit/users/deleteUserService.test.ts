@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { describe, it, expect } from 'vitest';
 import { DeleteUserService } from '../../../application/users/services/DeleteUserService';
 import { NotFoundError } from '../../../shared/errors/NotFoundError';

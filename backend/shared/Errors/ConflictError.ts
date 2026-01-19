@@ -1,9 +1,8 @@
-export class ConflictError extends Error {
-  public readonly statusCode = 409;
+import { HttpError } from './HttpError';
 
+export class ConflictError extends HttpError {
   constructor(message: string) {
-    super(message);
+    super(409, message);
     this.name = 'ConflictError';
-    Error.captureStackTrace(this, this.constructor);
   }
 }

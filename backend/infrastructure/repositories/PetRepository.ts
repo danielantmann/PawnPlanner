@@ -1,45 +1,87 @@
 import { injectable } from 'tsyringe';
-import { Like, Repository } from 'typeorm';
+import { Repository, Like, DataSource } from 'typeorm';
+
+import { PetEntity } from '../orm/entities/PetEntity';
 import { Pet } from '../../core/pets/domain/Pet';
 import { IPetRepository } from '../../core/pets/domain/IPetRepository';
-import { dataSource } from '../orm';
 
 @injectable()
 export class PetRepository implements IPetRepository {
-  private ormRepo: Repository<Pet>;
+  private ormRepo: Repository<PetEntity>;
 
-  constructor() {
-    this.ormRepo = dataSource.getRepository(Pet);
+  constructor(private dataSource: DataSource) {
+    this.ormRepo = dataSource.getRepository(PetEntity);
+  }
+
+  // ORM → Dominio
+  private toDomain(entity: PetEntity): Pet {
+    return new Pet(
+      entity.id,
+      entity.name,
+      entity.searchName,
+      entity.birthDate ?? null,
+      entity.importantNotes ?? null,
+      entity.quickNotes ?? null,
+      entity.ownerId,
+      entity.breedId,
+      entity.userId
+    );
+  }
+
+  // Dominio → ORM
+  private toEntity(domain: Pet): PetEntity {
+    const entity = new PetEntity();
+
+    if (domain.id !== null) {
+      entity.id = domain.id;
+    }
+
+    entity.name = domain.name;
+    entity.searchName = domain.searchName;
+
+    entity.birthDate = domain.birthDate ?? undefined;
+    entity.importantNotes = domain.importantNotes ?? undefined;
+    entity.quickNotes = domain.quickNotes ?? undefined;
+
+    entity.ownerId = domain.ownerId;
+    entity.breedId = domain.breedId;
+    entity.userId = domain.userId;
+
+    return entity;
   }
 
   async save(pet: Pet): Promise<Pet> {
-    return await this.ormRepo.save(pet);
+    const entity = this.toEntity(pet);
+    const saved = await this.ormRepo.save(entity);
+    return this.toDomain(saved);
   }
 
   async update(id: number, data: Partial<Pet>, userId: number): Promise<Pet | null> {
     const existing = await this.ormRepo.findOne({
       where: { id, userId },
-      relations: ['owner', 'breed'],
     });
 
     if (!existing) return null;
 
     Object.assign(existing, data);
-    return await this.ormRepo.save(existing);
+    const saved = await this.ormRepo.save(existing);
+    return this.toDomain(saved);
   }
 
   async findById(id: number, userId: number): Promise<Pet | null> {
-    return await this.ormRepo.findOne({
+    const entity = await this.ormRepo.findOne({
       where: { id, userId },
-      relations: ['owner', 'breed'],
     });
+
+    return entity ? this.toDomain(entity) : null;
   }
 
   async findAll(userId: number): Promise<Pet[]> {
-    return await this.ormRepo.find({
+    const entities = await this.ormRepo.find({
       where: { userId },
-      relations: ['owner', 'breed'],
     });
+
+    return entities.map((e) => this.toDomain(e));
   }
 
   async findByName(name: string, userId: number): Promise<Pet[]> {
@@ -49,21 +91,34 @@ export class PetRepository implements IPetRepository {
       .replace(/[\u0300-\u036f]/g, '')
       .replace(/\s+/g, '');
 
-    return await this.ormRepo.find({
-      where: [{ searchName: Like(`%${normalized}%`), userId }],
-      relations: ['owner', 'breed'],
+    const entities = await this.ormRepo.find({
+      where: {
+        searchName: Like(`%${normalized}%`),
+        userId,
+      },
     });
+
+    return entities.map((e) => this.toDomain(e));
   }
 
   async findByBreed(breedId: number, userId: number): Promise<Pet[]> {
-    return await this.ormRepo.find({
-      where: { breed: { id: breedId }, userId },
-      relations: ['owner', 'breed'],
+    const entities = await this.ormRepo.find({
+      where: { breedId, userId },
     });
+
+    return entities.map((e) => this.toDomain(e));
   }
 
   async delete(id: number, userId: number): Promise<boolean> {
     const result = await this.ormRepo.delete({ id, userId });
     return !!result.affected && result.affected > 0;
+  }
+
+  async findByOwner(ownerId: number, userId: number): Promise<Pet[]> {
+    const entities = await this.ormRepo.find({
+      where: { ownerId, userId },
+    });
+
+    return entities.map((e) => this.toDomain(e));
   }
 }

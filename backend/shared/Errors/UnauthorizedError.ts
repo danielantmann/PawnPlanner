@@ -1,9 +1,8 @@
-export class UnauthorizedError extends Error {
-  public readonly statusCode = 401;
+import { HttpError } from './HttpError';
 
+export class UnauthorizedError extends HttpError {
   constructor(message: string) {
-    super(message);
+    super(401, message);
     this.name = 'UnauthorizedError';
-    Error.captureStackTrace(this, this.constructor);
   }
 }

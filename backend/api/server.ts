@@ -1,14 +1,14 @@
 import 'reflect-metadata';
 import app from './app';
 import { AppDataSource } from '../infrastructure/orm/data-source';
-import { TestDataSource } from '../infrastructure/orm/data-source.helper';
-
-const dataSource = process.env.NODE_ENV === 'test' ? TestDataSource : AppDataSource;
 
 async function startServer(port: number = 3000) {
   try {
-    await dataSource.initialize();
+    await AppDataSource.initialize();
     console.log('📦 Database connected');
+
+    // Cargar contenedor DESPUÉS de inicializar el DataSource
+    await import('../container');
 
     app.listen(port, () => {
       console.log(`🚀 Server running at http://localhost:${port}`);

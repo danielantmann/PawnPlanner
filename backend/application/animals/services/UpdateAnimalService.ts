@@ -13,7 +13,7 @@ export class UpdateAnimalService {
     const updated = await this.repo.update(
       id,
       {
-        species: dto.species.toLowerCase(),
+        species: dto.species.toLowerCase().trim(),
       },
       userId
     );

@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { describe, it, expect } from 'vitest';
 import { RefreshTokenService } from '../../../application/auth/services/RefreshTokenService';
 import { User } from '../../../core/users/domain/User';
@@ -7,9 +8,7 @@ import jwt from 'jsonwebtoken';
 
 describe('RefreshTokenService', () => {
   it('should refresh tokens for valid user', async () => {
-    const user = new User();
-    user.id = 1;
-    user.email = 'test@example.com';
+    const user = new User(1, 'Test', 'User', null, 'test@example.com', 'hash');
 
     const mockRepo = { findByEmail: async () => user } as any;
     const service = new RefreshTokenService(mockRepo);
@@ -46,9 +45,7 @@ describe('RefreshTokenService', () => {
   });
 
   it('should throw UnauthorizedError if token is expired', async () => {
-    const user = new User();
-    user.id = 1;
-    user.email = 'test@example.com';
+    const user = new User(1, 'Test', 'User', null, 'test@example.com', 'hash');
 
     const mockRepo = { findByEmail: async () => user } as any;
     const service = new RefreshTokenService(mockRepo);
@@ -56,7 +53,7 @@ describe('RefreshTokenService', () => {
     // Generamos un token con expiración inmediata
     const expiredToken = jwt.sign(
       { id: 1, email: 'test@example.com' },
-      (TokenService as any).REFRESH_SECRET,
+      process.env.JWT_REFRESH_SECRET || 'refresh-secret',
       { expiresIn: '1ms' }
     );
 

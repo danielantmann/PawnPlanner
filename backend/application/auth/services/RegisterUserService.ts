@@ -10,28 +10,35 @@ import { ConflictError } from '../../../shared/errors/ConflictError';
 export class RegisterUserService {
   constructor(@inject('UserRepository') private readonly userRepo: IUserRepository) {}
 
-  async execute(
-    dto: CreateUserDTO
-  ): Promise<{ user: User; accessToken: string; refreshToken: string }> {
-    const existing = await this.userRepo.findByEmail(dto.email.toLowerCase().trim());
-    if (existing) {
-      throw new ConflictError('Email already exists');
-    }
+  async execute(dto: CreateUserDTO) {
+    const email = dto.email.toLowerCase().trim();
+
+    const existing = await this.userRepo.findByEmail(email);
+    if (existing) throw new ConflictError('Email already exists');
 
     const passwordHash = await PasswordService.hash(dto.password);
 
-    const user = new User();
-    user.firstName = dto.firstName.toLowerCase().trim();
-    user.lastName = dto.lastName.toLowerCase().trim();
-    user.secondLastName = dto.secondLastName?.toLowerCase().trim();
-    user.email = dto.email.toLowerCase().trim();
-    user.passwordHash = passwordHash;
+    const user = new User(
+      null,
+      dto.firstName.toLowerCase().trim(),
+      dto.lastName.toLowerCase().trim(),
+      dto.secondLastName?.toLowerCase().trim() ?? null,
+      email,
+      passwordHash
+    );
 
-    await this.userRepo.save(user);
+    const saved = await this.userRepo.save(user);
 
-    const accessToken = TokenService.generateAccessToken({ id: user.id, email: user.email });
-    const refreshToken = TokenService.generateRefreshToken({ id: user.id, email: user.email });
+    const accessToken = TokenService.generateAccessToken({
+      id: saved.id!,
+      email: saved.email,
+    });
 
-    return { user, accessToken, refreshToken };
+    const refreshToken = TokenService.generateRefreshToken({
+      id: saved.id!,
+      email: saved.email,
+    });
+
+    return { user: saved, accessToken, refreshToken };
   }
 }

@@ -1,5 +1,5 @@
 export class UserResponseDTO {
-  id!: number;
+  id!: number | null;
   firstName!: string;
   lastName!: string;
   secondLastName?: string;
