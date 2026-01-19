@@ -15,9 +15,9 @@ import { setupUserContainer } from './container/user.container';
 import { setupAuthContainer } from './container/auth.container';
 
 // Registrar todos los contenedores por dominio
-setupPetContainer(container, dataSource);
-setupBreedContainer(container, dataSource);
-setupAnimalContainer(container, dataSource);
-setupOwnerContainer(container, dataSource);
-setupUserContainer(container, dataSource);
-setupAuthContainer(container);
+setupPetContainer(dataSource);
+setupBreedContainer(dataSource);
+setupAnimalContainer(dataSource);
+setupOwnerContainer(dataSource);
+setupUserContainer(dataSource);
+setupAuthContainer();

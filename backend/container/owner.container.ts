@@ -1,4 +1,4 @@
-import { Container } from 'tsyringe';
+import { container } from 'tsyringe';
 import { DataSource } from 'typeorm';
 import { OwnerRepository } from '../infrastructure/repositories/OwnerRepository';
 import { IOwnerRepository } from '../core/owners/domain/IOwnerRepository';
@@ -10,7 +10,7 @@ import { GetOwnerByIdService } from '../application/owners/services/GetOwnerById
 import { GetOwnerByEmailService } from '../application/owners/services/GetOwnerByEmailService';
 import { GetOwnerByNameService } from '../application/owners/services/GetOwnerByNameService';
 
-export function setupOwnerContainer(container: Container, dataSource: DataSource): void {
+export function setupOwnerContainer(dataSource: DataSource): void {
   container.register<IOwnerRepository>('OwnerRepository', {
     useFactory: () => new OwnerRepository(dataSource),
   });

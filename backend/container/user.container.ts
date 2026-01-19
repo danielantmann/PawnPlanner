@@ -1,4 +1,4 @@
-import { Container } from 'tsyringe';
+import { container } from 'tsyringe';
 import { DataSource } from 'typeorm';
 import { UserRepository } from '../infrastructure/repositories/UserRepository';
 import { IUserRepository } from '../core/users/domain/IUserRepository';
@@ -6,7 +6,7 @@ import { GetUserByIdService } from '../application/users/services/GetUserByIdSer
 import { UpdateUserService } from '../application/users/services/UpdateUserService';
 import { DeleteUserService } from '../application/users/services/DeleteUserService';
 
-export function setupUserContainer(container: Container, dataSource: DataSource): void {
+export function setupUserContainer(dataSource: DataSource): void {
   container.register<IUserRepository>('UserRepository', {
     useFactory: () => new UserRepository(dataSource),
   });

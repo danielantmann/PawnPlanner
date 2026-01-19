@@ -1,4 +1,4 @@
-import { Container } from 'tsyringe';
+import { container } from 'tsyringe';
 import { DataSource } from 'typeorm';
 import { PetRepository } from '../infrastructure/repositories/PetRepository';
 import { IPetRepository } from '../core/pets/domain/IPetRepository';
@@ -10,7 +10,7 @@ import { GetPetByIdService } from '../application/pets/services/GetPetByIdServic
 import { GetPetByNameService } from '../application/pets/services/GetPetByNameService';
 import { GetPetByBreedService } from '../application/pets/services/GetPetByBreedService';
 
-export function setupPetContainer(container: Container, dataSource: DataSource): void {
+export function setupPetContainer(dataSource: DataSource): void {
   container.register<IPetRepository>('PetRepository', {
     useFactory: () => new PetRepository(dataSource),
   });

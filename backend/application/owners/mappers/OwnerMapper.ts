@@ -10,16 +10,15 @@ export class OwnerMapper {
       name: capitalize(owner.name),
       email: owner.email,
       phone: owner.phone,
-      pets: pets?.map((p) => ({
-        id: p.id,
-        name: capitalize(p.name),
-      })) ?? [],
+      pets:
+        pets?.map((p) => ({
+          id: p.id,
+          name: capitalize(p.name),
+        })) ?? [],
     };
   }
 
   static toDTOs(owners: Owner[], petsMap?: Map<number, Pet[]>): OwnerWithPetsResponseDTO[] {
-    return owners.map((owner) =>
-      this.toDTO(owner, petsMap?.get(owner.id!) ?? undefined)
-    );
+    return owners.map((owner) => this.toDTO(owner, petsMap?.get(owner.id!) ?? undefined));
   }
 }

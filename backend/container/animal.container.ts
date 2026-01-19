@@ -1,4 +1,4 @@
-import { Container } from 'tsyringe';
+import { container } from 'tsyringe';
 import { DataSource } from 'typeorm';
 import { AnimalRepository } from '../infrastructure/repositories/AnimalRepository';
 import { IAnimalRepository } from '../core/animals/domain/IAnimalRepository';
@@ -9,7 +9,7 @@ import { GetAllAnimalsService } from '../application/animals/services/GetAllAnim
 import { GetAnimalByIdService } from '../application/animals/services/GetAnimalByIdService';
 import { GetAnimalsBySpeciesService } from '../application/animals/services/GetAnimalsBySpeciesService';
 
-export function setupAnimalContainer(container: Container, dataSource: DataSource): void {
+export function setupAnimalContainer(dataSource: DataSource): void {
   container.register<IAnimalRepository>('AnimalRepository', {
     useFactory: () => new AnimalRepository(dataSource),
   });

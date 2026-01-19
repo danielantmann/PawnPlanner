@@ -1,4 +1,4 @@
-import { Container } from 'tsyringe';
+import { container } from 'tsyringe';
 import { DataSource } from 'typeorm';
 import { BreedRepository } from '../infrastructure/repositories/BreedRepository';
 import { IBreedRepository } from '../core/breeds/domain/IBreedRepository';
@@ -10,7 +10,7 @@ import { GetBreedByIdService } from '../application/breeds/services/GetBreedById
 import { GetBreedByNameService } from '../application/breeds/services/GetBreedByNameService';
 import { GetBreedsByAnimalService } from '../application/breeds/services/GetBreedsByAnimalService';
 
-export function setupBreedContainer(container: Container, dataSource: DataSource): void {
+export function setupBreedContainer(dataSource: DataSource): void {
   container.register<IBreedRepository>('BreedRepository', {
     useFactory: () => new BreedRepository(dataSource),
   });
