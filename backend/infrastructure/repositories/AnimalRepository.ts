@@ -14,12 +14,10 @@ export class AnimalRepository implements IAnimalRepository {
     this.ormRepo = AppDataSource.getRepository(AnimalEntity);
   }
 
-  // ORM → Dominio
   private toDomain(entity: AnimalEntity): Animal {
     return new Animal(entity.id, entity.species, entity.userId);
   }
 
-  // Dominio → ORM
   private toEntity(domain: Animal): AnimalEntity {
     const entity = new AnimalEntity();
 
@@ -39,7 +37,7 @@ export class AnimalRepository implements IAnimalRepository {
     return this.toDomain(saved);
   }
 
-  async update(id: number, data: Partial<Animal>, userId: number): Promise<Animal | null> {
+  async update(id: number, data: Partial<AnimalEntity>, userId: number): Promise<Animal | null> {
     const existing = await this.ormRepo.findOne({
       where: [
         { id, userId },

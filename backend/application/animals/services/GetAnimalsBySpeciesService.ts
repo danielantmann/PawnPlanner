@@ -8,7 +8,7 @@ export class GetAnimalsBySpeciesService {
   constructor(@inject('AnimalRepository') private repo: IAnimalRepository) {}
 
   async execute(species: string, userId: number): Promise<AnimalResponseDTO[]> {
-    const normalized = species.toLowerCase();
+    const normalized = species.toLowerCase().trim();
 
     const animals = await this.repo.findBySpecies(normalized, userId);
 

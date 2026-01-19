@@ -11,16 +11,14 @@ export class CreateAnimalService {
   constructor(@inject('AnimalRepository') private repo: IAnimalRepository) {}
 
   async execute(dto: CreateAnimalDTO, userId: number): Promise<AnimalResponseDTO> {
-    const normalized = dto.species.toLowerCase();
+    const normalized = dto.species.toLowerCase().trim();
 
     const existing = await this.repo.findBySpecies(normalized, userId);
     if (existing.length > 0) {
       throw new ConflictError(`Animal with species '${dto.species}' already exists`);
     }
 
-    const animal = new Animal();
-    animal.species = normalized;
-    animal.userId = userId;
+    const animal = new Animal(null, normalized, userId);
 
     const saved = await this.repo.create(animal);
     return AnimalMapper.toDTO(saved);
