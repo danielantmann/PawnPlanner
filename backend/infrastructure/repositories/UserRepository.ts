@@ -14,7 +14,6 @@ export class UserRepository implements IUserRepository {
     this.ormRepo = AppDataSource.getRepository(UserEntity);
   }
 
-  // ORM → Dominio
   private toDomain(entity: UserEntity): User {
     return new User(
       entity.id,
@@ -26,7 +25,6 @@ export class UserRepository implements IUserRepository {
     );
   }
 
-  // Dominio → ORM
   private toEntity(domain: User): UserEntity {
     const entity = new UserEntity();
 
@@ -49,7 +47,7 @@ export class UserRepository implements IUserRepository {
     return this.toDomain(saved);
   }
 
-  async update(id: number, data: Partial<User>): Promise<User | null> {
+  async update(id: number, data: Partial<UserEntity>): Promise<User | null> {
     const existing = await this.ormRepo.findOne({ where: { id } });
     if (!existing) return null;
 
