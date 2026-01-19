@@ -611,3 +611,108 @@ The update brings the backend to a production‑ready state before beginning the
   - Clean Architecture / SRP refactor (module‑by‑module)
   - Implementation of Services (catalog)
   - Implementation of Appointments (core scheduling module)
+
+## [Refactor – Big Clean Architecture Overhaul] – 2026‑01‑19
+
+## Overview
+
+This refactor introduces a full Clean Architecture restructuring across the entire backend.  
+It modularizes dependency injection, standardizes error handling, improves repository consistency, and aligns all tests with domain boundaries.  
+The result is a more maintainable, scalable, and predictable codebase ready for future modules such as Appointments and Services.
+
+---
+
+## Key Changes
+
+### 1. Architecture & Project Structure
+
+- Reorganized the entire backend into clear layers:
+  - **core** (domain models & interfaces)
+  - **application** (DTOs, mappers, services)
+  - **infrastructure** (ORM entities, repositories, data sources)
+  - **api** (controllers, routes, middleware)
+- Introduced a **modular container system**, with dedicated DI containers for:
+  - animals
+  - breeds
+  - owners
+  - pets
+  - users
+  - auth
+
+---
+
+### 2. Dependency Injection
+
+- Centralized all DI tokens for clarity and maintainability.
+- Updated every service to use explicit `@inject` tokens.
+- Removed legacy container definitions and auto‑resolution patterns.
+- Ensured deterministic DI behavior across tests and runtime.
+
+---
+
+### 3. Domain‑to‑ORM Mapping
+
+- Added a dedicated mapping layer to isolate infrastructure concerns.
+- Standardized entity normalization:
+  - email normalization
+  - name normalization
+  - search field normalization
+- Ensured consistent behavior across all repositories.
+
+---
+
+### 4. Repositories
+
+- Refactored all repositories to align with domain boundaries.
+- Standardized search behavior across modules.
+- Fixed inconsistent normalization logic.
+- Improved error handling for missing entities and constraint violations.
+- Ensured multi‑tenant filtering is applied consistently.
+
+---
+
+### 5. Application Layer
+
+- Updated DTO validation with improved nested error reporting.
+- Standardized naming conventions across DTOs, services, and mappers.
+- Improved update services to prevent accidental data loss.
+- Ensured all services throw typed domain exceptions:
+  - `NotFoundError`
+  - `ConflictError`
+  - `BadRequestError`
+  - `UnauthorizedError`
+
+---
+
+### 6. API Layer
+
+- Updated controllers to follow a unified response contract.
+- Improved error handling middleware:
+  - consistent error format
+  - nested validation error flattening
+  - correct mapping of domain errors to HTTP codes
+- Removed redundant logic now handled by services or middleware.
+
+---
+
+### 7. Testing
+
+- Fully aligned unit and integration tests with the new architecture.
+- Reworked test setup for deterministic DB initialization and teardown.
+- Eliminated test flakiness caused by shared state.
+- Achieved **95%+ total coverage** across the backend.
+- Added missing branches in mappers and repositories.
+
+---
+
+## Outcome
+
+- The backend now follows a clean, modular, and scalable architecture.
+- Dependency injection is explicit, predictable, and easy to maintain.
+- Error handling is standardized across all modules.
+- Tests are stable, deterministic, and aligned with domain boundaries.
+- The system is ready for:
+  - Appointments module
+  - Services module
+  - Future multi‑tenant expansions
+  - Additional domain features
