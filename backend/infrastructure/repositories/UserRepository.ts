@@ -4,7 +4,6 @@ import { DataSource, Repository } from 'typeorm';
 import { UserEntity } from '../orm/entities/UserEntity';
 import { User } from '../../core/users/domain/User';
 import { IUserRepository } from '../../core/users/domain/IUserRepository';
-import { AppDataSource } from '../orm/data-source';
 
 @injectable()
 export class UserRepository implements IUserRepository {

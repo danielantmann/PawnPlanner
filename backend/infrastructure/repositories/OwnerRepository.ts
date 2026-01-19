@@ -4,7 +4,6 @@ import { Repository, Like, DataSource } from 'typeorm';
 import { OwnerEntity } from '../orm/entities/OwnerEntity';
 import { Owner } from '../../core/owners/domain/Owner';
 import { IOwnerRepository } from '../../core/owners/domain/IOwnerRepository';
-import { AppDataSource } from '../orm/data-source';
 
 @injectable()
 export class OwnerRepository implements IOwnerRepository {

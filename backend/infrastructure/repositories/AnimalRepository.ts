@@ -4,7 +4,6 @@ import { Repository, IsNull, DataSource } from 'typeorm';
 import { AnimalEntity } from '../orm/entities/AnimalEntity';
 import { Animal } from '../../core/animals/domain/Animal';
 import { IAnimalRepository } from '../../core/animals/domain/IAnimalRepository';
-import { AppDataSource } from '../orm/data-source';
 
 @injectable()
 export class AnimalRepository implements IAnimalRepository {
