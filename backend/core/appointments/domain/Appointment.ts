@@ -1,11 +1,23 @@
 export class Appointment {
   constructor(
     public id: number | null,
-    public startTime: Date,
-    public endTime: Date,
-    public notes: string | null,
+    public userId: number,
     public petId: number,
     public serviceId: number,
-    public userId: number
+
+    public petName: string,
+    public ownerName: string,
+    public ownerPhone: string,
+
+    public serviceName: string,
+    public estimatedPrice: number,
+    public finalPrice: number,
+
+    public startTime: Date,
+    public endTime: Date,
+    public durationMinutes: number,
+
+    public status: 'completed' | 'no-show' | 'cancelled' = 'completed',
+    public reminderSent: boolean = false
   ) {}
 }

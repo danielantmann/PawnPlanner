@@ -2,14 +2,14 @@ import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { Request, Response, NextFunction } from 'express';
 
-export function validationMiddleware(type: any) {
+export function validationMiddleware(type: any, skipMissingProperties: boolean = false) {
   return async (req: Request, _res: Response, next: NextFunction) => {
     const dto = plainToInstance(type, req.body);
 
     const errors = await validate(dto, {
       whitelist: true,
       forbidNonWhitelisted: true,
-      skipMissingProperties: false,
+      skipMissingProperties,
     });
 
     if (errors.length > 0) {
