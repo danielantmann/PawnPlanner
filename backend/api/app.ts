@@ -5,6 +5,7 @@ import petsRoutes from './routes/pets';
 import breedsRoutes from './routes/breeds';
 import animalsRoutes from './routes/animals';
 import ownersRoutes from './routes/owners';
+import appointmentsRoutes from './routes/appointments';
 import authRoutes from './routes/auth';
 import usersRoutes from './routes/users';
 
@@ -18,6 +19,7 @@ app.use('/pets', petsRoutes);
 app.use('/breeds', breedsRoutes);
 app.use('/animals', animalsRoutes);
 app.use('/owners', ownersRoutes);
+app.use('/appointments', appointmentsRoutes);
 app.use('/auth', authRoutes);
 app.use('/users', usersRoutes);
 

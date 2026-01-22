@@ -5,6 +5,8 @@ import { setupAnimalContainer } from './container/animal.container';
 import { setupOwnerContainer } from './container/owner.container';
 import { setupUserContainer } from './container/user.container';
 import { setupAuthContainer } from './container/auth.container';
+import { setupServiceContainer } from './container/service.container';
+import { setupAppointmentContainer } from './container/appointment.container';
 import { AppDataSource } from './infrastructure/orm/data-source';
 import { TestDataSource } from './infrastructure/orm/data-source.helper';
 
@@ -18,3 +20,5 @@ setupAnimalContainer(dataSource);
 setupOwnerContainer(dataSource);
 setupUserContainer(dataSource);
 setupAuthContainer();
+setupServiceContainer(dataSource);
+setupAppointmentContainer(dataSource);
