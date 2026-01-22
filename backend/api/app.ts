@@ -8,6 +8,7 @@ import ownersRoutes from './routes/owners';
 import appointmentsRoutes from './routes/appointments';
 import authRoutes from './routes/auth';
 import usersRoutes from './routes/users';
+import servicesRoutes from './routes/services';
 
 import { errorHandler } from './middlewares/errorHandler';
 
@@ -22,6 +23,7 @@ app.use('/owners', ownersRoutes);
 app.use('/appointments', appointmentsRoutes);
 app.use('/auth', authRoutes);
 app.use('/users', usersRoutes);
+app.use('/services', servicesRoutes);
 
 app.get('/ping', (_req, res) => {
   res.send('pong 🏓');

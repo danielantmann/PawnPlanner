@@ -11,15 +11,15 @@ export class ServiceEntity {
   @Column({ type: 'varchar', length: 255 })
   name!: string;
 
-  @Column({ type: 'text', nullable: true })
-  description?: string;
-
   @Column('decimal', { precision: 10, scale: 2 })
   price!: number;
 
-  @ManyToOne(() => UserEntity, (user) => user.services, { onDelete: 'CASCADE' })
+  @ManyToOne(() => UserEntity, (user) => user.services, {
+    onDelete: 'CASCADE',
+    nullable: true,
+  })
   @JoinColumn({ name: 'userId' })
-  createdByUser!: UserEntity;
+  createdByUser?: UserEntity | null;
 
   @OneToMany(() => AppointmentEntity, (appointment) => appointment.service)
   appointments!: AppointmentEntity[];

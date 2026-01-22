@@ -39,6 +39,7 @@ export class CreatePetService {
     );
 
     const saved = await this.pets.save(pet);
+    console.log('🔥 PET GUARDADO:', saved);
     return PetMapper.toDTO(saved, owner, breed);
   }
 
