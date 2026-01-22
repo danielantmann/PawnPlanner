@@ -716,3 +716,67 @@ The result is a more maintainable, scalable, and predictable codebase ready for 
   - Services module
   - Future multi‑tenant expansions
   - Additional domain features
+
+## [Feature – Appointment Module Completed] – 2026‑01‑22
+
+## Overview
+
+This update introduces the full Appointment module, including domain logic, repository integration, application services, controllers, routing, and unit tests.  
+The module is now fully functional and aligned with the project’s Clean Architecture structure.  
+Integration tests will be added once the Service module is completed.
+
+---
+
+## Key Changes
+
+### 1. Domain & Infrastructure
+
+- Added complete Appointment domain model.
+- Implemented `AppointmentEntity` with all required relations.
+- Added `AppointmentRepository` with:
+  - user‑scoped filtering
+  - overlap detection
+  - consistent domain mapping
+
+---
+
+### 2. Application Layer
+
+- Implemented full set of Appointment services:
+  - `CreateAppointmentService`
+  - `UpdateAppointmentService`
+  - `DeleteAppointmentService`
+  - `GetAppointmentsByRangeService`
+  - `GetCompletedAppointmentsInRangeService`
+- Added DTOs for create/update flows.
+- Added `AppointmentMapper` for consistent API responses.
+- Ensured all services throw typed domain errors (`NotFoundError`, `ConflictError`, `BadRequestError`).
+
+---
+
+### 3. API Layer
+
+- Added controllers for all Appointment operations.
+- Added routing under `/appointments`.
+- Unified response structure and error handling.
+
+---
+
+### 4. Testing
+
+- Added unit tests covering:
+  - creation logic
+  - update rules (price, status, time range)
+  - validation errors
+  - not‑found scenarios
+  - conflict detection
+- Integration tests pending until the Service module is finalized.
+
+---
+
+## Outcome
+
+- Appointment module is now complete and production‑ready.
+- Fully aligned with the Clean Architecture refactor.
+- Provides a solid foundation for the upcoming Service module.
+- Integration tests will be added once the Service module is implemented.
