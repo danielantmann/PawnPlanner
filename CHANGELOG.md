@@ -780,3 +780,95 @@ Integration tests will be added once the Service module is completed.
 - Fully aligned with the Clean Architecture refactor.
 - Provides a solid foundation for the upcoming Service module.
 - Integration tests will be added once the Service module is implemented.
+
+## [Feature – Appointment Module Completed] – 2026‑01‑22
+
+## Overview
+
+This update finalizes the entire Appointment module, including domain logic, repository integration, application services, controllers, routing, and **full unit + integration test coverage**.  
+The module is now fully functional, production‑ready, and fully aligned with the project’s Clean Architecture structure.
+
+---
+
+## Key Changes
+
+### 1. Domain & Infrastructure
+
+- Added complete Appointment domain model.
+- Implemented `AppointmentEntity` with all required relations.
+- Added `AppointmentRepository` with:
+  - user‑scoped filtering
+  - overlap detection
+  - date‑range queries
+  - completed‑appointments filtering
+  - consistent domain mapping
+
+---
+
+### 2. Application Layer
+
+- Implemented full set of Appointment services:
+  - `CreateAppointmentService`
+  - `UpdateAppointmentService`
+  - `DeleteAppointmentService`
+  - `GetAppointmentsByRangeService`
+  - `GetCompletedAppointmentsInRangeService`
+- Added DTOs for create/update flows.
+- Added `AppointmentMapper` for consistent API responses.
+- Ensured all services throw typed domain errors (`NotFoundError`, `ConflictError`, `BadRequestError`).
+
+---
+
+### 3. API Layer
+
+- Added controllers for all Appointment operations.
+- Added routing under `/appointments`:
+  - `POST /appointments`
+  - `PUT /appointments/:id`
+  - `DELETE /appointments/:id`
+  - `GET /appointments` (range queries)
+  - `GET /appointments/completed`
+- Unified response structure and error handling.
+
+---
+
+### 4. Testing
+
+#### ✅ Unit Tests
+
+- Full coverage for:
+  - creation logic
+  - update rules (price, status, time range)
+  - validation errors
+  - not‑found scenarios
+  - conflict detection
+  - duration calculation
+  - multi‑tenant filtering
+- Repository unit tests covering:
+  - overlap detection
+  - date‑range queries
+  - completed‑appointments queries
+  - CRUD operations
+
+#### ✅ Integration Tests
+
+- End‑to‑end tests using real HTTP requests via `supertest`:
+  - create appointment
+  - update appointment
+  - delete appointment
+  - get appointments by date range
+  - get completed appointments in range
+- All tests include:
+  - real authentication
+  - real creation of owners, animals, pets, breeds, and services
+  - real multi‑tenant behavior
+  - validation and error scenarios
+
+---
+
+## Outcome
+
+- Appointment module is now **fully complete and production‑ready**.
+- Achieves **100% coverage** across services, controllers, repository, DTOs, and mapper.
+- Strengthens the overall Clean Architecture foundation.
+- Ensures safe future refactors and feature expansion.
