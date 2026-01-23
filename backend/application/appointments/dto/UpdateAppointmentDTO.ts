@@ -1,6 +1,17 @@
-import { IsOptional, IsString, IsNumber, IsEnum } from 'class-validator';
+import { IsOptional, IsString, IsNumber, IsEnum, IsInt } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class UpdateAppointmentDTO {
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  petId?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  serviceId?: number;
+
   @IsOptional()
   @IsString()
   startTime?: string;
@@ -10,6 +21,7 @@ export class UpdateAppointmentDTO {
   endTime?: string;
 
   @IsOptional()
+  @Type(() => Number) // ⭐ AGREGADO - Convierte string a number
   @IsNumber()
   finalPrice?: number;
 

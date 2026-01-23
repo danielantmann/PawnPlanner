@@ -39,7 +39,6 @@ export class CreatePetService {
     );
 
     const saved = await this.pets.save(pet);
-    console.log('🔥 PET GUARDADO:', saved);
     return PetMapper.toDTO(saved, owner, breed);
   }
 
@@ -76,15 +75,40 @@ export class CreatePetService {
       const animal = await this.animals.findById(dto.breedData.animalId, userId);
       if (!animal) throw new NotFoundError(`Animal with id ${dto.breedData.animalId} not found`);
 
-      const breed = new Breed(
-        null,
-        dto.breedData.name,
-        normalizeSearch(dto.breedData.name),
-        animal.id!,
-        userId
-      );
+      const breedName = dto.breedData.name;
+      const searchName = normalizeSearch(breedName);
 
-      return await this.breeds.save(breed);
+      // ⭐ 1. Buscar breed GLOBAL primero (userId = null)
+      let breed = await this.breeds.findByNameAndAnimal(searchName, animal.id!, null);
+
+      // ⭐ 2. Si no existe global, buscar breed del USUARIO
+      if (!breed) {
+        breed = await this.breeds.findByNameAndAnimal(searchName, animal.id!, userId);
+      }
+
+      // ⭐ 3. Si no existe ninguna, crear una NUEVA para el usuario
+      if (!breed) {
+        try {
+          breed = new Breed(null, breedName, searchName, animal.id!, userId);
+          breed = await this.breeds.save(breed);
+        } catch (error: any) {
+          // ⭐ MANEJO DE RACE CONDITION: Si falla por constraint, buscar de nuevo
+          if (error.code === 'SQLITE_CONSTRAINT' || error.errno === 19) {
+            // Otra request creó la breed justo ahora, buscarla de nuevo
+            breed = await this.breeds.findByNameAndAnimal(searchName, animal.id!, userId);
+
+            if (!breed) {
+              // Si aún no existe, re-lanzar el error original
+              throw error;
+            }
+            // Si la encontramos, continuar con esa breed
+          } else {
+            throw error; // Re-lanzar si no es error de constraint
+          }
+        }
+      }
+
+      return breed;
     }
 
     throw new BadRequestError('Breed information is required');

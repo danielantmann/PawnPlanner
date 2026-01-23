@@ -19,7 +19,7 @@ import { normalizeName } from '../../../shared/normalizers/normalizeName';
 import { normalizeSearch } from '../../../shared/normalizers/normalizeSearch';
 
 @Entity('breeds')
-@Unique(['name', 'animalId'])
+@Unique(['name', 'animalId', 'userId'])
 export class BreedEntity {
   @PrimaryGeneratedColumn()
   id!: number;

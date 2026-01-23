@@ -13,7 +13,9 @@ describe('AppointmentRepository', () => {
     1,
     1,
     1,
+    1,
     'Michi',
+    'Labrador',
     'Juan',
     '555-1234',
     'Baño',
@@ -48,8 +50,10 @@ describe('AppointmentRepository', () => {
         id: 1,
         userId: 1,
         petId: 1,
+        ownerId: 1,
         serviceId: 1,
         petName: 'Michi',
+        breedName: 'Labrador',
         ownerName: 'Juan',
         ownerPhone: '555-1234',
         serviceName: 'Baño',
@@ -78,8 +82,10 @@ describe('AppointmentRepository', () => {
         id: 1,
         userId: 1,
         petId: 1,
+        ownerId: 1,
         serviceId: 1,
         petName: 'Michi',
+        breedName: 'Labrador',
         ownerName: 'Juan',
         ownerPhone: '555-1234',
         serviceName: 'Baño',
@@ -128,8 +134,10 @@ describe('AppointmentRepository', () => {
         id: 1,
         userId: 1,
         petId: 1,
+        ownerId: 1,
         serviceId: 1,
         petName: 'Michi',
+        breedName: 'Labrador',
         ownerName: 'Juan',
         ownerPhone: '555-1234',
         serviceName: 'Baño',
@@ -151,7 +159,9 @@ describe('AppointmentRepository', () => {
         1,
         1,
         1,
+        1,
         'Michi',
+        'Labrador',
         'Juan',
         '555-1234',
         'Baño',
@@ -195,8 +205,10 @@ describe('AppointmentRepository', () => {
         id: 1,
         userId: 1,
         petId: 1,
+        ownerId: 1,
         serviceId: 1,
         petName: 'Michi',
+        breedName: 'Labrador',
         ownerName: 'Juan',
         ownerPhone: '555-1234',
         serviceName: 'Baño',
@@ -217,7 +229,6 @@ describe('AppointmentRepository', () => {
         new Date('2026-01-25T10:45:00Z')
       );
 
-      expect(result).toBeDefined();
       expect(result.length).toBeGreaterThan(0);
     });
 
@@ -252,8 +263,10 @@ describe('AppointmentRepository', () => {
         id: 1,
         userId: 1,
         petId: 1,
+        ownerId: 1,
         serviceId: 1,
         petName: 'Michi',
+        breedName: 'Labrador',
         ownerName: 'Juan',
         ownerPhone: '555-1234',
         serviceName: 'Baño',
@@ -275,7 +288,6 @@ describe('AppointmentRepository', () => {
       );
 
       expect(result.length).toBe(1);
-      expect(mockRepo.find).toHaveBeenCalled();
     });
 
     it('should return appointments ordered by start time', async () => {
@@ -284,8 +296,10 @@ describe('AppointmentRepository', () => {
           id: 1,
           userId: 1,
           petId: 1,
+          ownerId: 1,
           serviceId: 1,
           petName: 'Michi',
+          breedName: 'Labrador',
           ownerName: 'Juan',
           ownerPhone: '555-1234',
           serviceName: 'Baño',
@@ -301,8 +315,10 @@ describe('AppointmentRepository', () => {
           id: 2,
           userId: 1,
           petId: 1,
+          ownerId: 1,
           serviceId: 1,
           petName: 'Michi',
+          breedName: 'Labrador',
           ownerName: 'Juan',
           ownerPhone: '555-1234',
           serviceName: 'Baño',
@@ -346,8 +362,10 @@ describe('AppointmentRepository', () => {
         id: 1,
         userId: 1,
         petId: 1,
+        ownerId: 1,
         serviceId: 1,
         petName: 'Michi',
+        breedName: 'Labrador',
         ownerName: 'Juan',
         ownerPhone: '555-1234',
         serviceName: 'Baño',

@@ -12,7 +12,7 @@ export async function updateAppointment(req: Request, res: Response, next: NextF
     const service = container.resolve(UpdateAppointmentService);
     const result = await service.execute(id, dto, userId);
 
-    res.json(result);
+    return res.json(result);
   } catch (error) {
     next(error);
   }

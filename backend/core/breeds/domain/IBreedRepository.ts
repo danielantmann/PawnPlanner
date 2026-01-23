@@ -11,5 +11,5 @@ export interface IBreedRepository {
   findAll(userId: number): Promise<Breed[]>;
   findByAnimal(animalId: number, userId: number): Promise<Breed[]>;
 
-  findByNameAndAnimal(name: string, animalId: number, userId: number): Promise<Breed | null>;
+  findByNameAndAnimal(name: string, animalId: number, userId: number | null): Promise<Breed | null>;
 }

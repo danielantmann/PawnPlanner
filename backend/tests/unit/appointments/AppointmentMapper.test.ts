@@ -9,7 +9,9 @@ describe('AppointmentMapper', () => {
     1,
     1,
     1,
+    1,
     'Michi',
+    'Labrador',
     'Juan',
     '555-1234',
     'Baño',
@@ -25,7 +27,6 @@ describe('AppointmentMapper', () => {
   describe('toDTO', () => {
     it('should convert Appointment to AppointmentDTO', () => {
       const result = AppointmentMapper.toDTO(appointment);
-
       expect(result.id).toBe(1);
       expect(result.petId).toBe(1);
       expect(result.petName).toBe('Michi');
@@ -40,22 +41,17 @@ describe('AppointmentMapper', () => {
 
     it('should convert startTime and endTime to ISO strings', () => {
       const result = AppointmentMapper.toDTO(appointment);
-
-      expect(typeof result.startTime).toBe('string');
-      expect(typeof result.endTime).toBe('string');
       expect(result.startTime).toBe('2026-01-25T10:00:00.000Z');
       expect(result.endTime).toBe('2026-01-25T11:00:00.000Z');
     });
 
     it('should include duration in minutes', () => {
       const result = AppointmentMapper.toDTO(appointment);
-
       expect(result.durationMinutes).toBe(60);
     });
 
     it('should include all denormalized fields', () => {
       const result = AppointmentMapper.toDTO(appointment);
-
       expect(result).toHaveProperty('petName');
       expect(result).toHaveProperty('ownerName');
       expect(result).toHaveProperty('ownerPhone');
@@ -68,7 +64,9 @@ describe('AppointmentMapper', () => {
         1,
         1,
         1,
+        1,
         'Michi',
+        'Labrador',
         'Juan',
         '555-1234',
         'Baño',
@@ -87,9 +85,6 @@ describe('AppointmentMapper', () => {
 
     it('should preserve numerical values for prices', () => {
       const result = AppointmentMapper.toDTO(appointment);
-
-      expect(typeof result.estimatedPrice).toBe('number');
-      expect(typeof result.finalPrice).toBe('number');
       expect(result.estimatedPrice).toBe(100);
       expect(result.finalPrice).toBe(120);
     });

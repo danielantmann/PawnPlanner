@@ -25,20 +25,28 @@ describe('UpdateAppointmentService', () => {
     findById: vi.fn(),
   };
 
+  const mockBreedRepo = {
+    findById: vi.fn(),
+  };
+
   const service = new UpdateAppointmentService(
     mockAppointmentRepo as any,
     mockPetRepo as any,
     mockOwnerRepo as any,
-    mockServiceRepo as any
+    mockServiceRepo as any,
+    mockBreedRepo as any
   );
 
   const userId = 1;
   const appointmentId = 1;
+
   const existingAppointment = {
     id: appointmentId,
     userId,
     petId: 1,
+    ownerId: 1,
     petName: 'Michi',
+    breedName: 'Labrador',
     serviceId: 1,
     serviceName: 'Baño',
     estimatedPrice: 100,
@@ -48,14 +56,12 @@ describe('UpdateAppointmentService', () => {
     startTime: new Date('2026-01-25T10:00:00Z'),
     endTime: new Date('2026-01-25T11:00:00Z'),
     durationMinutes: 60,
-    status: 'completed' as const,
+    status: 'completed',
     reminderSent: false,
   };
 
   it('should update appointment with partial data', async () => {
-    const updateDto: UpdateAppointmentDTO = {
-      finalPrice: 150,
-    };
+    const updateDto: UpdateAppointmentDTO = { finalPrice: 150 };
 
     mockAppointmentRepo.findById.mockResolvedValue(existingAppointment);
     mockAppointmentRepo.update.mockResolvedValue({
@@ -64,14 +70,11 @@ describe('UpdateAppointmentService', () => {
     });
 
     const result = await service.execute(appointmentId, updateDto, userId);
-
     expect(result.finalPrice).toBe(150);
-    expect(mockAppointmentRepo.update).toHaveBeenCalled();
   });
 
   it('should throw NotFoundError if appointment not found', async () => {
     mockAppointmentRepo.findById.mockResolvedValue(null);
-
     await expect(service.execute(appointmentId, {}, userId)).rejects.toThrow(NotFoundError);
   });
 
@@ -85,13 +88,12 @@ describe('UpdateAppointmentService', () => {
     mockAppointmentRepo.findOverlapping.mockResolvedValue([]);
     mockAppointmentRepo.update.mockResolvedValue({
       ...existingAppointment,
-      ...(updateDto.startTime && { startTime: new Date(updateDto.startTime) }),
-      ...(updateDto.endTime && { endTime: new Date(updateDto.endTime) }),
+      startTime: new Date(updateDto.startTime!),
+      endTime: new Date(updateDto.endTime!),
       durationMinutes: 60,
     });
 
     const result = await service.execute(appointmentId, updateDto, userId);
-
     expect(result.startTime).toBe(new Date(updateDto.startTime!).toISOString());
     expect(result.endTime).toBe(new Date(updateDto.endTime!).toISOString());
   });
@@ -99,11 +101,10 @@ describe('UpdateAppointmentService', () => {
   it('should throw BadRequestError if new startTime >= endTime', async () => {
     const updateDto: UpdateAppointmentDTO = {
       startTime: '2026-01-25T15:00:00Z',
-      endTime: '2026-01-25T14:00:00Z', // Invalid: endTime before startTime
+      endTime: '2026-01-25T14:00:00Z',
     };
 
     mockAppointmentRepo.findById.mockResolvedValue(existingAppointment);
-
     await expect(service.execute(appointmentId, updateDto, userId)).rejects.toThrow(
       BadRequestError
     );
@@ -121,60 +122,60 @@ describe('UpdateAppointmentService', () => {
         id: 2,
         startTime: new Date('2026-01-25T11:00:00Z'),
         endTime: new Date('2026-01-25T12:00:00Z'),
-      } as any,
+      },
     ]);
 
     await expect(service.execute(appointmentId, updateDto, userId)).rejects.toThrow(ConflictError);
   });
 
   it('should update pet and related data', async () => {
-    const updateDto: UpdateAppointmentDTO = {
-      /* petId will be added as UpdateAppointmentDTO needs extension */
-    };
+    const updateDto: UpdateAppointmentDTO = { petId: 2 };
 
     mockAppointmentRepo.findById.mockResolvedValue(existingAppointment);
+
     mockPetRepo.findById.mockResolvedValue({
       id: 2,
       name: 'Gato Nuevo',
       ownerId: 1,
+      breedId: 10,
     });
+
     mockOwnerRepo.findById.mockResolvedValue({
       id: 1,
       name: 'Nueva Dueña',
       phone: '999',
     });
+
+    mockBreedRepo.findById.mockResolvedValue({
+      id: 10,
+      name: 'Labrador',
+    });
+
     mockAppointmentRepo.update.mockResolvedValue({
       ...existingAppointment,
       petId: 2,
       petName: 'Gato Nuevo',
+      breedName: 'Labrador',
       ownerName: 'Nueva Dueña',
       ownerPhone: '999',
     });
 
-    mockAppointmentRepo.findById.mockResolvedValue(existingAppointment);
-    mockAppointmentRepo.update.mockResolvedValue(existingAppointment);
+    const result = await service.execute(appointmentId, updateDto, userId);
 
-    await service.execute(appointmentId, updateDto, userId);
-
-    expect(mockAppointmentRepo.update).toHaveBeenCalled();
+    expect(result.petId).toBe(2);
   });
 
   it('should validate status values', async () => {
-    const updateDto: UpdateAppointmentDTO = {
-      status: 'invalid-status' as any,
-    };
+    const updateDto: UpdateAppointmentDTO = { status: 'invalid-status' as any };
 
     mockAppointmentRepo.findById.mockResolvedValue(existingAppointment);
-
     await expect(service.execute(appointmentId, updateDto, userId)).rejects.toThrow(
       BadRequestError
     );
   });
 
   it('should allow valid status transitions', async () => {
-    const updateDto: UpdateAppointmentDTO = {
-      status: 'no-show',
-    };
+    const updateDto: UpdateAppointmentDTO = { status: 'no-show' };
 
     mockAppointmentRepo.findById.mockResolvedValue(existingAppointment);
     mockAppointmentRepo.update.mockResolvedValue({
@@ -183,14 +184,11 @@ describe('UpdateAppointmentService', () => {
     });
 
     const result = await service.execute(appointmentId, updateDto, userId);
-
     expect(result.status).toBe('no-show');
   });
 
   it('should update finalPrice only', async () => {
-    const updateDto: UpdateAppointmentDTO = {
-      finalPrice: 200,
-    };
+    const updateDto: UpdateAppointmentDTO = { finalPrice: 200 };
 
     mockAppointmentRepo.findById.mockResolvedValue(existingAppointment);
     mockAppointmentRepo.update.mockResolvedValue({
@@ -199,27 +197,25 @@ describe('UpdateAppointmentService', () => {
     });
 
     const result = await service.execute(appointmentId, updateDto, userId);
-
     expect(result.finalPrice).toBe(200);
   });
 
   it('should recalculate duration when dates change', async () => {
     const updateDto: UpdateAppointmentDTO = {
       startTime: '2026-01-25T10:00:00Z',
-      endTime: '2026-01-25T13:00:00Z', // 3 hours = 180 minutes
+      endTime: '2026-01-25T13:00:00Z',
     };
 
     mockAppointmentRepo.findById.mockResolvedValue(existingAppointment);
     mockAppointmentRepo.findOverlapping.mockResolvedValue([]);
     mockAppointmentRepo.update.mockResolvedValue({
       ...existingAppointment,
-      ...(updateDto.startTime && { startTime: new Date(updateDto.startTime) }),
-      ...(updateDto.endTime && { endTime: new Date(updateDto.endTime) }),
+      startTime: new Date(updateDto.startTime!),
+      endTime: new Date(updateDto.endTime!),
       durationMinutes: 180,
     });
 
     const result = await service.execute(appointmentId, updateDto, userId);
-
     expect(result.durationMinutes).toBe(180);
   });
 });
