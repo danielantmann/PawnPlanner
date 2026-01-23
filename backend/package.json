@@ -1,6 +1,7 @@
 {
   "name": "pawnplanner-backend",
   "version": "1.0.0",
+  "type": "module",
   "main": "api/server.ts",
   "scripts": {
     "dev": "cross-env NODE_ENV=development ts-node-dev --respawn --project tsconfig.json api/server.ts",

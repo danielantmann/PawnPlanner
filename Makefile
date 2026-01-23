@@ -17,7 +17,7 @@ backend-test-unit:
 	cd backend && npm run test:unit
 
 backend-test-integration:
-	cd backend && npm run test:inteegration
+	cd backend && npm run test:integration
 
 backend-test:
 	cd backend && npm run test
