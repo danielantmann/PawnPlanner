@@ -3,6 +3,7 @@ import { injectable, inject } from 'tsyringe';
 import { IPetRepository } from '../../../core/pets/domain/IPetRepository';
 import { IOwnerRepository } from '../../../core/owners/domain/IOwnerRepository';
 import { IServiceRepository } from '../../../core/services/domain/IServiceRepository';
+import { IBreedRepository } from '../../../core/breeds/domain/IBreedRepository';
 import { IAppointmentRepository } from '../../../core/appointments/domain/IAppointmentRepository';
 
 import { CreateAppointmentDTO } from '../dto/CreateAppointmentDTO';
@@ -19,6 +20,7 @@ export class CreateAppointmentService {
     @inject('PetRepository') private pets: IPetRepository,
     @inject('OwnerRepository') private owners: IOwnerRepository,
     @inject('ServiceRepository') private services: IServiceRepository,
+    @inject('BreedRepository') private breeds: IBreedRepository, // ←🔥 AÑADIDO
     @inject('AppointmentRepository') private appointments: IAppointmentRepository
   ) {}
 
@@ -27,15 +29,19 @@ export class CreateAppointmentService {
     const pet = await this.pets.findById(dto.petId, userId);
     if (!pet) throw new NotFoundError(`Pet with id ${dto.petId} not found`);
 
-    // 2. Validar Owner (viene del pet)
+    // 2. Validar Owner
     const owner = await this.owners.findById(pet.ownerId, userId);
     if (!owner) throw new NotFoundError(`Owner with id ${pet.ownerId} not found`);
 
-    // 3. Validar Service
+    // 3. Validar Breed
+    const breed = await this.breeds.findById(pet.breedId, userId);
+    if (!breed) throw new NotFoundError(`Breed with id ${pet.breedId} not found`);
+
+    // 4. Validar Service
     const service = await this.services.findById(dto.serviceId, userId);
     if (!service) throw new NotFoundError(`Service with id ${dto.serviceId} not found`);
 
-    // 4. Validar fechas
+    // 5. Validar fechas
     const start = new Date(dto.startTime);
     const end = new Date(dto.endTime);
 
@@ -47,33 +53,35 @@ export class CreateAppointmentService {
       throw new BadRequestError('startTime must be before endTime');
     }
 
-    // 5. Validar solapamiento
+    // 6. Validar solapamiento
     const overlapping = await this.appointments.findOverlapping(userId, start, end);
     if (overlapping.length > 0) {
       throw new ConflictError('Appointment overlaps with an existing one');
     }
 
-    // 6. Calcular duración
+    // 7. Calcular duración
     const durationMinutes = Math.round((end.getTime() - start.getTime()) / 60000);
 
-    // 7. Precio sugerido
+    // 8. Precio sugerido
     const estimatedPrice = Number(service.price);
 
-    // 8. Precio final (si no se toca → estimatedPrice)
+    // 9. Precio final
     const finalPrice = dto.finalPrice !== undefined ? dto.finalPrice : estimatedPrice;
 
     if (finalPrice < 0) {
       throw new BadRequestError('finalPrice cannot be negative');
     }
 
-    // 9. Crear dominio
+    // 10. Crear dominio
     const appointment = new Appointment(
       null,
       userId,
       pet.id!,
+      owner.id!,
       service.id!,
 
       pet.name,
+      breed.name,
       owner.name,
       owner.phone,
 
@@ -85,14 +93,14 @@ export class CreateAppointmentService {
       end,
       durationMinutes,
 
-      'completed', // por defecto
+      'completed',
       false
     );
 
-    // 10. Guardar
+    // 11. Guardar
     const saved = await this.appointments.create(appointment);
 
-    // 11. Devolver DTO
+    // 12. Devolver DTO
     return AppointmentMapper.toDTO(saved);
   }
 }

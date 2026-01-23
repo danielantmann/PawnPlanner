@@ -71,6 +71,17 @@ export class PetRepository implements IPetRepository {
   async findById(id: number, userId: number): Promise<Pet | null> {
     const entity = await this.ormRepo.findOne({
       where: { id, userId },
+      select: [
+        'id',
+        'name',
+        'searchName',
+        'birthDate',
+        'importantNotes',
+        'quickNotes',
+        'ownerId',
+        'breedId',
+        'userId',
+      ],
     });
 
     return entity ? this.toDomain(entity) : null;

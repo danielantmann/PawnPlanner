@@ -16,19 +16,10 @@ const router = Router();
 // 🔐 PROTEGER TODAS LAS RUTAS
 router.use(authMiddleware);
 
-// POST /appointments - Crear cita
 router.post('/', validationMiddleware(CreateAppointmentDTO), createAppointment);
-
-// PUT /appointments/:id - Actualizar cita
 router.put('/:id', validationMiddleware(UpdateAppointmentDTO, true), updateAppointment);
-
-// DELETE /appointments/:id - Eliminar cita
 router.delete('/:id', deleteAppointment);
-
-// GET /appointments?start=...&end=... - Obtener citas en rango de fechas
 router.get('/', getAppointmentsByRange);
-
-// GET /appointments/completed?start=...&end=... - Obtener citas completadas en rango
 router.get('/completed', getCompletedAppointmentsByRange);
 
 export default router;

@@ -99,12 +99,17 @@ export class BreedRepository implements IBreedRepository {
     return entities.map((e) => this.toDomain(e));
   }
 
-  async findByNameAndAnimal(name: string, animalId: number, userId: number): Promise<Breed | null> {
+  async findByNameAndAnimal(
+    searchName: string, // ⭐ Cambiado de 'name' a 'searchName' para consistencia
+    animalId: number,
+    userId: number | null // ⭐ Acepta null para breeds globales
+  ): Promise<Breed | null> {
     const entity = await this.ormRepo.findOne({
-      where: [
-        { name, animalId, userId },
-        { name, animalId, userId: IsNull() },
-      ],
+      where: {
+        searchName,
+        animalId,
+        userId: userId === null ? IsNull() : userId, // ⭐ Usar IsNull() para buscar null
+      },
     });
 
     return entity ? this.toDomain(entity) : null;

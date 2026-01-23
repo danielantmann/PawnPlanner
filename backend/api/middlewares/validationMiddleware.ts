@@ -5,7 +5,6 @@ import { Request, Response, NextFunction } from 'express';
 export function validationMiddleware(type: any, skipMissingProperties: boolean = false) {
   return async (req: Request, _res: Response, next: NextFunction) => {
     const dto = plainToInstance(type, req.body);
-
     const errors = await validate(dto, {
       whitelist: true,
       forbidNonWhitelisted: true,
@@ -13,7 +12,7 @@ export function validationMiddleware(type: any, skipMissingProperties: boolean =
     });
 
     if (errors.length > 0) {
-      return next(errors); // 🔥 PASA EL ERROR AL MIDDLEWARE GLOBAL
+      return next(errors);
     }
 
     req.body = dto;

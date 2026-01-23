@@ -1,31 +1,33 @@
 import { injectable } from 'tsyringe';
-import { Repository, DataSource } from 'typeorm';
+import { Repository, IsNull, DataSource } from 'typeorm';
 
-import { ServiceEntity } from '../orm/entities/ServiceEntity';
 import { Service } from '../../core/services/domain/Service';
 import { IServiceRepository } from '../../core/services/domain/IServiceRepository';
+import { ServiceEntity } from '../orm/entities/ServiceEntity';
 
 @injectable()
 export class ServiceRepository implements IServiceRepository {
-  private ormRepo: Repository<ServiceEntity>;
+  private readonly repo: Repository<ServiceEntity>;
 
-  constructor(private dataSource: DataSource) {
-    this.ormRepo = dataSource.getRepository(ServiceEntity);
+  constructor(private readonly dataSource: DataSource) {
+    this.repo = dataSource.getRepository(ServiceEntity);
   }
 
   private toDomain(entity: ServiceEntity): Service {
     return new Service(
       entity.id,
       entity.name,
-      entity.description ?? null,
       Number(entity.price),
-      entity.createdByUser.id
+      entity.createdByUser ? entity.createdByUser.id : null
     );
   }
 
   async findById(id: number, userId: number): Promise<Service | null> {
-    const entity = await this.ormRepo.findOne({
-      where: { id, createdByUser: { id: userId } },
+    const entity = await this.repo.findOne({
+      where: [
+        { id, createdByUser: { id: userId } },
+        { id, createdByUser: IsNull() },
+      ],
       relations: ['createdByUser'],
     });
 
@@ -33,11 +35,48 @@ export class ServiceRepository implements IServiceRepository {
   }
 
   async findAll(userId: number): Promise<Service[]> {
-    const entities = await this.ormRepo.find({
-      where: { createdByUser: { id: userId } },
+    const entities = await this.repo.find({
+      where: [{ createdByUser: { id: userId } }, { createdByUser: IsNull() }],
       relations: ['createdByUser'],
+      order: { name: 'ASC' },
     });
 
     return entities.map((e) => this.toDomain(e));
+  }
+
+  async create(service: Service): Promise<Service> {
+    const entity = this.repo.create({
+      name: service.name,
+      price: service.price,
+      createdByUser: service.userId ? { id: service.userId } : null,
+    });
+
+    const saved = await this.repo.save(entity);
+    return this.toDomain(saved);
+  }
+
+  async update(service: Service): Promise<Service | null> {
+    const entity = await this.repo.findOne({
+      where: [
+        { id: service.id!, createdByUser: { id: service.userId! } },
+        { id: service.id!, createdByUser: IsNull() },
+      ],
+      relations: ['createdByUser'],
+    });
+
+    if (!entity) return null;
+
+    entity.name = service.name;
+    entity.price = service.price;
+
+    const saved = await this.repo.save(entity);
+    return this.toDomain(saved);
+  }
+
+  async delete(id: number, userId: number): Promise<void> {
+    await this.repo.delete({
+      id,
+      createdByUser: { id: userId },
+    });
   }
 }

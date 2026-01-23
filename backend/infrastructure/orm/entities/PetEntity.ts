@@ -65,10 +65,24 @@ export class PetEntity {
   @BeforeInsert()
   @BeforeUpdate()
   normalizeFields() {
+    // Normalización del nombre
     if (this.name) {
       const normalizedName = normalizeName(this.name);
       this.name = normalizedName;
       this.searchName = normalizeSearch(normalizedName);
+    }
+
+    // 🔥 Mantener claves foráneas SIEMPRE sincronizadas
+    if (this.owner && this.owner.id) {
+      this.ownerId = this.owner.id;
+    }
+
+    if (this.breed && this.breed.id) {
+      this.breedId = this.breed.id;
+    }
+
+    if (this.createdByUser && this.createdByUser.id) {
+      this.userId = this.createdByUser.id;
     }
   }
 }

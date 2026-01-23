@@ -3,9 +3,11 @@ export class Appointment {
     public id: number | null,
     public userId: number,
     public petId: number,
+    public ownerId: number,
     public serviceId: number,
 
     public petName: string,
+    public breedName: string,
     public ownerName: string,
     public ownerPhone: string,
 

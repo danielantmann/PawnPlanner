@@ -8,27 +8,17 @@ import { ConflictError } from '../../../shared/errors/ConflictError';
 import { Appointment } from '../../../core/appointments/domain/Appointment';
 
 describe('CreateAppointmentService', () => {
-  const mockPetRepo = {
-    findById: vi.fn(),
-  };
-
-  const mockOwnerRepo = {
-    findById: vi.fn(),
-  };
-
-  const mockServiceRepo = {
-    findById: vi.fn(),
-  };
-
-  const mockAppointmentRepo = {
-    create: vi.fn(),
-    findOverlapping: vi.fn(),
-  };
+  const mockPetRepo = { findById: vi.fn() };
+  const mockOwnerRepo = { findById: vi.fn() };
+  const mockServiceRepo = { findById: vi.fn() };
+  const mockBreedRepo = { findById: vi.fn() };
+  const mockAppointmentRepo = { create: vi.fn(), findOverlapping: vi.fn() };
 
   const service = new CreateAppointmentService(
     mockPetRepo as any,
     mockOwnerRepo as any,
     mockServiceRepo as any,
+    mockBreedRepo as any,
     mockAppointmentRepo as any
   );
 
@@ -45,32 +35,22 @@ describe('CreateAppointmentService', () => {
       finalPrice: 150,
     };
 
-    mockPetRepo.findById.mockResolvedValue({
-      id: 1,
-      name: 'Michi',
-      ownerId: 1,
-    });
-
-    mockOwnerRepo.findById.mockResolvedValue({
-      id: 1,
-      name: 'Juan Pérez',
-      phone: '555-1234',
-    });
-
-    mockServiceRepo.findById.mockResolvedValue({
-      id: 1,
-      name: 'Baño',
-      price: 100,
-    });
-
+    mockPetRepo.findById.mockResolvedValue({ id: 1, name: 'Michi', ownerId: 1, breedId: 1 });
+    mockOwnerRepo.findById.mockResolvedValue({ id: 1, name: 'Juan Pérez', phone: '555-1234' });
+    mockBreedRepo.findById.mockResolvedValue({ id: 1, name: 'Labrador' });
+    mockServiceRepo.findById.mockResolvedValue({ id: 1, name: 'Baño', price: 100 });
     mockAppointmentRepo.findOverlapping.mockResolvedValue([]);
+
     mockAppointmentRepo.create.mockResolvedValue({
       id: 1,
+      userId,
       petId: 1,
+      ownerId: 1,
+      serviceId: 1,
       petName: 'Michi',
+      breedName: 'Labrador',
       ownerName: 'Juan Pérez',
       ownerPhone: '555-1234',
-      serviceId: 1,
       serviceName: 'Baño',
       estimatedPrice: 100,
       finalPrice: 150,
@@ -78,7 +58,7 @@ describe('CreateAppointmentService', () => {
       endTime: new Date(endDate),
       durationMinutes: 60,
       status: 'completed',
-      userId,
+      reminderSent: false,
     });
 
     const result = await service.execute(dto, userId);
@@ -87,7 +67,6 @@ describe('CreateAppointmentService', () => {
     expect(result.petId).toBe(1);
     expect(result.finalPrice).toBe(150);
     expect(result.durationMinutes).toBe(60);
-    expect(mockAppointmentRepo.create).toHaveBeenCalled();
   });
 
   it('should use estimatedPrice when finalPrice is not provided', async () => {
@@ -98,8 +77,9 @@ describe('CreateAppointmentService', () => {
       endTime: endDate,
     };
 
-    mockPetRepo.findById.mockResolvedValue({ id: 1, name: 'Michi', ownerId: 1 });
+    mockPetRepo.findById.mockResolvedValue({ id: 1, name: 'Michi', ownerId: 1, breedId: 1 });
     mockOwnerRepo.findById.mockResolvedValue({ id: 1, name: 'Juan', phone: '555' });
+    mockBreedRepo.findById.mockResolvedValue({ id: 1, name: 'Labrador' });
     mockServiceRepo.findById.mockResolvedValue({ id: 1, name: 'Baño', price: 100 });
     mockAppointmentRepo.findOverlapping.mockResolvedValue([]);
 
@@ -108,7 +88,9 @@ describe('CreateAppointmentService', () => {
       userId,
       1,
       1,
+      1,
       'Michi',
+      'Labrador',
       'Juan',
       '555',
       'Baño',
@@ -124,7 +106,6 @@ describe('CreateAppointmentService', () => {
     mockAppointmentRepo.create.mockResolvedValue(domainAppointment);
 
     const result = await service.execute(dto, userId);
-
     expect(result.finalPrice).toBe(100);
   });
 
@@ -149,8 +130,23 @@ describe('CreateAppointmentService', () => {
       endTime: endDate,
     };
 
-    mockPetRepo.findById.mockResolvedValue({ id: 1, ownerId: 999 });
+    mockPetRepo.findById.mockResolvedValue({ id: 1, ownerId: 999, breedId: 1 });
     mockOwnerRepo.findById.mockResolvedValue(null);
+
+    await expect(service.execute(dto, userId)).rejects.toThrow(NotFoundError);
+  });
+
+  it('should throw NotFoundError if breed not found', async () => {
+    const dto: CreateAppointmentDTO = {
+      petId: 1,
+      serviceId: 1,
+      startTime: startDate,
+      endTime: endDate,
+    };
+
+    mockPetRepo.findById.mockResolvedValue({ id: 1, ownerId: 1, breedId: 999 });
+    mockOwnerRepo.findById.mockResolvedValue({ id: 1 });
+    mockBreedRepo.findById.mockResolvedValue(null);
 
     await expect(service.execute(dto, userId)).rejects.toThrow(NotFoundError);
   });
@@ -163,8 +159,9 @@ describe('CreateAppointmentService', () => {
       endTime: endDate,
     };
 
-    mockPetRepo.findById.mockResolvedValue({ id: 1, ownerId: 1 });
+    mockPetRepo.findById.mockResolvedValue({ id: 1, ownerId: 1, breedId: 1 });
     mockOwnerRepo.findById.mockResolvedValue({ id: 1 });
+    mockBreedRepo.findById.mockResolvedValue({ id: 1 });
     mockServiceRepo.findById.mockResolvedValue(null);
 
     await expect(service.execute(dto, userId)).rejects.toThrow(NotFoundError);
@@ -175,11 +172,12 @@ describe('CreateAppointmentService', () => {
       petId: 1,
       serviceId: 1,
       startTime: '2026-01-25T11:00:00Z',
-      endTime: '2026-01-25T10:00:00Z', // endTime before startTime
+      endTime: '2026-01-25T10:00:00Z',
     };
 
-    mockPetRepo.findById.mockResolvedValue({ id: 1, ownerId: 1 });
+    mockPetRepo.findById.mockResolvedValue({ id: 1, ownerId: 1, breedId: 1 });
     mockOwnerRepo.findById.mockResolvedValue({ id: 1 });
+    mockBreedRepo.findById.mockResolvedValue({ id: 1 });
     mockServiceRepo.findById.mockResolvedValue({ id: 1, price: 100 });
 
     await expect(service.execute(dto, userId)).rejects.toThrow(BadRequestError);
@@ -193,8 +191,9 @@ describe('CreateAppointmentService', () => {
       endTime: '2026-01-25T11:00:00Z',
     };
 
-    mockPetRepo.findById.mockResolvedValue({ id: 1, ownerId: 1 });
+    mockPetRepo.findById.mockResolvedValue({ id: 1, ownerId: 1, breedId: 1 });
     mockOwnerRepo.findById.mockResolvedValue({ id: 1 });
+    mockBreedRepo.findById.mockResolvedValue({ id: 1 });
     mockServiceRepo.findById.mockResolvedValue({ id: 1, price: 100 });
 
     await expect(service.execute(dto, userId)).rejects.toThrow(BadRequestError);
@@ -208,8 +207,9 @@ describe('CreateAppointmentService', () => {
       endTime: '2026-01-25T11:30:00Z',
     };
 
-    mockPetRepo.findById.mockResolvedValue({ id: 1, ownerId: 1 });
+    mockPetRepo.findById.mockResolvedValue({ id: 1, ownerId: 1, breedId: 1 });
     mockOwnerRepo.findById.mockResolvedValue({ id: 1 });
+    mockBreedRepo.findById.mockResolvedValue({ id: 1 });
     mockServiceRepo.findById.mockResolvedValue({ id: 1, price: 100 });
     mockAppointmentRepo.findOverlapping.mockResolvedValue([
       {
@@ -231,8 +231,9 @@ describe('CreateAppointmentService', () => {
       finalPrice: -50,
     };
 
-    mockPetRepo.findById.mockResolvedValue({ id: 1, ownerId: 1 });
+    mockPetRepo.findById.mockResolvedValue({ id: 1, ownerId: 1, breedId: 1 });
     mockOwnerRepo.findById.mockResolvedValue({ id: 1 });
+    mockBreedRepo.findById.mockResolvedValue({ id: 1 });
     mockServiceRepo.findById.mockResolvedValue({ id: 1, price: 100 });
     mockAppointmentRepo.findOverlapping.mockResolvedValue([]);
 
@@ -244,11 +245,12 @@ describe('CreateAppointmentService', () => {
       petId: 1,
       serviceId: 1,
       startTime: '2026-01-25T10:00:00Z',
-      endTime: '2026-01-25T12:30:00Z', // 2.5 hours = 150 minutes
+      endTime: '2026-01-25T12:30:00Z',
     };
 
-    mockPetRepo.findById.mockResolvedValue({ id: 1, ownerId: 1 });
+    mockPetRepo.findById.mockResolvedValue({ id: 1, ownerId: 1, breedId: 1 });
     mockOwnerRepo.findById.mockResolvedValue({ id: 1 });
+    mockBreedRepo.findById.mockResolvedValue({ id: 1 });
     mockServiceRepo.findById.mockResolvedValue({ id: 1, price: 100 });
     mockAppointmentRepo.findOverlapping.mockResolvedValue([]);
 
@@ -257,7 +259,9 @@ describe('CreateAppointmentService', () => {
       userId,
       1,
       1,
+      1,
       'Michi',
+      'Labrador',
       'Juan',
       '555-1234',
       'Baño',
@@ -273,7 +277,6 @@ describe('CreateAppointmentService', () => {
     mockAppointmentRepo.create.mockResolvedValue(domainAppointment);
 
     const result = await service.execute(dto, userId);
-
     expect(result.durationMinutes).toBe(150);
   });
 });

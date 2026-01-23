@@ -19,9 +19,11 @@ export class AppointmentRepository implements IAppointmentRepository {
       entity.id,
       entity.userId,
       entity.petId,
+      entity.ownerId,
       entity.serviceId,
 
       entity.petName,
+      entity.breedName,
       entity.ownerName,
       entity.ownerPhone,
 
@@ -42,15 +44,15 @@ export class AppointmentRepository implements IAppointmentRepository {
   private toEntity(domain: Appointment): AppointmentEntity {
     const entity = new AppointmentEntity();
 
-    if (domain.id !== null) {
-      entity.id = domain.id;
-    }
+    if (domain.id !== null) entity.id = domain.id;
 
     entity.userId = domain.userId;
     entity.petId = domain.petId;
+    entity.ownerId = domain.ownerId;
     entity.serviceId = domain.serviceId;
 
     entity.petName = domain.petName;
+    entity.breedName = domain.breedName;
     entity.ownerName = domain.ownerName;
     entity.ownerPhone = domain.ownerPhone;
 
@@ -91,17 +93,11 @@ export class AppointmentRepository implements IAppointmentRepository {
   }
 
   async findById(id: number, userId: number): Promise<Appointment | null> {
-    const entity = await this.ormRepo.findOne({
-      where: { id, userId },
-    });
-
+    const entity = await this.ormRepo.findOne({ where: { id, userId } });
     return entity ? this.toDomain(entity) : null;
   }
 
   async findOverlapping(userId: number, startTime: Date, endTime: Date): Promise<Appointment[]> {
-    // Encuentra citas que se solapan con el rango [startTime, endTime)
-    // Una cita A se solapa con [startTime, endTime) si:
-    // A.startTime < endTime AND A.endTime > startTime
     const entities = await this.ormRepo.find({
       where: {
         userId,
@@ -109,7 +105,6 @@ export class AppointmentRepository implements IAppointmentRepository {
       },
     });
 
-    // Filtramos para asegurar que las citas realmente se solapan
     return entities
       .filter((e) => e.endTime > startTime && e.startTime < endTime)
       .map((e) => this.toDomain(e));

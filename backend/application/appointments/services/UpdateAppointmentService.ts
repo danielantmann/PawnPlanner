@@ -4,6 +4,7 @@ import { IAppointmentRepository } from '../../../core/appointments/domain/IAppoi
 import { IPetRepository } from '../../../core/pets/domain/IPetRepository';
 import { IOwnerRepository } from '../../../core/owners/domain/IOwnerRepository';
 import { IServiceRepository } from '../../../core/services/domain/IServiceRepository';
+import { IBreedRepository } from '../../../core/breeds/domain/IBreedRepository';
 
 import { AppointmentMapper } from '../mappers/AppointmentMapper';
 import { NotFoundError } from '../../../shared/errors/NotFoundError';
@@ -16,30 +17,48 @@ export class UpdateAppointmentService {
     @inject('AppointmentRepository') private appointments: IAppointmentRepository,
     @inject('PetRepository') private pets: IPetRepository,
     @inject('OwnerRepository') private owners: IOwnerRepository,
-    @inject('ServiceRepository') private services: IServiceRepository
+    @inject('ServiceRepository') private services: IServiceRepository,
+    @inject('BreedRepository') private breeds: IBreedRepository
   ) {}
 
   async execute(id: number, data: any, userId: number) {
-    // 1. Buscar cita
+    // Convertir strings a números (Express siempre manda strings)
+    if (data.petId !== undefined && data.petId !== null) {
+      data.petId = Number(data.petId);
+    }
+    if (data.serviceId !== undefined && data.serviceId !== null) {
+      data.serviceId = Number(data.serviceId);
+    }
+
     const existing = await this.appointments.findById(id, userId);
     if (!existing) throw new NotFoundError(`Appointment with id ${id} not found`);
 
-    // 2. Si cambia petId → validar pet + owner
-    if (data.petId && data.petId !== existing.petId) {
+    // Cambia pet → cambia owner, breed, petName, ownerPhone, ownerId
+    if (data.petId !== undefined && data.petId !== null && data.petId !== existing.petId) {
       const pet = await this.pets.findById(data.petId, userId);
       if (!pet) throw new NotFoundError(`Pet with id ${data.petId} not found`);
 
       const owner = await this.owners.findById(pet.ownerId, userId);
       if (!owner) throw new NotFoundError(`Owner with id ${pet.ownerId} not found`);
 
+      const breed = await this.breeds.findById(pet.breedId, userId);
+      if (!breed) throw new NotFoundError(`Breed with id ${pet.breedId} not found`);
+
       existing.petId = pet.id!;
       existing.petName = pet.name;
+      existing.breedName = breed.name;
+
+      existing.ownerId = owner.id!;
       existing.ownerName = owner.name;
       existing.ownerPhone = owner.phone;
     }
 
-    // 3. Si cambia serviceId → validar service
-    if (data.serviceId && data.serviceId !== existing.serviceId) {
+    // Cambia service
+    if (
+      data.serviceId !== undefined &&
+      data.serviceId !== null &&
+      data.serviceId !== existing.serviceId
+    ) {
       const service = await this.services.findById(data.serviceId, userId);
       if (!service) throw new NotFoundError(`Service with id ${data.serviceId} not found`);
 
@@ -47,13 +66,12 @@ export class UpdateAppointmentService {
       existing.serviceName = service.name;
       existing.estimatedPrice = Number(service.price);
 
-      // Si no se toca finalPrice → mantener coherencia
       if (data.finalPrice === undefined) {
         existing.finalPrice = existing.estimatedPrice;
       }
     }
 
-    // 4. Si cambian fechas → validar
+    // Cambia fechas
     if (data.startTime || data.endTime) {
       const start = data.startTime ? new Date(data.startTime) : existing.startTime;
       const end = data.endTime ? new Date(data.endTime) : existing.endTime;
@@ -66,26 +84,21 @@ export class UpdateAppointmentService {
         throw new BadRequestError('startTime must be before endTime');
       }
 
-      // Validar solapamiento
       const overlapping = await this.appointments.findOverlapping(userId, start, end);
       const conflict = overlapping.some((a) => a.id !== existing.id);
 
-      if (conflict) {
-        throw new ConflictError('Appointment overlaps with an existing one');
-      }
+      if (conflict) throw new ConflictError('Appointment overlaps with an existing one');
 
       existing.startTime = start;
       existing.endTime = end;
       existing.durationMinutes = Math.round((end.getTime() - start.getTime()) / 60000);
     }
 
-    // 5. Precio final
     if (data.finalPrice !== undefined) {
       if (data.finalPrice < 0) throw new BadRequestError('finalPrice cannot be negative');
       existing.finalPrice = data.finalPrice;
     }
 
-    // 6. Estado
     if (data.status) {
       if (!['completed', 'no-show', 'cancelled'].includes(data.status)) {
         throw new BadRequestError('Invalid status');
@@ -93,9 +106,7 @@ export class UpdateAppointmentService {
       existing.status = data.status;
     }
 
-    // 7. Guardar
     const saved = await this.appointments.update(existing);
-
     if (!saved) throw new NotFoundError(`Appointment with id ${id} not found`);
 
     return AppointmentMapper.toDTO(saved);
