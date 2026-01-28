@@ -872,3 +872,81 @@ The module is now fully functional, production‑ready, and fully aligned with t
 - Achieves **100% coverage** across services, controllers, repository, DTOs, and mapper.
 - Strengthens the overall Clean Architecture foundation.
 - Ensures safe future refactors and feature expansion.
+
+## [Swagger & Postman Update] - 2026-01-28
+
+### Overview
+
+This branch delivers a full upgrade to the API documentation and developer tooling for PawnPlanner.  
+It includes a complete revision of the Swagger/OpenAPI specification, the addition of a full Postman collection and environment, and multiple fixes to service tests and mocks after recent refactors.  
+The goal is to provide a clean, accurate, and developer‑friendly API experience.
+
+---
+
+### Key Changes
+
+#### 1. Swagger/OpenAPI Documentation
+
+- Updated all endpoint definitions to match current DTOs and service logic.
+- Ensured consistent naming, descriptions, and tags across all modules.
+- Added accurate request/response schemas for Owners, Pets, Breeds, Animals, Services, and Appointments.
+- Implemented proper JWT Bearer authentication scheme.
+- Added example payloads for key endpoints.
+- Removed outdated or incorrect definitions.
+- Improved compatibility with Swagger UI and external API tools.
+
+---
+
+#### 2. Postman Collection
+
+- Added `paw_planner.postman_collection.json` containing all API endpoints:
+  - Auth
+  - Owners
+  - Animals
+  - Breeds
+  - Pets
+  - Services
+  - Appointments
+- Updated all requests to use environment variables (`{{baseURL}}`, `{{jwt}}`, `{{refresh}}`).
+- Organized folder structure to mirror backend modules.
+- Included example bodies, headers, and query parameters.
+- Ready for import into any Postman workspace.
+
+---
+
+#### 3. Postman Environment
+
+- Added `pawn_planner_environment.json` with the following variables:
+  - `baseURL` – API base URL
+  - `jwt` – JWT access token
+  - `refresh` – refresh token
+- Simplifies testing of authenticated endpoints.
+- Enables quick onboarding for new developers.
+
+---
+
+#### 4. Test & Mock Fixes After Refactor
+
+- Updated unit tests to match new service constructors and dependencies.
+- Added missing mocks for Owner, Breed, and Pet repositories.
+- Fixed failing tests in GetPetByNameService and GetPetByBreedService.
+- Ensured proper mock resets and isolation across test suites.
+- Improved consistency in DTO mapping during tests.
+- Stabilized all service tests affected by recent architectural changes.
+
+---
+
+### Notes
+
+- All documentation and tooling now reflect the current backend architecture.
+- Postman and Swagger are fully aligned with the real API behavior.
+- No breaking changes were introduced to existing endpoints.
+
+---
+
+### Outcome
+
+- API documentation is now complete, accurate, and production‑ready.
+- Postman tooling enables fast testing and onboarding.
+- Test suite is stable and aligned with the latest refactors.
+- The branch is ready to merge and improves overall developer experience.
