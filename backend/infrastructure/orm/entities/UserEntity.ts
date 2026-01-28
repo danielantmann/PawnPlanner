@@ -15,7 +15,6 @@ import { ServiceEntity } from './ServiceEntity';
 import { AnimalEntity } from './AnimalEntity';
 import { BreedEntity } from './BreedEntity';
 
-// Normalizadores
 import { normalizeEmail } from '../../../shared/normalizers/normalizeEmail';
 import { normalizeName } from '../../../shared/normalizers/normalizeName';
 
@@ -46,7 +45,7 @@ export class UserEntity {
   @OneToMany(() => PetEntity, (pet) => pet.createdByUser)
   pets!: PetEntity[];
 
-  @OneToMany(() => AppointmentEntity, (appointment) => appointment.createdByUser)
+  @OneToMany(() => AppointmentEntity, (appointment) => appointment.user)
   appointments!: AppointmentEntity[];
 
   @OneToMany(() => ServiceEntity, (service) => service.createdByUser)

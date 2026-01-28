@@ -21,7 +21,7 @@ export class UpdateAppointmentDTO {
   endTime?: string;
 
   @IsOptional()
-  @Type(() => Number) // ⭐ AGREGADO - Convierte string a number
+  @Type(() => Number)
   @IsNumber()
   finalPrice?: number;
 

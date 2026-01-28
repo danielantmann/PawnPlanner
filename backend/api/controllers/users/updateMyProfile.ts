@@ -1,13 +1,11 @@
-import { Response, NextFunction } from 'express';
-import { AuthRequest } from '../../../types/AuthRequest';
+import { Request, Response, NextFunction } from 'express';
 import { container } from 'tsyringe';
 import { UpdateUserService } from '../../../application/users/services/UpdateUserService';
 import { UpdateUserDTO } from '../../../application/users/dto/UpdateUserDTO';
 import { UserMapper } from '../../../application/users/mappers/UserMapper';
 
-export const updateMyProfile = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const updateMyProfile = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    // El validationMiddleware ya validó el DTO antes de llegar aquí
     const dto = req.body as UpdateUserDTO;
 
     const service = container.resolve(UpdateUserService);

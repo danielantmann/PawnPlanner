@@ -4,7 +4,7 @@ import { GetAnimalByIdService } from '../../../application/animals/services/GetA
 
 export async function getAnimalById(req: Request, res: Response, next: NextFunction) {
   try {
-    const userId = req.user.id;
+    const userId = req.user!.id;
     const service = container.resolve(GetAnimalByIdService);
     const animal = await service.execute(Number(req.params.id), userId);
     res.status(200).json(animal);

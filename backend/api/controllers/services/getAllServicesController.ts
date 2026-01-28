@@ -4,7 +4,7 @@ import { GetAllServicesService } from '../../../application/services/services/Ge
 
 export async function getAllServicesController(req: Request, res: Response, next: NextFunction) {
   try {
-    const userId = req.user.id;
+    const userId = req.user!.id;
     const service = container.resolve(GetAllServicesService);
     const result = await service.execute(userId);
     res.status(200).json(result);

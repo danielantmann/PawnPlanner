@@ -5,7 +5,7 @@ import { CreatePetDTO } from '../../../application/pets/dto/CreatePetDTO';
 
 export async function createPet(req: Request, res: Response, next: NextFunction) {
   try {
-    const userId = req.user.id;
+    const userId = req.user!.id;
     const service = container.resolve(CreatePetService);
     const pet = await service.execute(req.body as CreatePetDTO, userId);
     res.status(201).json(pet);

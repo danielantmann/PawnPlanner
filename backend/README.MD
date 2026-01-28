@@ -389,3 +389,41 @@ Owner ──< Pet ──< Appointment >── Service
 - **tsyringe (Dependency Injection)**
 - **Vitest + Supertest (Testing)**
 - **Clean Architecture**
+
+# Swagger
+
+## 🔐 Authentication for testing
+
+To test protected endpoints, create a user using:
+
+POST /auth/register
+
+```
+{
+  "name": "Test User",
+  "email": "test@example.com",
+  "password": "123456"
+}
+```
+
+Then login:
+
+POST /auth/login
+
+```
+{
+  "email": "test@example.com",
+  "password": "123456"
+}
+```
+
+or use created user at seed DB:
+
+```
+{
+  "email": "daniel123@example.com",
+  "password": "Daniel123!"
+}
+```
+
+Copy the returned JWT token and use it in Swagger via the "Authorize" button.

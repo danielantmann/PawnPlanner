@@ -1,5 +1,4 @@
 import { RequestHandler } from 'express';
-import { AuthRequest } from '../../../types/AuthRequest';
 import { container } from 'tsyringe';
 import { ChangePasswordService } from '../../../application/auth/services/ChangePasswordService';
 import { validateDTO } from '../../middlewares/validateDTO';
@@ -7,7 +6,6 @@ import { ChangePasswordDTO } from '../../../application/auth/dto/ChangePasswordD
 
 export const changePassword: RequestHandler = async (req, res, next) => {
   try {
-    // Validamos solo las propiedades que existen en ChangePasswordDTO
     const dto = await validateDTO(ChangePasswordDTO, {
       oldPassword: req.body.oldPassword,
       newPassword: req.body.newPassword,
@@ -15,7 +13,7 @@ export const changePassword: RequestHandler = async (req, res, next) => {
 
     const service = container.resolve(ChangePasswordService);
     await service.execute({
-      userId: (req as AuthRequest).user!.id,
+      userId: req.user!.id,
       oldPassword: dto.oldPassword,
       newPassword: dto.newPassword,
     });

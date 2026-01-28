@@ -1,4 +1,4 @@
-import { IsInt, IsString, Length } from 'class-validator';
+import { IsString, Length } from 'class-validator';
 
 export class UpdateAnimalDTO {
   @IsString({ message: 'Species must be a string' })

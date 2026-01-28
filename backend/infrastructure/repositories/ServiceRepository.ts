@@ -40,7 +40,6 @@ export class ServiceRepository implements IServiceRepository {
       relations: ['createdByUser'],
       order: { name: 'ASC' },
     });
-
     return entities.map((e) => this.toDomain(e));
   }
 
