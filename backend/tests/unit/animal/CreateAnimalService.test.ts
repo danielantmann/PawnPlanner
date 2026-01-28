@@ -36,7 +36,6 @@ describe('CreateAnimalService (unit)', () => {
     expect(animalRepo.findBySpecies).toHaveBeenCalledWith('dog', 10);
     expect(result.id).toBe(1);
     expect(result.species).toBe('Dog'); // mapper capitaliza
-    expect(Array.isArray(result.breeds)).toBe(true);
   });
 
   it('should throw ConflictError if species already exists', async () => {

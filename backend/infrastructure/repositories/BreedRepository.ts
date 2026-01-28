@@ -4,6 +4,7 @@ import { Repository, IsNull, DataSource } from 'typeorm';
 import { BreedEntity } from '../orm/entities/BreedEntity';
 import { Breed } from '../../core/breeds/domain/Breed';
 import { IBreedRepository } from '../../core/breeds/domain/IBreedRepository';
+import { Animal } from '../../core/animals/domain/Animal';
 
 @injectable()
 export class BreedRepository implements IBreedRepository {
@@ -14,7 +15,20 @@ export class BreedRepository implements IBreedRepository {
   }
 
   private toDomain(entity: BreedEntity): Breed {
-    return new Breed(entity.id, entity.name, entity.searchName, entity.animalId, entity.userId);
+    const breed = new Breed(
+      entity.id,
+      entity.name,
+      entity.searchName,
+      entity.animalId,
+      entity.userId
+    );
+
+    // ⭐ Añadir el animal cargado
+    if (entity.animal) {
+      breed.animal = new Animal(entity.animal.id, entity.animal.species, entity.animal.userId);
+    }
+
+    return breed;
   }
 
   private toEntity(domain: Breed): BreedEntity {
@@ -44,6 +58,7 @@ export class BreedRepository implements IBreedRepository {
         { id, userId },
         { id, userId: IsNull() },
       ],
+      relations: ['animal'], // ⭐ Cargar animal
     });
 
     if (!existing) return null;
@@ -64,6 +79,7 @@ export class BreedRepository implements IBreedRepository {
         { id, userId },
         { id, userId: IsNull() },
       ],
+      relations: ['animal'], // ⭐ Cargar animal
     });
 
     return entity ? this.toDomain(entity) : null;
@@ -75,6 +91,7 @@ export class BreedRepository implements IBreedRepository {
         { name, userId },
         { name, userId: IsNull() },
       ],
+      relations: ['animal'], // ⭐ Cargar animal
     });
 
     return entities.map((e) => this.toDomain(e));
@@ -83,6 +100,7 @@ export class BreedRepository implements IBreedRepository {
   async findAll(userId: number): Promise<Breed[]> {
     const entities = await this.ormRepo.find({
       where: [{ userId }, { userId: IsNull() }],
+      relations: ['animal'], // ⭐ Cargar animal
     });
 
     return entities.map((e) => this.toDomain(e));
@@ -94,22 +112,24 @@ export class BreedRepository implements IBreedRepository {
         { animalId, userId },
         { animalId, userId: IsNull() },
       ],
+      relations: ['animal'], // ⭐ Cargar animal
     });
 
     return entities.map((e) => this.toDomain(e));
   }
 
   async findByNameAndAnimal(
-    searchName: string, // ⭐ Cambiado de 'name' a 'searchName' para consistencia
+    searchName: string,
     animalId: number,
-    userId: number | null // ⭐ Acepta null para breeds globales
+    userId: number | null
   ): Promise<Breed | null> {
     const entity = await this.ormRepo.findOne({
       where: {
         searchName,
         animalId,
-        userId: userId === null ? IsNull() : userId, // ⭐ Usar IsNull() para buscar null
+        userId: userId === null ? IsNull() : userId,
       },
+      relations: ['animal'], // ⭐ Cargar animal
     });
 
     return entity ? this.toDomain(entity) : null;

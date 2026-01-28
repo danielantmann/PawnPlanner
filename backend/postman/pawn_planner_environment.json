@@ -1,0 +1,28 @@
+{
+	"id": "ea9672ec-f2d1-457c-9290-949766de3d26",
+	"name": "New Environment",
+	"values": [
+		{
+			"key": "{{baseUrl}}",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "jwt",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "refresh",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		}
+	],
+	"color": null,
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2026-01-28T10:14:42.171Z",
+	"_postman_exported_using": "Postman/11.82.2"
+}

@@ -13,7 +13,7 @@ import { BreedEntity } from './BreedEntity';
 import { UserEntity } from './UserEntity';
 
 // Normalizadores (si quieres aplicarlos aquí también)
-import { normalizeName } from '../../../shared/normalizers/normalizeName';
+//import { normalizeName } from '../../../shared/normalizers/normalizeName';
 
 @Entity('animals')
 export class AnimalEntity {

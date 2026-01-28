@@ -4,7 +4,7 @@ import { GetServiceByIdService } from '../../../application/services/services/Ge
 
 export async function getServiceByIdController(req: Request, res: Response, next: NextFunction) {
   try {
-    const userId = req.user.id;
+    const userId = req.user!.id;
     const id = Number(req.params.id);
 
     const service = container.resolve(GetServiceByIdService);

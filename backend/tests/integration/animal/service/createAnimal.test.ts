@@ -29,7 +29,6 @@ describe('Animal - CreateAnimal (integration)', () => {
     expect(res.status).toBe(201);
     expect(res.body.id).toBeDefined();
     expect(res.body.species).toBe('Dog');
-    expect(Array.isArray(res.body.breeds)).toBe(true);
   });
 
   it('should return 400 for invalid species', async () => {

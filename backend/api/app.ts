@@ -11,10 +11,14 @@ import usersRoutes from './routes/users';
 import servicesRoutes from './routes/services';
 
 import { errorHandler } from './middlewares/errorHandler';
+import { setupSwagger } from './swagger'; // <-- AÑADIDO
 
 const app = express();
 
 app.use(express.json());
+
+// Swagger
+setupSwagger(app);
 
 app.use('/pets', petsRoutes);
 app.use('/breeds', breedsRoutes);

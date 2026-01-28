@@ -4,7 +4,7 @@ import { GetPetByIdService } from '../../../application/pets/services/GetPetById
 
 export async function getPetById(req: Request, res: Response, next: NextFunction) {
   try {
-    const userId = req.user.id;
+    const userId = req.user!.id;
     const service = container.resolve(GetPetByIdService);
     const pet = await service.execute(Number(req.params.id), userId);
 

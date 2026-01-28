@@ -5,7 +5,7 @@ import { GetAnimalsBySpeciesService } from '../../../application/animals/service
 export async function getAnimalsBySpecies(req: Request, res: Response, next: NextFunction) {
   try {
     const { species } = req.params;
-    const userId = req.user.id;
+    const userId = req.user!.id;
 
     const service = container.resolve(GetAnimalsBySpeciesService);
     const animals = await service.execute(species, userId);

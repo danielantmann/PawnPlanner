@@ -5,7 +5,7 @@ import { CreateServiceDTO } from '../../../application/services/dto/CreateServic
 
 export async function createServiceController(req: Request, res: Response, next: NextFunction) {
   try {
-    const userId = req.user.id;
+    const userId = req.user!.id;
     const service = container.resolve(CreateServiceService);
     const result = await service.execute(req.body as CreateServiceDTO, userId);
     res.status(201).json(result);

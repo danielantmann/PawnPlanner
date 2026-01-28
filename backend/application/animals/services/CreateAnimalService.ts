@@ -25,8 +25,7 @@ export class CreateAnimalService {
     const animal = new Animal(null, normalized, userId);
 
     const saved = await this.animals.create(animal);
-    const animalBreeds = await this.breeds.findByAnimal(saved.id!, userId);
 
-    return AnimalMapper.toDTO(saved, animalBreeds);
+    return AnimalMapper.toDTO(saved);
   }
 }

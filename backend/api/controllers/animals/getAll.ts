@@ -4,7 +4,7 @@ import { GetAllAnimalsService } from '../../../application/animals/services/GetA
 
 export async function getAllAnimals(req: Request, res: Response, next: NextFunction) {
   try {
-    const userId = req.user.id;
+    const userId = req.user!.id;
     const service = container.resolve(GetAllAnimalsService);
     const animals = await service.execute(userId);
     res.status(200).json(animals);

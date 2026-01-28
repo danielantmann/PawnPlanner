@@ -1,0 +1,4208 @@
+{
+  "info": {
+    "_postman_id": "cfc6770e-5ea3-4569-8d23-74d3f35ef416",
+    "name": "My Collection",
+    "description": "### Welcome to Postman! This is your first collection.\n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests  \n• Test your API in real-world scenarios  \n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "49386787",
+    "_collection_link": "https://go.postman.co/collection/49386787-cfc6770e-5ea3-4569-8d23-74d3f35ef416?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "PawnPlanner",
+      "item": [
+        {
+          "name": "Owner",
+          "item": [
+            {
+              "name": "Get Owners",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/owners/",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "owners",
+                    ""
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Get Owners",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseURL}}/owners/",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "owners",
+                        ""
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "396"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"18c-Z0jbEWwtZ07Wx5vIzWUpQbRv4Oc\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 14:01:19 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "[\n    {\n        \"id\": 1,\n        \"name\": \"Carlos Pérez\",\n        \"email\": \"carlos@example.com\",\n        \"phone\": \"+34111111111\",\n        \"pets\": [\n            {\n                \"id\": 1,\n                \"name\": \"Firulais\"\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Toby\"\n            }\n        ]\n    },\n    {\n        \"id\": 2,\n        \"name\": \"María López\",\n        \"email\": \"maria@example.com\",\n        \"phone\": \"+34222222222\",\n        \"pets\": [\n            {\n                \"id\": 3,\n                \"name\": \"Luna\"\n            },\n            {\n                \"id\": 4,\n                \"name\": \"Misu\"\n            }\n        ]\n    },\n    {\n        \"id\": 3,\n        \"name\": \"Juan García\",\n        \"email\": \"juan@example.com\",\n        \"phone\": \"+34333333333\",\n        \"pets\": [\n            {\n                \"id\": 5,\n                \"name\": \"Rocky\"\n            }\n        ]\n    }\n]"
+                }
+              ]
+            },
+            {
+              "name": "Get Owner By Id",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/owners/1",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "owners",
+                    "1"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Get Owner By Id",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseURL}}/owners/1",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "owners",
+                        "1"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "142"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"8e-ku3/oPubIURsQK0zzt7dIQyohBs\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 14:01:43 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"id\": 1,\n    \"name\": \"Carlos Pérez\",\n    \"email\": \"carlos@example.com\",\n    \"phone\": \"+34111111111\",\n    \"pets\": [\n        {\n            \"id\": 1,\n            \"name\": \"Firulais\"\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Toby\"\n        }\n    ]\n}"
+                }
+              ]
+            },
+            {
+              "name": "Get Owner By Name",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/owners/name/juan",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "owners",
+                    "name",
+                    "juan"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Get Owner By Name",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseURL}}/owners/name/juan",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "owners",
+                        "name",
+                        "juan"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "115"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"73-ldJC1PU+XkCpP0kdbAil/VNydsk\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 14:02:04 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "[\n    {\n        \"id\": 3,\n        \"name\": \"Juan García\",\n        \"email\": \"juan@example.com\",\n        \"phone\": \"+34333333333\",\n        \"pets\": [\n            {\n                \"id\": 5,\n                \"name\": \"Rocky\"\n            }\n        ]\n    }\n]"
+                }
+              ]
+            },
+            {
+              "name": "Get Owner By Email",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/owners/email/carlos@example.com",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "owners",
+                    "email",
+                    "carlos@example.com"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Get Owner By Email",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseURL}}/owners/email/carlos@example.com",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "owners",
+                        "email",
+                        "carlos@example.com"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "142"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"8e-ku3/oPubIURsQK0zzt7dIQyohBs\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 14:02:21 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"id\": 1,\n    \"name\": \"Carlos Pérez\",\n    \"email\": \"carlos@example.com\",\n    \"phone\": \"+34111111111\",\n    \"pets\": [\n        {\n            \"id\": 1,\n            \"name\": \"Firulais\"\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Toby\"\n        }\n    ]\n}"
+                }
+              ]
+            },
+            {
+              "name": "Create Owner",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Daniela\",\n  \"email\": \"dlaaa@exam.com\",\n  \"phone\": \"+34123333789\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseURL}}/owners",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "owners"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Create Owner",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"Daniela\",\n  \"email\": \"dlaaa@exam.com\",\n  \"phone\": \"+34123333789\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/owners",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "owners"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "83"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"53-PAiPAMIFKQFRUJZ1lzenUnfRufc\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 14:02:39 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"id\": 4,\n    \"name\": \"Daniela\",\n    \"email\": \"dlaaa@exam.com\",\n    \"phone\": \"+34123333789\",\n    \"pets\": []\n}"
+                }
+              ]
+            },
+            {
+              "name": "Update Owner",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Daniel García\",\n  \"phone\": \"+34987654321\"\n}\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseURL}}/owners/2",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "owners",
+                    "2"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Update Owner",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"Danielaaa García\",\n  \"phone\": \"+34981654321\"\n}\n",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/owners/4",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "owners",
+                        "4"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "93"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"5d-xEa1WLodS3AttKg2hkR3D0Cs8tc\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 14:02:56 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"id\": 4,\n    \"name\": \"Danielaaa García\",\n    \"email\": \"dlaaa@exam.com\",\n    \"phone\": \"+34981654321\",\n    \"pets\": []\n}"
+                }
+              ]
+            },
+            {
+              "name": "Delete Owner",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Daniel García\",\n  \"phone\": \"+34987654321\"\n}\n"
+                },
+                "url": {
+                  "raw": "{{baseURL}}/owners/6",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "owners",
+                    "6"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Delete Owner",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"Daniel García\",\n  \"phone\": \"+34987654321\"\n}\n"
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/owners/4",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "owners",
+                        "4"
+                      ]
+                    }
+                  },
+                  "status": "No Content",
+                  "code": 204,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 14:03:12 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Animal",
+          "item": [
+            {
+              "name": "Get Animals",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/animals",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "animals"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Get Animals",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseURL}}/animals",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "animals"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "79"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"4f-Oen/+4I8rCeRnntHqNNtXf/xSGI\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 13:59:43 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "[\n    {\n        \"id\": 1,\n        \"species\": \"Dog\",\n        \"userId\": null\n    },\n    {\n        \"id\": 2,\n        \"species\": \"Cat\",\n        \"userId\": null\n    }\n]"
+                }
+              ]
+            },
+            {
+              "name": "Get animal by id",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/animals/1",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "animals",
+                    "1"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Get animal by id",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseURL}}/animals/1",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "animals",
+                        "1"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "38"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"26-yRFwXE4tFdq0XzEvxXVXpblUYmo\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 14:00:00 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"id\": 1,\n    \"species\": \"Dog\",\n    \"userId\": null\n}"
+                }
+              ]
+            },
+            {
+              "name": "Get animal by species",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/animals/species/dog",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "animals",
+                    "species",
+                    "dog"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Get animal by species",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseURL}}/animals/species/dog",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "animals",
+                        "species",
+                        "dog"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "40"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"28-zhJb3fmqN2uaEdcgAs5VnnIuEWw\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 14:00:17 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "[\n    {\n        \"id\": 1,\n        \"species\": \"Dog\",\n        \"userId\": null\n    }\n]"
+                }
+              ]
+            },
+            {
+              "name": "Create animal",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"species\": \"rat\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseURL}}/animals",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "animals"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Create animal",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"species\": \"Parrot\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/animals",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "animals"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "38"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"26-kJ8UoWmoPySzxJUhm1PegVGwli0\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 13:41:15 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"id\": 3,\n    \"species\": \"Parrot\",\n    \"userId\": 1\n}"
+                }
+              ]
+            },
+            {
+              "name": "Update animal",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{ \"species\": \"hammster\" }\n"
+                },
+                "url": {
+                  "raw": "{{baseURL}}/animals/5",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "animals",
+                    "5"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Update animal",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{ \"species\": \"parrot\" }\n"
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/animals/3",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "animals",
+                        "3"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "38"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"26-kJ8UoWmoPySzxJUhm1PegVGwli0\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 13:42:08 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"id\": 3,\n    \"species\": \"Parrot\",\n    \"userId\": 1\n}"
+                }
+              ]
+            },
+            {
+              "name": "Delete animal",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{ \"species\": \"hammster\" }\n"
+                },
+                "url": {
+                  "raw": "{{baseURL}}/animals/6",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "animals",
+                    "6"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Delete animal",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{ \"species\": \"hammster\" }\n"
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/animals/3",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "animals",
+                        "3"
+                      ]
+                    }
+                  },
+                  "status": "No Content",
+                  "code": 204,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 13:43:20 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Breed",
+          "item": [
+            {
+              "name": "Get all breeds",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/breeds",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "breeds"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Get all breeds",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseURL}}/breeds",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "breeds"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "374"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"176-D20++gzehIxct6V01TIVUagdSGY\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 13:58:39 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "[\n    {\n        \"id\": 1,\n        \"name\": \"Labrador\",\n        \"animal\": {\n            \"id\": 1,\n            \"species\": \"Dog\"\n        }\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Golden Retriever\",\n        \"animal\": {\n            \"id\": 1,\n            \"species\": \"Dog\"\n        }\n    },\n    {\n        \"id\": 3,\n        \"name\": \"Bulldog\",\n        \"animal\": {\n            \"id\": 1,\n            \"species\": \"Dog\"\n        }\n    },\n    {\n        \"id\": 4,\n        \"name\": \"Siamese\",\n        \"animal\": {\n            \"id\": 2,\n            \"species\": \"Cat\"\n        }\n    },\n    {\n        \"id\": 5,\n        \"name\": \"Persian\",\n        \"animal\": {\n            \"id\": 2,\n            \"species\": \"Cat\"\n        }\n    },\n    {\n        \"id\": 6,\n        \"name\": \"Maine Coon\",\n        \"animal\": {\n            \"id\": 2,\n            \"species\": \"Cat\"\n        }\n    }\n]"
+                }
+              ]
+            },
+            {
+              "name": "Get Breed by id",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/breeds/3",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "breeds",
+                    "3"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Get Breed by id",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseURL}}/breeds/3",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "breeds",
+                        "3"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "59"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"3b-dSKH4Hf18z2nVTeWC6h9UDLphpE\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 13:58:49 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"id\": 3,\n    \"name\": \"Bulldog\",\n    \"animal\": {\n        \"id\": 1,\n        \"species\": \"Dog\"\n    }\n}"
+                }
+              ]
+            },
+            {
+              "name": "Get breed by animal id",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/breeds/animal/3",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "breeds",
+                    "animal",
+                    "3"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Get breed by animal id",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseURL}}/breeds/animal/3",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "breeds",
+                        "animal",
+                        "3"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "62"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"3e-D8VXz/dyJCqUcbfvLV1AKPpc6ew\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Mon, 17 Nov 2025 12:58:12 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "[\n    {\n        \"id\": 3,\n        \"name\": \"Labrador\",\n        \"animal\": {\n            \"id\": 3,\n            \"species\": \"Dog\"\n        }\n    }\n]"
+                }
+              ]
+            },
+            {
+              "name": "Get breed by name",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/breeds/name/labrador",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "breeds",
+                    "name",
+                    "labrador"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Get breed by name",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseURL}}/breeds/name/labrador",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "breeds",
+                        "name",
+                        "labrador"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "62"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"3e-D8VXz/dyJCqUcbfvLV1AKPpc6ew\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Mon, 17 Nov 2025 13:07:46 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "[\n    {\n        \"id\": 3,\n        \"name\": \"Labrador\",\n        \"animal\": {\n            \"id\": 3,\n            \"species\": \"Dog\"\n        }\n    }\n]"
+                }
+              ]
+            },
+            {
+              "name": "Create breed",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Beagle\",\n  \"animalId\": 3\n}\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseURL}}/breeds/",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "breeds",
+                    ""
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Create breed",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"mastin\",\n  \"animalId\": 3\n}\n",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/breeds",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "breeds"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "58"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"3a-uWJGyXJun6/iiBznrZpaBv4RULY\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Mon, 17 Nov 2025 15:37:12 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"id\": 9,\n    \"name\": \"Mastin\",\n    \"animal\": {\n        \"id\": 3,\n        \"species\": \"Dog\"\n    }\n}"
+                }
+              ]
+            },
+            {
+              "name": "Delete breed",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Beagle\",\n  \"animalId\": 3\n}\n"
+                },
+                "url": {
+                  "raw": "{{baseURL}}/breeds/7",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "breeds",
+                    "7"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Delete breed",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"Beagle\",\n  \"animalId\": 3\n}\n"
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/breeds/6",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "breeds",
+                        "6"
+                      ]
+                    }
+                  },
+                  "status": "No Content",
+                  "code": 204,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Mon, 17 Nov 2025 22:07:08 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Pet",
+          "item": [
+            {
+              "name": "Get all pets",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/pets",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "pets"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Get all pets",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseURL}}/pets",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "pets"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "825"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"339-G968B23+X7C38BpqizuDDhspAcU\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 14:27:43 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "[\n    {\n        \"id\": 1,\n        \"name\": \"Firulais\",\n        \"birthDate\": null,\n        \"ownerId\": 1,\n        \"ownerName\": \"Carlos Pérez\",\n        \"ownerPhone\": \"+34111111111\",\n        \"breed\": \"Labrador\",\n        \"importantNotes\": \"\",\n        \"quickNotes\": \"\"\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Toby\",\n        \"birthDate\": null,\n        \"ownerId\": 1,\n        \"ownerName\": \"Carlos Pérez\",\n        \"ownerPhone\": \"+34111111111\",\n        \"breed\": \"Golden Retriever\",\n        \"importantNotes\": \"\",\n        \"quickNotes\": \"\"\n    },\n    {\n        \"id\": 3,\n        \"name\": \"Luna\",\n        \"birthDate\": null,\n        \"ownerId\": 2,\n        \"ownerName\": \"María López\",\n        \"ownerPhone\": \"+34222222222\",\n        \"breed\": \"Siamese\",\n        \"importantNotes\": \"\",\n        \"quickNotes\": \"\"\n    },\n    {\n        \"id\": 4,\n        \"name\": \"Misu\",\n        \"birthDate\": null,\n        \"ownerId\": 2,\n        \"ownerName\": \"María López\",\n        \"ownerPhone\": \"+34222222222\",\n        \"breed\": \"Persian\",\n        \"importantNotes\": \"\",\n        \"quickNotes\": \"\"\n    },\n    {\n        \"id\": 5,\n        \"name\": \"Rocky\",\n        \"birthDate\": null,\n        \"ownerId\": 3,\n        \"ownerName\": \"Juan García\",\n        \"ownerPhone\": \"+34333333333\",\n        \"breed\": \"Bulldog\",\n        \"importantNotes\": \"\",\n        \"quickNotes\": \"\"\n    }\n]"
+                }
+              ]
+            },
+            {
+              "name": "Get pet by id",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/pets/3",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "pets",
+                    "3"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Get pet by id",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseURL}}/pets/3",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "pets",
+                        "3"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "161"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"a1-H6mLTZgClU+jPvDgAo+ORVEJI2k\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 14:28:02 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"id\": 3,\n    \"name\": \"Luna\",\n    \"birthDate\": null,\n    \"ownerId\": 2,\n    \"ownerName\": \"María López\",\n    \"ownerPhone\": \"+34222222222\",\n    \"breed\": \"Siamese\",\n    \"importantNotes\": \"\",\n    \"quickNotes\": \"\"\n}"
+                }
+              ]
+            },
+            {
+              "name": "Get pet by name",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/pets/name/firulais",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "pets",
+                    "name",
+                    "firulais"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Get pet by name",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseURL}}/pets/name/firulais",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "pets",
+                        "name",
+                        "firulais"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "168"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"a8-Zh8swUHrYxe/Uu1UGZWPAXJkHWY\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 17:51:35 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "[\n    {\n        \"id\": 1,\n        \"name\": \"Firulais\",\n        \"birthDate\": null,\n        \"ownerId\": 1,\n        \"ownerName\": \"Carlos Pérez\",\n        \"ownerPhone\": \"+34111111111\",\n        \"breed\": \"Labrador\",\n        \"importantNotes\": \"\",\n        \"quickNotes\": \"\"\n    }\n]"
+                }
+              ]
+            },
+            {
+              "name": "Get pet by breed id",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/pets/breed/1",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "pets",
+                    "breed",
+                    "1"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Get pet by breed id",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseURL}}/pets/breed/1",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "pets",
+                        "breed",
+                        "1"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "168"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"a8-Zh8swUHrYxe/Uu1UGZWPAXJkHWY\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 17:54:08 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "[\n    {\n        \"id\": 1,\n        \"name\": \"Firulais\",\n        \"birthDate\": null,\n        \"ownerId\": 1,\n        \"ownerName\": \"Carlos Pérez\",\n        \"ownerPhone\": \"+34111111111\",\n        \"breed\": \"Labrador\",\n        \"importantNotes\": \"\",\n        \"quickNotes\": \"\"\n    }\n]"
+                }
+              ]
+            },
+            {
+              "name": "Create Pet and Owner",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Rocky1\",\n  \"birthDate\": \"2021-09-20\",\n  \"importantNotes\": \"Vacunado y con chip\",\n  \"quickNotes\": \"Muy juguetón y cariñoso\",\n  \"ownerData\": {\n    \"name\": \"Carlos Pérez\",\n    \"email\": \"carlos.perez@example.com\",\n    \"phone\": \"+34911223344\"\n  },\n  \"breedId\": 2\n}\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseURL}}/pets/",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "pets",
+                    ""
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Create Pet and Owner",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"Rocky1\",\n  \"birthDate\": \"2021-09-20\",\n  \"importantNotes\": \"Vacunado y con chip\",\n  \"quickNotes\": \"Muy juguetón y cariñoso\",\n  \"ownerData\": {\n    \"name\": \"Carlos Pérez\",\n    \"email\": \"carlos.perez@example.com\",\n    \"phone\": \"+34911223344\"\n  },\n  \"breedId\": 2\n}\n",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/pets/",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "pets",
+                        ""
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "238"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"ee-kjaeJcPGVImhdgM56fU1awvqKsk\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 17:54:33 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"id\": 6,\n    \"name\": \"Rocky1\",\n    \"birthDate\": \"2021-09-20T00:00:00.000Z\",\n    \"ownerId\": 5,\n    \"ownerName\": \"Carlos Pérez\",\n    \"ownerPhone\": \"+34911223344\",\n    \"breed\": \"Golden Retriever\",\n    \"importantNotes\": \"Vacunado y con chip\",\n    \"quickNotes\": \"Muy juguetón y cariñoso\"\n}"
+                }
+              ]
+            },
+            {
+              "name": "Create pet, owner and breed",
+              "protocolProfileBehavior": {
+                "disabledSystemHeaders": {
+                  "content-type": true
+                }
+              },
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Zeus\",\n  \"birthDate\": \"2023-01-12\",\n  \"importantNotes\": \"Cachorro, necesita vacunas iniciales\",\n  \"quickNotes\": \"Muy activo y curioso\",\n  \"ownerData\": {\n    \"name\": \"María López\",\n    \"email\": \"maria.lopez.unique@example.com\",\n    \"phone\": \"+34955667799\"\n  },\n  \"breedData\": {\n    \"name\": \"Border Collie\",\n    \"animalId\": 3\n  }\n}\n"
+                },
+                "url": {
+                  "raw": "{{baseURL}}/pets/",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "pets",
+                    ""
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Create pet , breed and owner",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"Zeus\",\n  \"birthDate\": \"2023-01-12\",\n  \"importantNotes\": \"Cachorro, necesita vacunas iniciales\",\n  \"quickNotes\": \"Muy activo y curioso\",\n  \"ownerData\": {\n    \"name\": \"María López\",\n    \"email\": \"maria.lopez.unique@example.com\",\n    \"phone\": \"+34955667799\"\n  },\n  \"breedData\": {\n    \"name\": \"Border Collie\",\n    \"animalId\": 3\n  }\n}\n"
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/pets/",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "pets",
+                        ""
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "233"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"e9-NgEqTP3z8nJzEBqMXas0zH+V+Hg\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Mon, 17 Nov 2025 22:51:43 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"id\": 7,\n    \"name\": \"Zeus\",\n    \"birthDate\": \"2023-01-12T00:00:00.000Z\",\n    \"ownerName\": \"María López\",\n    \"ownerPhone\": \"+34955667799\",\n    \"breed\": \"Border Collie\",\n    \"importantNotes\": \"Cachorro, necesita vacunas iniciales\",\n    \"quickNotes\": \"Muy activo y curioso\"\n}"
+                }
+              ]
+            },
+            {
+              "name": "Create pet",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Nala\",\n  \"birthDate\": \"2022-03-15\",\n  \"importantNotes\": \"Necesita revisión veterinaria anual\",\n  \"quickNotes\": \"Le encanta dormir en el sofá\",\n  \"ownerId\": 12,\n  \"breedId\": 5\n}\n"
+                },
+                "url": {
+                  "raw": "{{baseURL}}/pets/",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "pets",
+                    ""
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Create pet",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"Nala\",\n  \"birthDate\": \"2022-03-15\",\n  \"importantNotes\": \"Necesita revisión veterinaria anual\",\n  \"quickNotes\": \"Le encanta dormir en el sofá\",\n  \"ownerId\": 12,\n  \"breedId\": 5\n}\n"
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/pets/",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "pets",
+                        ""
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "235"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"eb-cqHMxcmAql1L2KZXoKn4hiERYQA\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Mon, 17 Nov 2025 22:53:51 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"id\": 8,\n    \"name\": \"Nala\",\n    \"birthDate\": \"2022-03-15T00:00:00.000Z\",\n    \"ownerName\": \"Carlos Pérez\",\n    \"ownerPhone\": \"+34911223344\",\n    \"breed\": \"beagle\",\n    \"importantNotes\": \"Necesita revisión veterinaria anual\",\n    \"quickNotes\": \"Le encanta dormir en el sofá\"\n}"
+                }
+              ]
+            },
+            {
+              "name": "Update pet",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Nala Rename\"\n}\n"
+                },
+                "url": {
+                  "raw": "{{baseURL}}/pets/8",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "pets",
+                    "8"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Update pet",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"Nala Actualizada\",\n  \"birthDate\": \"2022-05-20\",\n  \"importantNotes\": \"Ahora necesita medicación diaria\",\n  \"quickNotes\": \"Le encanta jugar con pelotas\"\n}\n\n"
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/pets/7",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "pets",
+                        "7"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "262"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"106-BMAFSyMMQRNzh5KV/sXv6a18lbQ\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 17:56:09 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"id\": 7,\n    \"name\": \"Nala Actualizada\",\n    \"birthDate\": \"2022-05-20T00:00:00.000Z\",\n    \"ownerId\": 6,\n    \"ownerName\": \"María López\",\n    \"ownerPhone\": \"+34955667799\",\n    \"breed\": \"Border Collie\",\n    \"importantNotes\": \"Ahora necesita medicación diaria\",\n    \"quickNotes\": \"Le encanta jugar con pelotas\"\n}"
+                }
+              ]
+            },
+            {
+              "name": "Delete pet",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{baseURL}}/pets/7",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "pets",
+                    "7"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Delete pet",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": ""
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/pets/7",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "pets",
+                        "7"
+                      ]
+                    }
+                  },
+                  "status": "No Content",
+                  "code": 204,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 17:57:03 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Auth",
+          "item": [
+            {
+              "name": "Register",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"firstName\": \"Daniel\",\n  \"lastName\": \"User\",\n  \"secondLastName\": \"\",\n  \"email\": \"daniel@example.com\",\n  \"password\": \"123456\"\n}\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseURL}}/auth/register",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Register",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"firstName\": \"Daniel\",\n  \"lastName\": \"User\",\n  \"secondLastName\": \"\",\n  \"email\": \"daniel123@example.com\",\n  \"password\": \"Pepe123!\"\n}\n",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/auth/register",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "auth",
+                        "register"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "483"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"1e3-MKC6d/7cZ15HbYfERJmyOtMyhiU\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Wed, 14 Jan 2026 22:25:48 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJkYW5pZWwxMjNAZXhhbXBsZS5jb20iLCJpYXQiOjE3Njg0Mjk1NDgsImV4cCI6MTc2ODQzMDQ0OH0.Zp0I6M_7r7XxkXMEfWzRXP_i4CWh44eRN5VQBU8qO8E\",\n    \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJkYW5pZWwxMjNAZXhhbXBsZS5jb20iLCJpYXQiOjE3Njg0Mjk1NDgsImV4cCI6MTc2OTAzNDM0OH0.cpu0vaAOo79VYDljI8iYveInPhCoCD9_TlD1iOzKXR8\",\n    \"user\": {\n        \"id\": 2,\n        \"firstName\": \"Daniel\",\n        \"lastName\": \"User\",\n        \"email\": \"daniel123@example.com\"\n    }\n}"
+                }
+              ]
+            },
+            {
+              "name": "Login",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const jsonData = pm.response.json();",
+                      "pm.environment.set(\"jwt\", jsonData.accessToken);",
+                      "pm.environment.set(\"refresh\", jsonData.refreshToken);",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"daniel123@example.com\",\n  \"password\": \"Pepe123!\"\n}\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseURL}}/auth/login",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Login",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"email\": \"daniel@example.com\",\n  \"password\": \"123456\"\n}\n",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/auth/login",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "auth",
+                        "login"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "472"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"1d8-hDG1NUo0hZqPZm32LElkthUPIt0\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Mon, 01 Dec 2025 11:51:16 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJkYW5pZWxAZXhhbXBsZS5jb20iLCJpYXQiOjE3NjQ1ODk4NzYsImV4cCI6MTc2NDU5MDc3Nn0.3BlYpQjZxGFCDoRSZfA_qk5tulGpHcIzi3m7hu7meN0\",\n    \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJkYW5pZWxAZXhhbXBsZS5jb20iLCJpYXQiOjE3NjQ1ODk4NzYsImV4cCI6MTc2NTE5NDY3Nn0.98IVnbnMeHsg1IyZl_x2FQDbOv2s7us8fOngUHTZkog\",\n    \"user\": {\n        \"id\": 2,\n        \"firstName\": \"Daniel\",\n        \"lastName\": \"User\",\n        \"email\": \"daniel@example.com\"\n    }\n}"
+                }
+              ]
+            },
+            {
+              "name": "Refresh token",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const jsonData = pm.response.json();",
+                      "pm.environment.set(\"jwt\", jsonData.accessToken);",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"refreshToken\": \"{{refresh}}\"\n}\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseURL}}/auth/refresh",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "refresh"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Refresh token",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"refreshToken\": \"{{refresh}}\"\n}\n",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/auth/refresh",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "auth",
+                        "refresh"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "472"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"1d8-jDk/dJS7pDd6Wf+blIEgpOS1Kvw\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Mon, 01 Dec 2025 12:06:04 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJkYW5pZWxAZXhhbXBsZS5jb20iLCJpYXQiOjE3NjQ1OTA3NjQsImV4cCI6MTc2NDU5MTY2NH0.RJ6Ba30GQ0h0M-Z16DNPbvl8sTL2Usq4w2bLitJAr5s\",\n    \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJkYW5pZWxAZXhhbXBsZS5jb20iLCJpYXQiOjE3NjQ1OTA3NjQsImV4cCI6MTc2NTE5NTU2NH0.z1IvfaVRWCs-kj1NRox63ZmMvg8nzTinVDBAu1lATec\",\n    \"user\": {\n        \"id\": 2,\n        \"firstName\": \"Daniel\",\n        \"lastName\": \"User\",\n        \"email\": \"daniel@example.com\"\n    }\n}"
+                }
+              ]
+            },
+            {
+              "name": "Forgot password",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\"email\": \"daniel@example.com\"\n}\n"
+                },
+                "url": {
+                  "raw": "{{baseURL}}/auth/forgot-password",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "forgot-password"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Forgot password",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n\"email\": \"daniel@example.com\"\n}\n",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/auth/forgot-password",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "auth",
+                        "forgot-password"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "193"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"c1-Tbh4Qi3s5x74GBw5H2m7CQDPHes\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Mon, 01 Dec 2025 12:10:26 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"resetToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJkYW5pZWxAZXhhbXBsZS5jb20iLCJpYXQiOjE3NjQ1OTEwMjYsImV4cCI6MTc2NDU5MTkyNn0.RJyRfM4kmmAsrm-h0VKRWlWneEcBmkL2SWPb0_nE-S4\"\n}"
+                }
+              ]
+            },
+            {
+              "name": "Reset password",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"restToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJkYW5pZWxAZXhhbXBsZS5jb20iLCJpYXQiOjE3NjQ1OTEwMjYsImV4cCI6MTc2NDU5MTkyNn0.RJyRfM4kmmAsrm-h0VKRWlWneEcBmkL2SWPb0_nE-S4\",\n  \"newPassword\": \"Nora1302!\"\n}\n\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseURL}}/auth/reset-password",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "reset-password"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Reset password",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"resetToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJkYW5pZWwxMjNAZXhhbXBsZS5jb20iLCJpYXQiOjE3Njg0MzAwMDksImV4cCI6MTc2ODQzMDkwOX0.c3z2Uns_52v5vB93yUtzlESRGI_YYgrU6t47apEdUvQ\",\n  \"newPassword\": \"Pepe1234!\"\n}\n\n",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/auth/reset-password",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "auth",
+                        "reset-password"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "39"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"27-L4xvc+jp/avJkeCZKkXIaqi7KoM\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Wed, 14 Jan 2026 22:35:26 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"message\": \"Password reset successful\"\n}"
+                }
+              ]
+            },
+            {
+              "name": "Change password",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"oldPassword\": \"Abc123\",\n  \"newPassword\": \"Abc1234\"\n}\n\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseURL}}/auth/change-password",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "change-password"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Change password",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"oldPassword\": \"Abc123\",\n  \"newPassword\": \"Abc1234\"\n}\n\n",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/auth/change-password",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "auth",
+                        "change-password"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "43"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"2b-BcqZXnJsIxPWaT5KqbeKFU83Xws\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Mon, 01 Dec 2025 12:42:48 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"message\": \"Password changed successfully\"\n}"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "User",
+          "item": [
+            {
+              "name": "Get my details",
+              "request": {
+                "method": "GET",
+                "header": []
+              },
+              "response": [
+                {
+                  "name": "Get my details",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseURL}}/users/me",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "users",
+                        "me"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "76"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"4c-cREPFbzbXIlao8+dqvPWytvQm+E\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Mon, 01 Dec 2025 11:59:33 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"id\": 2,\n    \"firstName\": \"Daniel\",\n    \"lastName\": \"User\",\n    \"email\": \"daniel@example.com\"\n}"
+                }
+              ]
+            },
+            {
+              "name": "Update my details",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"firstName\": \"Daniel\",\n  \"lastName\": \"Updated\",\n  \"email\": \"daniel.updated@example.com\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseURL}}/users/me",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "users",
+                    "me"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Update my details",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"firstName\": \"Daniel\",\n  \"lastName\": \"Updated\",\n  \"email\": \"daniel.updated@example.com\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/users/me",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "users",
+                        "me"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "87"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"57-WXGVERl1EDaffjndyXmrypA1vkg\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Mon, 01 Dec 2025 14:51:39 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"id\": 2,\n    \"firstName\": \"Daniel\",\n    \"lastName\": \"Updated\",\n    \"email\": \"daniel.updated@example.com\"\n}"
+                }
+              ]
+            },
+            {
+              "name": "Delete my user",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"firstName\": \"Daniel\",\n  \"lastName\": \"Updated\",\n  \"email\": \"daniel.updated@example.com\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseURL}}/users/me",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "users",
+                    "me"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Delete my user",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"firstName\": \"Daniel\",\n  \"lastName\": \"Updated\",\n  \"email\": \"daniel.updated@example.com\"\n}"
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/users/me",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "users",
+                        "me"
+                      ]
+                    }
+                  },
+                  "status": "No Content",
+                  "code": 204,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Mon, 01 Dec 2025 14:55:14 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Service",
+          "item": [
+            {
+              "name": "Get services",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/services",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "services"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Get services",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseURL}}/services",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "services"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "270"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"10e-slGNZBorarYMHDR1FhVMYFijy1Q\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 13:40:49 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "[\n    {\n        \"id\": 1,\n        \"name\": \"bath\",\n        \"price\": 15,\n        \"userId\": null\n    },\n    {\n        \"id\": 4,\n        \"name\": \"ear cleaning\",\n        \"price\": 12,\n        \"userId\": null\n    },\n    {\n        \"id\": 5,\n        \"name\": \"full grooming\",\n        \"price\": 35,\n        \"userId\": null\n    },\n    {\n        \"id\": 2,\n        \"name\": \"haircut\",\n        \"price\": 20,\n        \"userId\": null\n    },\n    {\n        \"id\": 3,\n        \"name\": \"nail trimming\",\n        \"price\": 10,\n        \"userId\": null\n    }\n]"
+                }
+              ]
+            },
+            {
+              "name": "Get service by id",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/services/1",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "services",
+                    "1"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Get service by id",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseURL}}/services/1",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "services",
+                        "1"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "47"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"2f-zuPC3boQi+mGZxQaLM0HU5PZCV8\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 13:45:57 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"id\": 1,\n    \"name\": \"bath\",\n    \"price\": 15,\n    \"userId\": null\n}"
+                }
+              ]
+            },
+            {
+              "name": "Create service",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"spa deluxe\",\n  \"price\": 45\n}\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseURL}}/services",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "services"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Create service",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"spa deluxe\",\n  \"price\": 45\n}\n",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/services",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "services"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "50"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"32-Br4ykBHumqyGPy/N2facyOvlVfA\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 13:51:23 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"id\": 6,\n    \"name\": \"spa deluxe\",\n    \"price\": 45,\n    \"userId\": 1\n}"
+                }
+              ]
+            },
+            {
+              "name": "Update service",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"spa deluxe\",\n  \"price\": 25\n}\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseURL}}/services/6",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "services",
+                    "6"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Update service",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"spa deluxe\",\n  \"price\": 25\n}\n",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/services/6",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "services",
+                        "6"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "50"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"32-QfDtJrWmo6490EJYR0iQzGY0lGg\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 13:54:29 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"id\": 6,\n    \"name\": \"spa deluxe\",\n    \"price\": 25,\n    \"userId\": 1\n}"
+                }
+              ]
+            },
+            {
+              "name": "Delete service",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"spa deluxe\",\n  \"price\": 25\n}\n"
+                },
+                "url": {
+                  "raw": "{{baseURL}}/services/6",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "services",
+                    "6"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Delete service",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"spa deluxe\",\n  \"price\": 25\n}\n"
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/services/6",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "services",
+                        "6"
+                      ]
+                    }
+                  },
+                  "status": "No Content",
+                  "code": 204,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 13:56:51 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Appointment",
+          "item": [
+            {
+              "name": "Create appointment",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"petId\": 1,\n  \"serviceId\": 2,\n  \"startTime\": \"2024-03-10T12:00:00.000Z\",\n  \"endTime\": \"2024-03-10T14:00:00.000Z\",\n  \"finalPrice\": 20\n}\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseURL}}/appointments",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "appointments"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Create appointment",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"petId\": 1,\n  \"serviceId\": 2,\n  \"startTime\": \"2024-03-10T12:00:00.000Z\",\n  \"endTime\": \"2024-03-10T14:00:00.000Z\",\n  \"finalPrice\": 20\n}\n",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/appointments",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "appointments"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "288"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"120-c59v4FTa+0Onc2BstjBldvqWI44\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 18:23:58 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"id\": 7,\n    \"petId\": 1,\n    \"petName\": \"Firulais\",\n    \"ownerName\": \"Carlos Pérez\",\n    \"ownerPhone\": \"+34111111111\",\n    \"serviceId\": 2,\n    \"serviceName\": \"haircut\",\n    \"estimatedPrice\": 20,\n    \"finalPrice\": 20,\n    \"startTime\": \"2024-03-10T12:00:00.000Z\",\n    \"endTime\": \"2024-03-10T14:00:00.000Z\",\n    \"durationMinutes\": 120,\n    \"status\": \"completed\"\n}"
+                }
+              ]
+            },
+            {
+              "name": "Update appointment",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"petId\": 2,\n  \"serviceId\": 5,\n  \"startTime\": \"2024-03-12T14:00:00.000Z\",\n  \"endTime\": \"2024-03-12T16:00:00.000Z\",\n  \"finalPrice\": 35,\n  \"status\": \"completed\"\n}\n\n"
+                },
+                "url": {
+                  "raw": "{{baseURL}}/appointments/7",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "appointments",
+                    "7"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Update appointment",
+                  "originalRequest": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"petId\": 2,\n  \"serviceId\": 5,\n  \"startTime\": \"2024-03-12T14:00:00.000Z\",\n  \"endTime\": \"2024-03-12T16:00:00.000Z\",\n  \"finalPrice\": 35,\n  \"status\": \"completed\"\n}\n\n"
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/appointments/7",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "appointments",
+                        "7"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "290"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"122-HcoEJ0eqWeT9vrTPUF9GuuFIGVE\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 18:33:03 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"id\": 7,\n    \"petId\": 2,\n    \"petName\": \"Toby\",\n    \"ownerName\": \"Carlos Pérez\",\n    \"ownerPhone\": \"+34111111111\",\n    \"serviceId\": 5,\n    \"serviceName\": \"full grooming\",\n    \"estimatedPrice\": 35,\n    \"finalPrice\": 35,\n    \"startTime\": \"2024-03-12T14:00:00.000Z\",\n    \"endTime\": \"2024-03-12T16:00:00.000Z\",\n    \"durationMinutes\": 120,\n    \"status\": \"completed\"\n}"
+                }
+              ]
+            },
+            {
+              "name": "Get appointments by range",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "disabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "\n\n"
+                },
+                "url": {
+                  "raw": "{{baseURL}}/appointments?start=2024-01-01&end=2024-12-31",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "appointments"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2024-12-31"
+                    }
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Get appointments by range",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text",
+                        "disabled": true
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "\n\n"
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/appointments?start=2024-01-01&end=2024-12-31",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "appointments"
+                      ],
+                      "query": [
+                        {
+                          "key": "start",
+                          "value": "2024-01-01"
+                        },
+                        {
+                          "key": "end",
+                          "value": "2024-12-31"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "2018"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"7e2-uhmLOLA26L6sMP4u0eI99VLtVgk\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 18:51:01 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "[\n    {\n        \"id\": 1,\n        \"petId\": 1,\n        \"petName\": \"Firulais\",\n        \"ownerName\": \"Carlos Pérez\",\n        \"ownerPhone\": \"+34111111111\",\n        \"serviceId\": 1,\n        \"serviceName\": \"bath\",\n        \"estimatedPrice\": 15,\n        \"finalPrice\": 15,\n        \"startTime\": \"2024-01-10T09:00:00.000Z\",\n        \"endTime\": \"2024-01-10T10:00:00.000Z\",\n        \"durationMinutes\": 60,\n        \"status\": \"completed\"\n    },\n    {\n        \"id\": 2,\n        \"petId\": 2,\n        \"petName\": \"Toby\",\n        \"ownerName\": \"Carlos Pérez\",\n        \"ownerPhone\": \"+34111111111\",\n        \"serviceId\": 5,\n        \"serviceName\": \"full grooming\",\n        \"estimatedPrice\": 35,\n        \"finalPrice\": 35,\n        \"startTime\": \"2024-02-05T10:00:00.000Z\",\n        \"endTime\": \"2024-02-05T11:00:00.000Z\",\n        \"durationMinutes\": 60,\n        \"status\": \"completed\"\n    },\n    {\n        \"id\": 6,\n        \"petId\": 1,\n        \"petName\": \"Firulais\",\n        \"ownerName\": \"Carlos Pérez\",\n        \"ownerPhone\": \"+34111111111\",\n        \"serviceId\": 2,\n        \"serviceName\": \"haircut\",\n        \"estimatedPrice\": 20,\n        \"finalPrice\": 20,\n        \"startTime\": \"2024-03-10T10:00:00.000Z\",\n        \"endTime\": \"2024-03-10T11:00:00.000Z\",\n        \"durationMinutes\": 60,\n        \"status\": \"completed\"\n    },\n    {\n        \"id\": 3,\n        \"petId\": 3,\n        \"petName\": \"Luna\",\n        \"ownerName\": \"María López\",\n        \"ownerPhone\": \"+34222222222\",\n        \"serviceId\": 2,\n        \"serviceName\": \"haircut\",\n        \"estimatedPrice\": 20,\n        \"finalPrice\": 20,\n        \"startTime\": \"2024-03-12T08:30:00.000Z\",\n        \"endTime\": \"2024-03-12T09:30:00.000Z\",\n        \"durationMinutes\": 60,\n        \"status\": \"completed\"\n    },\n    {\n        \"id\": 7,\n        \"petId\": 2,\n        \"petName\": \"Toby\",\n        \"ownerName\": \"Carlos Pérez\",\n        \"ownerPhone\": \"+34111111111\",\n        \"serviceId\": 5,\n        \"serviceName\": \"full grooming\",\n        \"estimatedPrice\": 35,\n        \"finalPrice\": 35,\n        \"startTime\": \"2024-03-12T14:00:00.000Z\",\n        \"endTime\": \"2024-03-12T16:00:00.000Z\",\n        \"durationMinutes\": 120,\n        \"status\": \"completed\"\n    },\n    {\n        \"id\": 4,\n        \"petId\": 4,\n        \"petName\": \"Misu\",\n        \"ownerName\": \"María López\",\n        \"ownerPhone\": \"+34222222222\",\n        \"serviceId\": 3,\n        \"serviceName\": \"nail trimming\",\n        \"estimatedPrice\": 10,\n        \"finalPrice\": 10,\n        \"startTime\": \"2024-04-01T13:00:00.000Z\",\n        \"endTime\": \"2024-04-01T14:00:00.000Z\",\n        \"durationMinutes\": 60,\n        \"status\": \"completed\"\n    },\n    {\n        \"id\": 5,\n        \"petId\": 5,\n        \"petName\": \"Rocky\",\n        \"ownerName\": \"Juan García\",\n        \"ownerPhone\": \"+34333333333\",\n        \"serviceId\": 4,\n        \"serviceName\": \"ear cleaning\",\n        \"estimatedPrice\": 12,\n        \"finalPrice\": 12,\n        \"startTime\": \"2024-05-20T11:00:00.000Z\",\n        \"endTime\": \"2024-05-20T12:00:00.000Z\",\n        \"durationMinutes\": 60,\n        \"status\": \"completed\"\n    }\n]"
+                }
+              ]
+            },
+            {
+              "name": "Get completed appointments by range",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "disabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "\n\n"
+                },
+                "url": {
+                  "raw": "{{baseURL}}/appointments/completed?start=2024-01-01&end=2024-12-31",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "appointments",
+                    "completed"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2024-12-31"
+                    }
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Get completed appointments by range",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text",
+                        "disabled": true
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "\n\n"
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/appointments/completed?start=2024-01-01&end=2024-12-31",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "appointments",
+                        "completed"
+                      ],
+                      "query": [
+                        {
+                          "key": "start",
+                          "value": "2024-01-01"
+                        },
+                        {
+                          "key": "end",
+                          "value": "2024-12-31"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json; charset=utf-8"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "2018"
+                    },
+                    {
+                      "key": "ETag",
+                      "value": "W/\"7e2-uhmLOLA26L6sMP4u0eI99VLtVgk\""
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 18:53:20 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "[\n    {\n        \"id\": 1,\n        \"petId\": 1,\n        \"petName\": \"Firulais\",\n        \"ownerName\": \"Carlos Pérez\",\n        \"ownerPhone\": \"+34111111111\",\n        \"serviceId\": 1,\n        \"serviceName\": \"bath\",\n        \"estimatedPrice\": 15,\n        \"finalPrice\": 15,\n        \"startTime\": \"2024-01-10T09:00:00.000Z\",\n        \"endTime\": \"2024-01-10T10:00:00.000Z\",\n        \"durationMinutes\": 60,\n        \"status\": \"completed\"\n    },\n    {\n        \"id\": 2,\n        \"petId\": 2,\n        \"petName\": \"Toby\",\n        \"ownerName\": \"Carlos Pérez\",\n        \"ownerPhone\": \"+34111111111\",\n        \"serviceId\": 5,\n        \"serviceName\": \"full grooming\",\n        \"estimatedPrice\": 35,\n        \"finalPrice\": 35,\n        \"startTime\": \"2024-02-05T10:00:00.000Z\",\n        \"endTime\": \"2024-02-05T11:00:00.000Z\",\n        \"durationMinutes\": 60,\n        \"status\": \"completed\"\n    },\n    {\n        \"id\": 6,\n        \"petId\": 1,\n        \"petName\": \"Firulais\",\n        \"ownerName\": \"Carlos Pérez\",\n        \"ownerPhone\": \"+34111111111\",\n        \"serviceId\": 2,\n        \"serviceName\": \"haircut\",\n        \"estimatedPrice\": 20,\n        \"finalPrice\": 20,\n        \"startTime\": \"2024-03-10T10:00:00.000Z\",\n        \"endTime\": \"2024-03-10T11:00:00.000Z\",\n        \"durationMinutes\": 60,\n        \"status\": \"completed\"\n    },\n    {\n        \"id\": 3,\n        \"petId\": 3,\n        \"petName\": \"Luna\",\n        \"ownerName\": \"María López\",\n        \"ownerPhone\": \"+34222222222\",\n        \"serviceId\": 2,\n        \"serviceName\": \"haircut\",\n        \"estimatedPrice\": 20,\n        \"finalPrice\": 20,\n        \"startTime\": \"2024-03-12T08:30:00.000Z\",\n        \"endTime\": \"2024-03-12T09:30:00.000Z\",\n        \"durationMinutes\": 60,\n        \"status\": \"completed\"\n    },\n    {\n        \"id\": 7,\n        \"petId\": 2,\n        \"petName\": \"Toby\",\n        \"ownerName\": \"Carlos Pérez\",\n        \"ownerPhone\": \"+34111111111\",\n        \"serviceId\": 5,\n        \"serviceName\": \"full grooming\",\n        \"estimatedPrice\": 35,\n        \"finalPrice\": 35,\n        \"startTime\": \"2024-03-12T14:00:00.000Z\",\n        \"endTime\": \"2024-03-12T16:00:00.000Z\",\n        \"durationMinutes\": 120,\n        \"status\": \"completed\"\n    },\n    {\n        \"id\": 4,\n        \"petId\": 4,\n        \"petName\": \"Misu\",\n        \"ownerName\": \"María López\",\n        \"ownerPhone\": \"+34222222222\",\n        \"serviceId\": 3,\n        \"serviceName\": \"nail trimming\",\n        \"estimatedPrice\": 10,\n        \"finalPrice\": 10,\n        \"startTime\": \"2024-04-01T13:00:00.000Z\",\n        \"endTime\": \"2024-04-01T14:00:00.000Z\",\n        \"durationMinutes\": 60,\n        \"status\": \"completed\"\n    },\n    {\n        \"id\": 5,\n        \"petId\": 5,\n        \"petName\": \"Rocky\",\n        \"ownerName\": \"Juan García\",\n        \"ownerPhone\": \"+34333333333\",\n        \"serviceId\": 4,\n        \"serviceName\": \"ear cleaning\",\n        \"estimatedPrice\": 12,\n        \"finalPrice\": 12,\n        \"startTime\": \"2024-05-20T11:00:00.000Z\",\n        \"endTime\": \"2024-05-20T12:00:00.000Z\",\n        \"durationMinutes\": 60,\n        \"status\": \"completed\"\n    }\n]"
+                }
+              ]
+            },
+            {
+              "name": "Delete appointment",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{jwt}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "disabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "\n\n"
+                },
+                "url": {
+                  "raw": "{{baseURL}}/appointments/7",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "appointments",
+                    "7"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Delete appointment",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text",
+                        "disabled": true
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "\n\n"
+                    },
+                    "url": {
+                      "raw": "{{baseURL}}/appointments/7",
+                      "host": [
+                        "{{baseURL}}"
+                      ],
+                      "path": [
+                        "appointments",
+                        "7"
+                      ]
+                    }
+                  },
+                  "status": "No Content",
+                  "code": 204,
+                  "_postman_previewlanguage": null,
+                  "header": [
+                    {
+                      "key": "X-Powered-By",
+                      "value": "Express"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Tue, 27 Jan 2026 18:54:24 GMT"
+                    },
+                    {
+                      "key": "Connection",
+                      "value": "keep-alive"
+                    },
+                    {
+                      "key": "Keep-Alive",
+                      "value": "timeout=5"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": null
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseURL",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "baseURL",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}

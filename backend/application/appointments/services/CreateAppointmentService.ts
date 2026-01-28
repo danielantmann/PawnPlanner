@@ -20,7 +20,7 @@ export class CreateAppointmentService {
     @inject('PetRepository') private pets: IPetRepository,
     @inject('OwnerRepository') private owners: IOwnerRepository,
     @inject('ServiceRepository') private services: IServiceRepository,
-    @inject('BreedRepository') private breeds: IBreedRepository, // ←🔥 AÑADIDO
+    @inject('BreedRepository') private breeds: IBreedRepository,
     @inject('AppointmentRepository') private appointments: IAppointmentRepository
   ) {}
 

@@ -4,7 +4,7 @@ import { DeleteServiceService } from '../../../application/services/services/Del
 
 export async function deleteServiceController(req: Request, res: Response, next: NextFunction) {
   try {
-    const userId = req.user.id;
+    const userId = req.user!.id;
     const id = Number(req.params.id);
 
     const service = container.resolve(DeleteServiceService);

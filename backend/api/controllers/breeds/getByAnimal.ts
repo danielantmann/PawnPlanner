@@ -4,7 +4,7 @@ import { GetBreedsByAnimalService } from '../../../application/breeds/services/G
 
 export async function getBreedsByAnimal(req: Request, res: Response, next: NextFunction) {
   try {
-    const userId = req.user.id;
+    const userId = req.user!.id;
     const service = container.resolve(GetBreedsByAnimalService);
     const breeds = await service.execute(Number(req.params.animalId), userId);
     res.status(200).json(breeds);

@@ -6,7 +6,7 @@ import { NotFoundError } from '../../../shared/errors/NotFoundError';
 
 export async function updatePet(req: Request, res: Response, next: NextFunction) {
   try {
-    const userId = req.user.id;
+    const userId = req.user!.id;
     const id = Number(req.params.id);
     const service = container.resolve(UpdatePetService);
     const pet = await service.execute(id, req.body as UpdatePetDTO, userId);

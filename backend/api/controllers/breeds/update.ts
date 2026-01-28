@@ -4,7 +4,7 @@ import { UpdateBreedService } from '../../../application/breeds/services/UpdateB
 
 export async function updateBreed(req: Request, res: Response, next: NextFunction) {
   try {
-    const userId = req.user.id;
+    const userId = req.user!.id;
     const service = container.resolve(UpdateBreedService);
     const id = Number(req.params.id);
     const breed = await service.execute(id, req.body, userId);

@@ -90,6 +90,7 @@ export class PetRepository implements IPetRepository {
   async findAll(userId: number): Promise<Pet[]> {
     const entities = await this.ormRepo.find({
       where: { userId },
+      relations: ['owner', 'breed'],
     });
 
     return entities.map((e) => this.toDomain(e));
