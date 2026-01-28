@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useUserStore } from '../store/user.store';
 
 export const api = axios.create({
   baseURL: process.env.EXPO_PUBLIC_API_URL,
@@ -8,15 +9,18 @@ export const api = axios.create({
   },
 });
 
-// Optional: attach token automatically
-api.interceptors.request.use(async (config) => {
-  // TODO: read token from Zustand or SecureStore
-  // const token = useUserStore.getState().token;
-  // if (token) config.headers.Authorization = `Bearer ${token}`;
+// Attach token automatically
+api.interceptors.request.use((config) => {
+  const token = useUserStore.getState().token;
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
   return config;
 });
 
-// Optional: global error handling
+// Global error handling
 api.interceptors.response.use(
   (response) => response,
   (error) => {
