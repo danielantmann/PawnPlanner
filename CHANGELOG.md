@@ -950,3 +950,114 @@ The goal is to provide a clean, accurate, and developer‑friendly API experienc
 - Postman tooling enables fast testing and onboarding.
 - Test suite is stable and aligned with the latest refactors.
 - The branch is ready to merge and improves overall developer experience.
+
+## [Frontend Foundation & Home UI] - 2026-01-29
+
+### Overview
+
+This branch delivers the complete foundational layer of the PawnPlanner frontend.  
+It includes the full Home screen UI, navigation structure, modular components, internationalization (EN/ES), layout fixes, and the initial architecture for scalable feature development.  
+The goal is to provide a clean, maintainable, and production‑ready frontend base before implementing authentication and backend data loading.
+
+---
+
+### Key Changes
+
+#### 1. Home Screen Implementation
+
+- Added full Home UI with:
+  - Greeting header with dynamic date
+  - Quick action buttons (appointment, client, pet)
+  - Today’s appointments section with dynamic rendering:
+    - 0 → EmptyAppointmentsCard
+    - 1 → full-width MiniAppointmentCard
+    - > 1 → horizontal scroll list
+  - Daily stats card
+  - Weekly summary card with activity graph
+- Ensured layout consistency in English and Spanish.
+- Fixed alignment issues for long labels (e.g., “Total appointments”).
+- Implemented locale‑aware date formatting with automatic capitalization.
+
+---
+
+#### 2. Navigation Structure
+
+- Added tab navigation under `app/(tabs)`.
+- Connected Home, Agenda, and Stats screens.
+- Ensured clean routing with Expo Router.
+- Prepared structure for future authenticated routes.
+
+---
+
+#### 3. UI Modules & Components
+
+- Created reusable primitives:
+  - `Button`
+  - `Label`
+  - `Title`
+  - `BodyText`
+  - `Icon`
+- Added pattern components:
+  - `ScreenHeader`
+- Added dashboard components:
+  - `StatsCard` (now receives `moreLabel` as prop)
+  - `WeeklyStatsCard` (with improved metric alignment)
+- Added appointment components:
+  - `MiniAppointmentCard`
+  - `EmptyAppointmentsCard`
+
+---
+
+#### 4. Internationalization (i18n)
+
+- Added full EN/ES translation files.
+- Implemented:
+  - `home.*` strings
+  - `weeklyStats.*` strings
+  - Navigation labels
+  - Dynamic date formatting based on `i18n.language`
+- Removed all hardcoded UI text.
+- Added `home.more` for “See more / Ver más”.
+- Ensured days of the week load from arrays using `returnObjects: true`.
+
+---
+
+#### 5. Layout & Visual Fixes
+
+- Fixed React Native error caused by stray text nodes.
+- Improved metric alignment using spacer technique.
+- Ensured icons remain top‑aligned while numbers align bottom‑aligned.
+- Improved spacing, shadows, and dark mode compatibility.
+- Ensured horizontal scroll works smoothly for multiple appointments.
+
+---
+
+#### 6. TypeScript & Architecture Improvements
+
+- Strong typing for `MiniAppointmentCardProps` (status literal types).
+- Fixed inference issues by typing appointment arrays explicitly.
+- Added missing props (`moreLabel`) and removed invalid ones (`labelClass`).
+- Cleaned unused imports and improved component composition.
+- Ensured all components are safe for future backend integration.
+
+---
+
+### Notes
+
+- The Home screen is now visually stable and production‑ready.
+- All UI strings are fully internationalized.
+- The architecture is prepared for:
+  - Login & authentication
+  - Backend data loading
+  - Skeleton loaders
+  - Animations (Reanimated/Moti)
+- No breaking changes introduced to existing screens.
+
+---
+
+### Outcome
+
+- Frontend foundation is complete, modular, and scalable.
+- Home screen is polished, responsive, and bilingual.
+- Navigation and components are ready for real data.
+- The branch is ready to merge and sets the stage for the Login module and backend integration.
