@@ -1,0 +1,28 @@
+{
+  "home": {
+    "greeting": "Hola {{name}} 👋",
+    "today": "Hoy es {{date}}. Tienes {{count}} citas.",
+    "quickActions": { "appointment": "Cita", "client": "Cliente", "pet": "Mascota" },
+    "appointmentsToday": "Citas de hoy",
+    "seeAll": "Ver todas",
+    "dailyStats": "Estadísticas del día",
+    "weeklySummary": "Resumen semanal",
+    "stats": { "income": "Ingresos", "completed": "Completadas", "noShows": "No-shows" },
+    "more": "Ver más"
+  },
+  "navigation": {
+    "home": "Inicio",
+    "agenda": "Agenda",
+    "search": "Buscar",
+    "stats": "Estadísticas",
+    "profile": "Perfil"
+  },
+  "weeklyStats": {
+    "seeStats": "Ver estadísticas",
+    "totalAppointments": "Citas totales",
+    "totalRevenue": "Ingresos totales",
+    "cancellations": "Cancelaciones",
+    "weeklyActivity": "Actividad semanal",
+    "daysShort": ["L", "M", "X", "J", "V", "S", "D"]
+  }
+}
