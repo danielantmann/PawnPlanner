@@ -1,5 +1,8 @@
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import type { AppointmentDTO } from '../types/appointment.types';
+import { Title } from '@/src/ui/components/primitives/Title';
+import { BodyText } from '@/src/ui/components/primitives/BodyText';
+import { Label } from '@/src/ui/components/primitives/Label';
 
 interface Props {
   appointment: AppointmentDTO;
@@ -12,25 +15,34 @@ export const AppointmentCard = ({ appointment }: Props) => {
     minute: '2-digit',
   });
 
-  const statusColor = {
-    completed: 'text-green-600',
-    'no-show': 'text-red-600',
-    cancelled: 'text-gray-500',
+  // Estado → badge
+  const statusStyles = {
+    completed: 'bg-success/15 text-success border-success/30',
+    'no-show': 'bg-danger/15 text-danger border-danger/30',
+    cancelled: 'bg-danger/15 text-danger border-danger/30',
   }[appointment.status];
 
   return (
-    <View className="mb-3 rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
-      <Text className="text-lg font-semibold">{appointment.petName}</Text>
+    <View className="bg-background dark:bg-backgroundDarkAlt mb-3 rounded-lg border border-gray-200 p-4 shadow-sm dark:border-gray-700">
+      {/* Mascota */}
+      <Title className="text-lg">{appointment.petName}</Title>
 
-      <Text className="text-gray-700">
+      {/* Dueño */}
+      <BodyText className="mt-0.5">
         {appointment.ownerName} · {appointment.ownerPhone}
-      </Text>
+      </BodyText>
 
-      <Text className="mt-1 text-gray-800">{appointment.serviceName}</Text>
+      {/* Servicio */}
+      <BodyText className="mt-1 font-medium">{appointment.serviceName}</BodyText>
 
-      <View className="mt-2 flex-row justify-between">
-        <Text className="text-gray-600">{time}</Text>
-        <Text className={`font-medium ${statusColor}`}>{appointment.status}</Text>
+      {/* Hora + Estado */}
+      <View className="mt-3 flex-row items-center justify-between">
+        <Label className="text-textSecondary dark:text-textSecondaryDark">{time}</Label>
+
+        {/* Badge */}
+        <View className={`rounded-md border px-2 py-1 ${statusStyles}`}>
+          <Label className="font-semibold capitalize">{appointment.status}</Label>
+        </View>
       </View>
     </View>
   );

@@ -1,0 +1,28 @@
+{
+  "home": {
+    "greeting": "Hi {{name}} 👋",
+    "today": "Today is {{date}}. You have {{count}} appointments.",
+    "quickActions": { "appointment": "Appointment", "client": "Client", "pet": "Pet" },
+    "appointmentsToday": "Today's appointments",
+    "seeAll": "See all",
+    "dailyStats": "Daily stats",
+    "weeklySummary": "Weekly summary",
+    "stats": { "income": "Income", "completed": "Completed", "noShows": "No-shows" },
+    "more": "See more"
+  },
+  "navigation": {
+    "home": "Home",
+    "agenda": "Agenda",
+    "search": "Search",
+    "stats": "Stats",
+    "profile": "Profile"
+  },
+  "weeklyStats": {
+    "seeStats": "View stats",
+    "totalAppointments": "Total appointments",
+    "totalRevenue": "Total revenue",
+    "cancellations": "Cancellations",
+    "weeklyActivity": "Weekly activity",
+    "daysShort": ["M", "T", "W", "T", "F", "S", "S"]
+  }
+}
