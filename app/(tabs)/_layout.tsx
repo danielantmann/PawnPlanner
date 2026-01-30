@@ -28,7 +28,7 @@ export default function TabsLayout() {
           },
         }}>
         <Tabs.Screen
-          name="index"
+          name="home/index"
           options={{
             title: t('navigation.home'),
             tabBarIcon: ({ color, size }) => <Ionicons name="home" size={size} color={color} />,

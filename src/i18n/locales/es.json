@@ -24,5 +24,37 @@
     "cancellations": "Cancelaciones",
     "weeklyActivity": "Actividad semanal",
     "daysShort": ["L", "M", "X", "J", "V", "S", "D"]
+  },
+  "auth": {
+    "loginTitle": "Iniciar sesión",
+    "registerTitle": "Crear cuenta",
+    "firstName": "Nombre",
+    "lastName": "Apellidos",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "loginButton": "Entrar",
+    "registerButton": "Registrarse",
+
+    "goToRegisterPrefix": "¿No tienes cuenta?",
+    "goToRegisterAction": "Regístrate",
+    "goToLoginPrefix": "¿Ya tienes cuenta?",
+    "goToLoginAction": "Inicia sesión",
+
+    "errors": {
+      "firstNameRequired": "El nombre es obligatorio",
+      "lastNameRequired": "Los apellidos son obligatorios",
+      "emailRequired": "El correo es obligatorio",
+      "emailInvalid": "Introduce un correo válido",
+      "passwordRequired": "La contraseña es obligatoria",
+      "passwordInvalid": "La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un símbolo (por ejemplo: !, @, #, $, %, &).",
+      "passwordsDontMatch": "Las contraseñas no coinciden",
+      "missingFields": "Completa todos los campos"
+    },
+    "invalidCredentials": "Correo o contraseña incorrectos",
+    "userNotFound": "El usuario no existe",
+    "emailExists": "Este correo ya está registrado",
+    "unexpected": "Error inesperado. Inténtalo de nuevo.",
+    "forgotPassword": "¿Olvidaste tu contraseña?"
   }
 }

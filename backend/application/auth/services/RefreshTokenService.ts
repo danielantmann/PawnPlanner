@@ -2,7 +2,6 @@ import { inject, injectable } from 'tsyringe';
 import { IUserRepository } from '../../../core/users/domain/IUserRepository';
 import { UnauthorizedError } from '../../../shared/errors/UnauthorizedError';
 import { TokenService } from '../../../shared/utils/TokenService';
-import { User } from '../../../core/users/domain/User';
 
 @injectable()
 export class RefreshTokenService {
