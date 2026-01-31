@@ -1061,3 +1061,82 @@ The goal is to provide a clean, maintainable, and production‑ready frontend ba
 - Home screen is polished, responsive, and bilingual.
 - Navigation and components are ready for real data.
 - The branch is ready to merge and sets the stage for the Login module and backend integration.
+
+# [Auth Module – Login & Register] - 2026-01-31
+
+### Overview
+
+This branch introduces the complete authentication flow for PawnPlanner, including login, registration, validation, error handling, session persistence, and frontend–backend integration.  
+The goal is to deliver a production‑ready auth foundation that cleanly integrates with the existing architecture and prepares the app for protected routes and dashboard data loading.
+
+---
+
+### Key Changes
+
+#### 1. Login & Register Screens
+
+- Implemented fully functional Login and Register screens.
+- Added dynamic form rendering based on mode (`isLogin`).
+- Integrated React Hook Form + Zod for schema‑based validation.
+- Added strong password validation (min length, uppercase, number, symbol).
+- Implemented localized error messages (EN/ES) for all fields.
+- Ensured clean UI/UX with consistent spacing, icons, and dark mode support.
+
+---
+
+#### 2. Validation & Error Handling
+
+- Created `createAuthSchema` with dynamic rules for login/register.
+- Removed unused `confirm` field from the form and aligned schema accordingly.
+- Added backend error mapping for login (invalid credentials, user not found).
+- Ensured proper display of validation errors under each input.
+- Added global error clearing when typing to avoid stale messages.
+
+---
+
+#### 3. Backend Integration
+
+- Connected login and register screens to real API endpoints.
+- Implemented `useLogin` and `useRegister` hooks using React Query.
+- Added loading states and disabled buttons during submission.
+- Ensured correct payload structure for both flows.
+- Confirmed successful registration triggers backend user creation.
+
+---
+
+#### 4. Session Management (Zustand)
+
+- Added session store to persist:
+  - `accessToken`
+  - `refreshToken`
+  - `user` object (firstName, lastName, email, id)
+- Implemented `setSession`, `clearSession`, and hydration logic.
+- Ensured session is updated immediately after login/register.
+- Prepared store for future `/me` endpoint integration.
+
+---
+
+#### 5. Navigation & Redirects
+
+- Added automatic redirect to Home after successful login/register.
+- Ensured navigation works cleanly with Expo Router.
+- Prepared structure for future protected routes.
+
+---
+
+### Notes
+
+- Registration and login flows are fully functional and stable.
+- Validation is strict, localized, and production‑ready.
+- Session handling is centralized and scalable.
+- Backend integration is complete and tested manually.
+- Ready for next steps: `/me` endpoint, dashboard data loading, and protected routes.
+
+---
+
+### Outcome
+
+- Authentication module is complete and integrated.
+- Users can register, log in, and persist their session.
+- Error handling and validation are robust and user‑friendly.
+- The app is now ready to connect the Home screen to real backend data.

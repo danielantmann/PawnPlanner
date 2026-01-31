@@ -5,11 +5,13 @@ import { cn } from '../../../utils/cn';
 import { Icon } from '@ui/components/primitives/Icon';
 import type { IconName } from '@ui/components/primitives/Icon';
 
-const buttonStyles = cva('items-center justify-center flex-col', {
+// ⭐ Estilos del contenedor (fondo, padding, disabled, etc.)
+const buttonStyles = cva('items-center justify-center flex-col rounded-lg', {
   variants: {
     variant: {
       primary: 'bg-primary dark:bg-primaryDark',
       secondary: 'bg-gray-600 dark:bg-gray-700',
+      disabled: 'bg-gray-300 dark:bg-gray-600', // ⭐ gris bonito para disabled
       outline: 'border border-gray-400 dark:border-gray-600',
     },
 
@@ -20,16 +22,8 @@ const buttonStyles = cva('items-center justify-center flex-col', {
     },
 
     disabled: {
-      true: 'opacity-50',
+      true: 'opacity-100', // ⭐ NO usamos opacity-50 porque queda feo
       false: '',
-    },
-
-    textColor: {
-      light: 'text-black',
-      dark: 'text-white',
-      primary: 'text-primary dark:text-primaryLight',
-      white: 'text-white',
-      black: 'text-black',
     },
   },
 
@@ -37,7 +31,29 @@ const buttonStyles = cva('items-center justify-center flex-col', {
     variant: 'primary',
     size: 'md',
     disabled: false,
+  },
+});
+
+// ⭐ Estilos del texto (separado para evitar heredar bg-primary)
+const textStyles = cva('font-semibold leading-none mt-1 text-center', {
+  variants: {
+    textColor: {
+      white: 'text-white',
+      black: 'text-black',
+      primary: 'text-primary dark:text-primaryLight',
+      dark: 'text-white',
+      light: 'text-black',
+    },
+    textSize: {
+      xs: 'text-xs',
+      sm: 'text-sm',
+      base: 'text-base',
+      lg: 'text-lg',
+    },
+  },
+  defaultVariants: {
     textColor: 'white',
+    textSize: 'base',
   },
 });
 
@@ -48,6 +64,8 @@ interface ButtonProps extends VariantProps<typeof buttonStyles> {
   circle?: 'sm' | 'md' | 'lg';
   onPress?: () => void;
   className?: string;
+  textColor?: VariantProps<typeof textStyles>['textColor'];
+  textSize?: VariantProps<typeof textStyles>['textSize'];
 }
 
 export const Button: FC<ButtonProps> = ({
@@ -59,6 +77,7 @@ export const Button: FC<ButtonProps> = ({
   circle,
   disabled,
   textColor,
+  textSize,
   className,
   onPress,
 }) => {
@@ -75,6 +94,9 @@ export const Button: FC<ButtonProps> = ({
     <Pressable
       disabled={disabled}
       onPress={onPress}
+      android_ripple={null} // ⭐ elimina highlight azul
+      focusable={false} // ⭐ elimina borde de enfoque
+      pressRetentionOffset={0} // ⭐ elimina retención rara
       className={cn(
         buttonStyles({ variant, size, disabled }),
         circleClasses,
@@ -82,19 +104,10 @@ export const Button: FC<ButtonProps> = ({
         'flex-col items-center justify-center',
         className
       )}>
-      {icon && (
-        <Icon
-          name={icon}
-          size={iconSize}
-          color="white" // ⭐ PRO: icono blanco siempre
-          fixedColor // ⭐ evita que cambie en dark mode
-        />
-      )}
+      {icon && <Icon name={icon} size={iconSize} color="white" fixedColor />}
 
       {children && (
-        <Text
-          className={cn(buttonStyles({ textColor }), 'mt-1 text-center text-xs font-semibold')}
-          numberOfLines={1}>
+        <Text className={cn(textStyles({ textColor, textSize }))} numberOfLines={1}>
           {children}
         </Text>
       )}

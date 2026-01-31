@@ -22,8 +22,4 @@ backend-test-integration:
 backend-test:
 	cd backend && npm run test
 
-frontend-install:
-	cd frontend && npm install
 
-frontend-start:
-	cd frontend && npm run start

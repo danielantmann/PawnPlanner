@@ -24,5 +24,37 @@
     "cancellations": "Cancellations",
     "weeklyActivity": "Weekly activity",
     "daysShort": ["M", "T", "W", "T", "F", "S", "S"]
+  },
+  "auth": {
+    "loginTitle": "Sign in",
+    "registerTitle": "Create account",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "loginButton": "Sign in",
+    "registerButton": "Register",
+
+    "goToRegisterPrefix": "Don't have an account?",
+    "goToRegisterAction": "Register",
+    "goToLoginPrefix": "Already have an account?",
+    "goToLoginAction": "Sign in",
+
+    "errors": {
+      "firstNameRequired": "First name is required",
+      "lastNameRequired": "Last name is required",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Enter a valid email",
+      "passwordRequired": "Password is required",
+      "passwordInvalid": "Password must contain at least 8 characters, one uppercase letter, one number, and one symbol (e.g. !, @, #, $, %, &).",
+      "passwordsDontMatch": "Passwords do not match",
+      "missingFields": "Please fill in all fields"
+    },
+    "invalidCredentials": "Invalid email or password",
+    "userNotFound": "User not found",
+    "emailExists": "This email is already registered",
+    "unexpected": "Unexpected error. Please try again.",
+    "forgotPassword": "Forgot password?"
   }
 }

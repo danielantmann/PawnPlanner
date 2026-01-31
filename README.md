@@ -1,44 +1,109 @@
 # 🐾 PawnPlanner – Dog Grooming Management System
 
-Full‑stack application for managing dog grooming appointments, pets, owners, services and more.
+Full‑stack mobile app for managing appointments, pets, owners and services. Built with **React Native (Expo)** + **Node.js / TypeScript** using **Clean Architecture**, **DDD**, and **96% test coverage**.
 
-This repository contains:
+**Status:** Backend completed and fully tested. Mobile app in active development (login, register, home connected to API).
 
-- **Expo / React Native mobile app** (root of the project)
-- **Backend API** inside `/backend` (Node.js, Express, TypeScript, TypeORM)
+---
+
+## 🚀 Overview
+
+PawnPlanner is a real-world management system built for a dog‑grooming business. It includes:
+
+- Mobile app (React Native + Expo)
+- Backend API (Node.js, Express, TypeScript, TypeORM)
+- Authentication (JWT)
+- Multi‑tenant data isolation
+- Full CRUD for owners, pets, services and appointments
+- 96% test coverage (unit + integration)
 
 ---
 
 ## 📦 Project Structure
 
-```text
 PawnPlanner/
-  backend/     → Full backend API (Node.js, Express, TypeScript, TypeORM)
-  app/         → Expo project files
-  package.json → Expo project config
-  README.md    → You are here
+backend/ → Full backend API (Node.js, Express, TypeScript, TypeORM)
+app/ → Expo project files (React Native frontend)
+package.json → Expo project config
+README.md → You are here
+
+⚠️ **Note:** There is no `/frontend` folder. The **Expo project itself is the frontend**.
+
+---
+
+# 🏁 Running the Project
+
+## 1️⃣ Install dependencies
+
+### Backend
+
+```
+cd backend
+npm install
 ```
 
-⚠️ Note: There is no /frontend folder because the Expo project itself is the frontend.
+### Frontend (Expo)
 
-## 🧱 Backend Documentation
+From the project root:
 
-The backend has its own full documentation, including:
+```
+npm install
+```
 
-Architecture
+---
 
-Domain model
+## 2️⃣ Start the backend (development mode)
 
-Endpoints
+```
+cd backend
+npm run dev
+```
 
-Testing (unit + integration)
+---
 
-ERD diagram
+## 3️⃣ Start the mobile app (Expo)
 
-Makefile commands
+### From the project root:
 
-Environment variables
+```
+npx expo start
+```
 
-### 👉 See full backend documentation:
+#### This opens Metro Bundler and allows you to:
 
-`/backend/README.md`
+- run on Android
+- run on iOS
+- run on web
+- use Expo Go on your mobile device
+
+---
+
+# 🧪 Running Tests (Backend)
+
+```
+cd backend
+npm run test
+```
+
+## Specific tests:
+
+```
+npm run test:unit
+npm run test:integration
+```
+
+---
+
+## 📚 Backend Documentation
+
+The backend includes full documentation:
+
+- Architecture
+- Domain model
+- Endpoints
+- Testing (unit + integration)
+- ERD diagram
+- Makefile commands
+- Environment variables
+
+👉 See full backend documentation: `/backend/README.md`

@@ -11,7 +11,7 @@ import usersRoutes from './routes/users';
 import servicesRoutes from './routes/services';
 
 import { errorHandler } from './middlewares/errorHandler';
-import { setupSwagger } from './swagger'; // <-- AÑADIDO
+import { setupSwagger } from './swagger';
 
 const app = express();
 
@@ -20,14 +20,17 @@ app.use(express.json());
 // Swagger
 setupSwagger(app);
 
-app.use('/pets', petsRoutes);
-app.use('/breeds', breedsRoutes);
-app.use('/animals', animalsRoutes);
-app.use('/owners', ownersRoutes);
-app.use('/appointments', appointmentsRoutes);
-app.use('/auth', authRoutes);
-app.use('/users', usersRoutes);
-app.use('/services', servicesRoutes);
+// API v1 prefix
+const API_PREFIX = '/api/v1';
+
+app.use(`${API_PREFIX}/pets`, petsRoutes);
+app.use(`${API_PREFIX}/breeds`, breedsRoutes);
+app.use(`${API_PREFIX}/animals`, animalsRoutes);
+app.use(`${API_PREFIX}/owners`, ownersRoutes);
+app.use(`${API_PREFIX}/appointments`, appointmentsRoutes);
+app.use(`${API_PREFIX}/auth`, authRoutes);
+app.use(`${API_PREFIX}/users`, usersRoutes);
+app.use(`${API_PREFIX}/services`, servicesRoutes);
 
 app.get('/ping', (_req, res) => {
   res.send('pong 🏓');
