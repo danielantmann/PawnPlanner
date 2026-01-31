@@ -1,13 +1,12 @@
-import request from 'supertest';
 import { describe, it, expect } from 'vitest';
-import app from '../../../../api/app';
+import { apiRequest } from '../../../setup/apiRequest';
 import '../../../setup/test-setup';
 
 async function createUser() {
   const email = `user-${Date.now()}@test.com`;
   const password = 'Password123!';
 
-  const res = await request(app).post('/auth/register').send({
+  const res = await apiRequest.post('/auth/register').send({
     email,
     password,
     firstName: 'Test',
@@ -21,7 +20,7 @@ describe('Animal - GetAllAnimals (integration)', () => {
   it('should return empty array when no animals exist', async () => {
     const token = await createUser();
 
-    const res = await request(app).get('/animals').set('Authorization', `Bearer ${token}`);
+    const res = await apiRequest.get('/animals').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual([]);
@@ -30,17 +29,17 @@ describe('Animal - GetAllAnimals (integration)', () => {
   it('should return all animals for the user', async () => {
     const token = await createUser();
 
-    await request(app)
+    await apiRequest
       .post('/animals')
       .set('Authorization', `Bearer ${token}`)
       .send({ species: 'Dog' });
 
-    await request(app)
+    await apiRequest
       .post('/animals')
       .set('Authorization', `Bearer ${token}`)
       .send({ species: 'Cat' });
 
-    const res = await request(app).get('/animals').set('Authorization', `Bearer ${token}`);
+    const res = await apiRequest.get('/animals').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(res.body.length).toBe(2);
