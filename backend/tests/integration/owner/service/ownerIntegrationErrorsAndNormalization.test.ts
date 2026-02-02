@@ -1,13 +1,12 @@
-import request from 'supertest';
-import app from '../../../../api/app';
-import '../../../setup/test-setup';
 import { describe, it, expect } from 'vitest';
+import '../../../setup/test-setup';
+import { apiRequest } from '../../../setup/apiRequest';
 
 async function createTestUser() {
   const email = `user-${Date.now()}@test.com`;
   const password = 'Password123!';
 
-  const registerRes = await request(app).post('/auth/register').send({
+  const registerRes = await apiRequest.post('/auth/register').send({
     email,
     password,
     firstName: 'Test',
@@ -21,7 +20,7 @@ describe('Owner integration - error cases & normalization', () => {
   it('should return 404 when owner not found by id', async () => {
     const token = await createTestUser();
 
-    const res = await request(app).get('/owners/999').set('Authorization', `Bearer ${token}`);
+    const res = await apiRequest.get('/owners/999').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(404);
     expect(res.body.message).toBe('Owner not found');
@@ -30,13 +29,13 @@ describe('Owner integration - error cases & normalization', () => {
   it('should return 409 when creating owner with duplicate email', async () => {
     const token = await createTestUser();
 
-    await request(app).post('/owners').set('Authorization', `Bearer ${token}`).send({
+    await apiRequest.post('/owners').set('Authorization', `Bearer ${token}`).send({
       name: 'Daniel',
       email: 'dan@test.com',
       phone: '1234567',
     });
 
-    const res = await request(app).post('/owners').set('Authorization', `Bearer ${token}`).send({
+    const res = await apiRequest.post('/owners').set('Authorization', `Bearer ${token}`).send({
       name: 'Other',
       email: 'dan@test.com',
       phone: '7654321',
@@ -49,7 +48,7 @@ describe('Owner integration - error cases & normalization', () => {
   it('should return 400 when DTO is invalid', async () => {
     const token = await createTestUser();
 
-    const res = await request(app).post('/owners').set('Authorization', `Bearer ${token}`).send({
+    const res = await apiRequest.post('/owners').set('Authorization', `Bearer ${token}`).send({
       name: '',
       email: 'not-an-email',
       phone: '12',
@@ -69,7 +68,7 @@ describe('Owner integration - error cases & normalization', () => {
   it('should normalize owner name on creation', async () => {
     const token = await createTestUser();
 
-    const res = await request(app).post('/owners').set('Authorization', `Bearer ${token}`).send({
+    const res = await apiRequest.post('/owners').set('Authorization', `Bearer ${token}`).send({
       name: 'juan jose lopez',
       email: 'juan@test.com',
       phone: '1234567',

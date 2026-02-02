@@ -1,13 +1,12 @@
-import request from 'supertest';
 import { describe, it, expect } from 'vitest';
-import app from '../../../../api/app';
 import '../../../setup/test-setup';
+import { apiRequest } from '../../../setup/apiRequest';
 
 async function createUser() {
   const email = `user-${Date.now()}@test.com`;
   const password = 'Password123!';
 
-  const res = await request(app).post('/auth/register').send({
+  const res = await apiRequest.post('/auth/register').send({
     email,
     password,
     firstName: 'Test',
@@ -21,14 +20,14 @@ describe('Animal - UpdateAnimal (integration)', () => {
   it('should update an animal successfully', async () => {
     const token = await createUser();
 
-    const createRes = await request(app)
+    const createRes = await apiRequest
       .post('/animals')
       .set('Authorization', `Bearer ${token}`)
       .send({ species: 'Dog' });
 
     const id = createRes.body.id;
 
-    const res = await request(app)
+    const res = await apiRequest
       .put(`/animals/${id}`)
       .set('Authorization', `Bearer ${token}`)
       .send({ species: 'Wolf' });
@@ -40,14 +39,14 @@ describe('Animal - UpdateAnimal (integration)', () => {
   it('should return 400 for invalid species', async () => {
     const token = await createUser();
 
-    const createRes = await request(app)
+    const createRes = await apiRequest
       .post('/animals')
       .set('Authorization', `Bearer ${token}`)
       .send({ species: 'Dog' });
 
     const id = createRes.body.id;
 
-    const res = await request(app)
+    const res = await apiRequest
       .put(`/animals/${id}`)
       .set('Authorization', `Bearer ${token}`)
       .send({ species: 'a' });
@@ -58,7 +57,7 @@ describe('Animal - UpdateAnimal (integration)', () => {
   it('should return 404 if animal does not exist', async () => {
     const token = await createUser();
 
-    const res = await request(app)
+    const res = await apiRequest
       .put('/animals/9999')
       .set('Authorization', `Bearer ${token}`)
       .send({ species: 'Wolf' });

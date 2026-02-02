@@ -1,13 +1,12 @@
-import request from 'supertest';
 import { describe, it, expect } from 'vitest';
-import app from '../../../../api/app';
 import '../../../setup/test-setup';
+import { apiRequest } from '../../../setup/apiRequest';
 
 async function createUser() {
   const email = `user-${Date.now()}@test.com`;
   const password = 'Password123!';
 
-  const res = await request(app).post('/auth/register').send({
+  const res = await apiRequest.post('/auth/register').send({
     email,
     password,
     firstName: 'Test',
@@ -18,7 +17,7 @@ async function createUser() {
 }
 
 async function createAnimal(token: string) {
-  const res = await request(app)
+  const res = await apiRequest
     .post('/animals')
     .set('Authorization', `Bearer ${token}`)
     .send({ species: 'Dog' });
@@ -27,7 +26,7 @@ async function createAnimal(token: string) {
 }
 
 async function createOwner(token: string) {
-  const res = await request(app)
+  const res = await apiRequest
     .post('/owners')
     .set('Authorization', `Bearer ${token}`)
     .send({
@@ -40,7 +39,7 @@ async function createOwner(token: string) {
 }
 
 async function createBreed(token: string, animalId: number) {
-  const res = await request(app)
+  const res = await apiRequest
     .post('/breeds')
     .set('Authorization', `Bearer ${token}`)
     .send({ name: 'Labrador', animalId });
@@ -49,7 +48,7 @@ async function createBreed(token: string, animalId: number) {
 }
 
 async function createPet(token: string, ownerId: number, breedId: number, name: string) {
-  return request(app)
+  return apiRequest
     .post('/pets')
     .set('Authorization', `Bearer ${token}`)
     .send({ name, ownerId, breedId });
@@ -59,7 +58,7 @@ describe('Pet - GetAllPets (integration)', () => {
   it('should return empty array when no pets exist', async () => {
     const token = await createUser();
 
-    const res = await request(app).get('/pets').set('Authorization', `Bearer ${token}`);
+    const res = await apiRequest.get('/pets').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual([]);
@@ -74,7 +73,7 @@ describe('Pet - GetAllPets (integration)', () => {
     await createPet(token, ownerId, breedId, 'Bobby');
     await createPet(token, ownerId, breedId, 'Rocky');
 
-    const res = await request(app).get('/pets').set('Authorization', `Bearer ${token}`);
+    const res = await apiRequest.get('/pets').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(res.body.length).toBe(2);

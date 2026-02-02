@@ -1,13 +1,12 @@
-import request from 'supertest';
 import { describe, it, expect } from 'vitest';
-import app from '../../../../api/app';
 import '../../../setup/test-setup';
+import { apiRequest } from '../../../setup/apiRequest';
 
 async function createTestUser() {
   const email = `user-${Date.now()}@test.com`;
   const password = 'Password123!';
 
-  const registerRes = await request(app).post('/auth/register').send({
+  const registerRes = await apiRequest.post('/auth/register').send({
     email,
     password,
     firstName: 'Test',
@@ -21,20 +20,20 @@ describe('Owner service - deleteOwner', () => {
   it('should delete an existing owner successfully', async () => {
     const token = await createTestUser();
 
-    const createRes = await request(app)
+    const createRes = await apiRequest
       .post('/owners')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Daniel', phone: '1234567', email: 'dan@google.com' });
 
     const ownerId = createRes.body.id;
 
-    const deleteRes = await request(app)
+    const deleteRes = await apiRequest
       .delete(`/owners/${ownerId}`)
       .set('Authorization', `Bearer ${token}`);
 
     expect(deleteRes.status).toBe(204);
 
-    const getRes = await request(app)
+    const getRes = await apiRequest
       .get(`/owners/${ownerId}`)
       .set('Authorization', `Bearer ${token}`);
 
@@ -44,7 +43,7 @@ describe('Owner service - deleteOwner', () => {
   it('should return 404 if owner does not exist', async () => {
     const token = await createTestUser();
 
-    const res = await request(app).delete('/owners/9999').set('Authorization', `Bearer ${token}`);
+    const res = await apiRequest.delete('/owners/9999').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(404);
     expect(res.body.message).toContain('not found');
@@ -54,14 +53,14 @@ describe('Owner service - deleteOwner', () => {
     const tokenA = await createTestUser();
     const tokenB = await createTestUser();
 
-    const createRes = await request(app)
+    const createRes = await apiRequest
       .post('/owners')
       .set('Authorization', `Bearer ${tokenA}`)
       .send({ name: 'Laura', phone: '5555555', email: 'laura@test.com' });
 
     const ownerId = createRes.body.id;
 
-    const deleteRes = await request(app)
+    const deleteRes = await apiRequest
       .delete(`/owners/${ownerId}`)
       .set('Authorization', `Bearer ${tokenB}`);
 

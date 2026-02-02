@@ -1,13 +1,12 @@
-import request from 'supertest';
 import { describe, it, expect } from 'vitest';
-import app from '../../../../api/app';
 import '../../../setup/test-setup';
+import { apiRequest } from '../../../setup/apiRequest';
 
 async function createUser() {
   const email = `user-${Date.now()}@test.com`;
   const password = 'Password123!';
 
-  const res = await request(app).post('/auth/register').send({
+  const res = await apiRequest.post('/auth/register').send({
     email,
     password,
     firstName: 'Test',
@@ -18,7 +17,7 @@ async function createUser() {
 }
 
 async function createAnimal(token: string, species = 'Dog') {
-  const res = await request(app)
+  const res = await apiRequest
     .post('/animals')
     .set('Authorization', `Bearer ${token}`)
     .send({ species });
@@ -27,7 +26,7 @@ async function createAnimal(token: string, species = 'Dog') {
 }
 
 async function createOwner(token: string) {
-  const res = await request(app)
+  const res = await apiRequest
     .post('/owners')
     .set('Authorization', `Bearer ${token}`)
     .send({
@@ -40,7 +39,7 @@ async function createOwner(token: string) {
 }
 
 async function createBreed(token: string, animalId: number, name = 'Labrador') {
-  const res = await request(app)
+  const res = await apiRequest
     .post('/breeds')
     .set('Authorization', `Bearer ${token}`)
     .send({ name, animalId });
@@ -55,7 +54,7 @@ describe('Pet - CreatePet (integration)', () => {
     const ownerId = await createOwner(token);
     const breedId = await createBreed(token, animalId);
 
-    const res = await request(app).post('/pets').set('Authorization', `Bearer ${token}`).send({
+    const res = await apiRequest.post('/pets').set('Authorization', `Bearer ${token}`).send({
       name: 'Bobby',
       ownerId,
       breedId,
@@ -71,7 +70,7 @@ describe('Pet - CreatePet (integration)', () => {
     const token = await createUser();
     const animalId = await createAnimal(token);
 
-    const res = await request(app)
+    const res = await apiRequest
       .post('/pets')
       .set('Authorization', `Bearer ${token}`)
       .send({
@@ -98,7 +97,7 @@ describe('Pet - CreatePet (integration)', () => {
     const animalId = await createAnimal(token);
     const breedId = await createBreed(token, animalId);
 
-    const res = await request(app).post('/pets').set('Authorization', `Bearer ${token}`).send({
+    const res = await apiRequest.post('/pets').set('Authorization', `Bearer ${token}`).send({
       name: 'Ghost',
       ownerId: 9999,
       breedId,
@@ -111,7 +110,7 @@ describe('Pet - CreatePet (integration)', () => {
     const token = await createUser();
     const ownerId = await createOwner(token);
 
-    const res = await request(app).post('/pets').set('Authorization', `Bearer ${token}`).send({
+    const res = await apiRequest.post('/pets').set('Authorization', `Bearer ${token}`).send({
       name: 'Ghost',
       ownerId,
       breedId: 9999,
@@ -123,7 +122,7 @@ describe('Pet - CreatePet (integration)', () => {
   it('should return 404 if breedData.animalId does not exist', async () => {
     const token = await createUser();
 
-    const res = await request(app)
+    const res = await apiRequest
       .post('/pets')
       .set('Authorization', `Bearer ${token}`)
       .send({
@@ -147,7 +146,7 @@ describe('Pet - CreatePet (integration)', () => {
     const animalId = await createAnimal(token);
     const breedId = await createBreed(token, animalId);
 
-    const res = await request(app).post('/pets').set('Authorization', `Bearer ${token}`).send({
+    const res = await apiRequest.post('/pets').set('Authorization', `Bearer ${token}`).send({
       name: 'Ghost',
       breedId,
     });
@@ -159,7 +158,7 @@ describe('Pet - CreatePet (integration)', () => {
     const token = await createUser();
     const ownerId = await createOwner(token);
 
-    const res = await request(app).post('/pets').set('Authorization', `Bearer ${token}`).send({
+    const res = await apiRequest.post('/pets').set('Authorization', `Bearer ${token}`).send({
       name: 'Ghost',
       ownerId,
     });
@@ -168,7 +167,7 @@ describe('Pet - CreatePet (integration)', () => {
   });
 
   it('should return 401 if no token is provided', async () => {
-    const res = await request(app).post('/pets').send({ name: 'Ghost' });
+    const res = await apiRequest.post('/pets').send({ name: 'Ghost' });
     expect(res.status).toBe(401);
   });
 
@@ -176,7 +175,7 @@ describe('Pet - CreatePet (integration)', () => {
     const token = await createUser();
     const animalId = await createAnimal(token);
 
-    const res = await request(app)
+    const res = await apiRequest
       .post('/pets')
       .set('Authorization', `Bearer ${token}`)
       .send({
@@ -184,7 +183,7 @@ describe('Pet - CreatePet (integration)', () => {
         ownerData: {
           name: 'Daniel',
           email: `dan-${Date.now()}@test.com`,
-          phone: '12', // ❌ inválido (muy corto)
+          phone: '12',
         },
         breedData: {
           name: 'Beagle',
@@ -192,15 +191,41 @@ describe('Pet - CreatePet (integration)', () => {
         },
       });
 
-    console.log(JSON.stringify(res.body.errors, null, 2));
-
-    // Validación correcta
     expect(res.status).toBe(400);
-
-    // Debe contener errores de validación
     expect(Array.isArray(res.body.errors)).toBe(true);
-
-    // Debe señalar el campo correcto
     expect(res.body.errors.some((e: any) => e.field === 'ownerData.phone')).toBe(true);
+  });
+
+  it('should handle race condition when creating a new breed (SQLITE_CONSTRAINT)', async () => {
+    const token = await createUser();
+    const animalId = await createAnimal(token);
+
+    // Creamos una breed del usuario
+    await apiRequest
+      .post('/breeds')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: 'Beagle', animalId });
+
+    // Ahora intentamos crear un pet con breedData con el MISMO nombre
+    // Esto provoca que SQLite lance SQLITE_CONSTRAINT al intentar crear la breed duplicada
+    const res = await apiRequest
+      .post('/pets')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: 'Rocky',
+        ownerData: {
+          name: 'Daniel',
+          email: `dan-${Date.now()}@test.com`,
+          phone: '12345',
+        },
+        breedData: {
+          name: 'Beagle', // mismo nombre → constraint
+          animalId,
+        },
+      });
+
+    expect(res.status).toBe(201);
+    expect(res.body.name).toBe('Rocky');
+    expect(res.body.breed).toBe('Beagle');
   });
 });

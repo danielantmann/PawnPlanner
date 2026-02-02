@@ -9,6 +9,7 @@ import { setupServiceContainer } from './container/service.container';
 import { setupAppointmentContainer } from './container/appointment.container';
 import { AppDataSource } from './infrastructure/orm/data-source';
 import { TestDataSource } from './infrastructure/orm/data-source.helper';
+import { setupDashboardContainer } from './container/dashboard.container';
 
 // Elegir DataSource según entorno
 const dataSource = process.env.NODE_ENV === 'test' ? TestDataSource : AppDataSource;
@@ -22,3 +23,4 @@ setupUserContainer(dataSource);
 setupAuthContainer();
 setupServiceContainer(dataSource);
 setupAppointmentContainer(dataSource);
+setupDashboardContainer(dataSource);

@@ -1140,3 +1140,122 @@ The goal is to deliver a production‑ready auth foundation that cleanly integra
 - Users can register, log in, and persist their session.
 - Error handling and validation are robust and user‑friendly.
 - The app is now ready to connect the Home screen to real backend data.
+
+## [Dashboard Module & Test Coverage Completion] - 2026-02-02
+
+### Overview
+
+This branch delivers the complete Dashboard module for PawnPlanner, including all backend services, controllers, mappers, and repository logic required to compute daily, weekly, monthly, and yearly statistics.  
+It also finalizes the remaining test coverage across the backend, fixes the missing route prefix issue, and adds all missing unit tests for mappers and utilities.  
+The goal is to achieve a fully stable, production‑ready backend with near‑perfect coverage before connecting the frontend dashboard.
+
+---
+
+### Key Changes
+
+#### 1. Dashboard Module Implementation
+
+- Added full set of dashboard services:
+  - `GetDashboardTodayService`
+  - `GetDashboardWeeklyService`
+  - `GetDashboardMonthlyService`
+  - `GetDashboardYearlyService`
+  - `CompareDashboardPeriodsService`
+- Implemented all controllers under `api/controllers/dashboards`.
+- Added route registration under `/dashboards` with correct prefix.
+- Ensured consistent DTO output for all periods.
+- Implemented date‑range utilities for accurate period calculations.
+- Added repository queries for:
+  - Completed appointments
+  - Revenue totals
+  - Appointment counts
+  - Period comparisons
+
+---
+
+#### 2. Prefix Correction
+
+- Fixed missing `/dashboards` prefix in the router.
+- Ensured all endpoints resolve correctly:
+  - `/dashboards/today`
+  - `/dashboards/weekly`
+  - `/dashboards/monthly`
+  - `/dashboards/yearly`
+  - `/dashboards/compare`
+- Updated tests to use the corrected prefix.
+- Verified all routes return the expected structure.
+
+---
+
+#### 3. Dashboard Test Suite
+
+- Added complete integration test coverage for:
+  - Today dashboard
+  - Weekly dashboard
+  - Monthly dashboard
+  - Yearly dashboard
+  - Period comparison
+- Added seed data helpers for appointments and services.
+- Ensured deterministic results using fixed dates.
+- Validated:
+  - Counts
+  - Revenue totals
+  - Completed appointments
+  - Period deltas
+  - Empty‑state behavior
+
+---
+
+#### 4. Mapper Test Completion
+
+Added missing unit tests for all remaining mappers:
+
+- `OwnerMapper`
+- `PetMapper`
+- `BreedMapper`
+- `UserMapper`
+
+Coverage improvements:
+
+- All mappers now at **100%**
+- All branches covered (optional fields, null checks, capitalization)
+
+---
+
+#### 5. TokenService & Utils Test Completion
+
+- Added full unit test suite for `TokenService`:
+  - Access token generation & verification
+  - Refresh token generation & verification
+  - Reset token generation & verification
+  - Invalid token handling (null return)
+- Added missing tests for `stringUtils` (capitalize, normalize, etc.)
+- All utils now at **100% coverage**
+
+---
+
+#### 6. Repository & Architecture Stability
+
+- Verified all dashboard queries work with SQLite test database.
+- Ensured repository methods return consistent shapes.
+- Cleaned unused imports and improved error handling.
+- Confirmed no breaking changes to existing modules.
+
+---
+
+### Notes
+
+- Dashboard module is fully functional and ready for frontend integration.
+- All routes, services, and mappers are stable and production‑ready.
+- Test coverage across the backend is now extremely high (≈97% global).
+- All remaining uncovered lines belong to defensive branches or TypeORM internals.
+- No architectural changes required going forward.
+
+---
+
+### Outcome
+
+- Dashboard backend is complete and reliable.
+- All mappers and utils now have full unit test coverage.
+- Prefix issue resolved and routes fully operational.
+- Backend is stable, predictable, and ready for the Dashboard UI integration.

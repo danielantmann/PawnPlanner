@@ -1,13 +1,12 @@
-import request from 'supertest';
 import { describe, it, expect } from 'vitest';
-import app from '../../../../api/app';
 import '../../../setup/test-setup';
+import { apiRequest } from '../../../setup/apiRequest';
 
 async function createUser() {
   const email = `user-${Date.now()}@test.com`;
   const password = 'Password123!';
 
-  const res = await request(app).post('/auth/register').send({
+  const res = await apiRequest.post('/auth/register').send({
     email,
     password,
     firstName: 'Test',
@@ -21,12 +20,12 @@ describe('Animal - GetAnimalsBySpecies (integration)', () => {
   it('should return animals by species', async () => {
     const token = await createUser();
 
-    await request(app)
+    await apiRequest
       .post('/animals')
       .set('Authorization', `Bearer ${token}`)
       .send({ species: 'Dog' });
 
-    const res = await request(app)
+    const res = await apiRequest
       .get('/animals/species/dog')
       .set('Authorization', `Bearer ${token}`);
 
@@ -38,7 +37,7 @@ describe('Animal - GetAnimalsBySpecies (integration)', () => {
   it('should return empty array if no animals match species', async () => {
     const token = await createUser();
 
-    const res = await request(app)
+    const res = await apiRequest
       .get('/animals/species/cat')
       .set('Authorization', `Bearer ${token}`);
 

@@ -1,13 +1,12 @@
-import request from 'supertest';
 import { describe, it, expect } from 'vitest';
-import app from '../../../../api/app';
 import '../../../setup/test-setup';
+import { apiRequest } from '../../../setup/apiRequest';
 
 async function createUser(emailOverride?: string) {
   const email = emailOverride ?? `user-${Date.now()}@test.com`;
   const password = 'Password123!';
 
-  const res = await request(app).post('/auth/register').send({
+  const res = await apiRequest.post('/auth/register').send({
     email,
     password,
     firstName: 'Test',
@@ -21,7 +20,7 @@ describe('User integration - updateMyProfile', () => {
   it('should update user profile successfully', async () => {
     const { token } = await createUser();
 
-    const res = await request(app)
+    const res = await apiRequest
       .put('/users/me')
       .set('Authorization', `Bearer ${token}`)
       .send({ firstName: 'Updated', lastName: 'User' });
@@ -33,7 +32,7 @@ describe('User integration - updateMyProfile', () => {
   it('should return 400 for invalid email', async () => {
     const { token } = await createUser();
 
-    const res = await request(app)
+    const res = await apiRequest
       .put('/users/me')
       .set('Authorization', `Bearer ${token}`)
       .send({ email: 'not-an-email' });
@@ -46,7 +45,7 @@ describe('User integration - updateMyProfile', () => {
     const userA = await createUser('a@test.com');
     const userB = await createUser('b@test.com');
 
-    const res = await request(app)
+    const res = await apiRequest
       .put('/users/me')
       .set('Authorization', `Bearer ${userB.token}`)
       .send({ email: 'a@test.com' });
@@ -56,7 +55,7 @@ describe('User integration - updateMyProfile', () => {
   });
 
   it('should return 401 if token is missing', async () => {
-    const res = await request(app).put('/users/me').send({ firstName: 'X' });
+    const res = await apiRequest.put('/users/me').send({ firstName: 'X' });
     expect(res.status).toBe(401);
   });
 });

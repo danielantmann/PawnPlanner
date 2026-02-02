@@ -1,13 +1,12 @@
-import request from 'supertest';
 import { describe, it, expect } from 'vitest';
-import app from '../../../../api/app';
 import '../../../setup/test-setup';
+import { apiRequest } from '../../../setup/apiRequest';
 
 async function createUser() {
   const email = `user-${Date.now()}-name@test.com`;
   const password = 'Password123!';
 
-  const res = await request(app).post('/auth/register').send({
+  const res = await apiRequest.post('/auth/register').send({
     email,
     password,
     firstName: 'Test',
@@ -18,7 +17,7 @@ async function createUser() {
 }
 
 async function createAnimal(token: string, species = 'Dog') {
-  const res = await request(app)
+  const res = await apiRequest
     .post('/animals')
     .set('Authorization', `Bearer ${token}`)
     .send({ species });
@@ -27,7 +26,7 @@ async function createAnimal(token: string, species = 'Dog') {
 }
 
 async function createOwner(token: string) {
-  const res = await request(app)
+  const res = await apiRequest
     .post('/owners')
     .set('Authorization', `Bearer ${token}`)
     .send({
@@ -40,7 +39,7 @@ async function createOwner(token: string) {
 }
 
 async function createBreed(token: string, animalId: number, name = 'Labrador') {
-  const res = await request(app)
+  const res = await apiRequest
     .post('/breeds')
     .set('Authorization', `Bearer ${token}`)
     .send({ name, animalId });
@@ -49,11 +48,10 @@ async function createBreed(token: string, animalId: number, name = 'Labrador') {
 }
 
 async function createPet(token: string, ownerId: number, breedId: number, name = 'Bobby') {
-  const res = await request(app).post('/pets').set('Authorization', `Bearer ${token}`).send({
-    name,
-    ownerId,
-    breedId,
-  });
+  const res = await apiRequest
+    .post('/pets')
+    .set('Authorization', `Bearer ${token}`)
+    .send({ name, ownerId, breedId });
 
   return res.body;
 }
@@ -68,7 +66,7 @@ describe('Pet - GetPetsByName Controller (integration)', () => {
     const pet1 = await createPet(token, ownerId, breedId, 'Fluffy');
     const pet2 = await createPet(token, ownerId, breedId, 'Fluffy');
 
-    const res = await request(app).get('/pets/name/Fluffy').set('Authorization', `Bearer ${token}`);
+    const res = await apiRequest.get('/pets/name/Fluffy').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(res.body).toBeInstanceOf(Array);
@@ -80,7 +78,7 @@ describe('Pet - GetPetsByName Controller (integration)', () => {
   it('should return empty array if no pets match name', async () => {
     const token = await createUser();
 
-    const res = await request(app)
+    const res = await apiRequest
       .get('/pets/name/NonexistentPet')
       .set('Authorization', `Bearer ${token}`);
 
@@ -90,8 +88,7 @@ describe('Pet - GetPetsByName Controller (integration)', () => {
   });
 
   it('should return 401 if user is not authenticated', async () => {
-    const res = await request(app).get('/pets/name/Fluffy');
-
+    const res = await apiRequest.get('/pets/name/Fluffy');
     expect(res.status).toBe(401);
   });
 
@@ -103,11 +100,11 @@ describe('Pet - GetPetsByName Controller (integration)', () => {
 
     await createPet(token, ownerId, breedId, 'Buddy');
 
-    const resLower = await request(app)
+    const resLower = await apiRequest
       .get('/pets/name/buddy')
       .set('Authorization', `Bearer ${token}`);
 
-    const resUpper = await request(app)
+    const resUpper = await apiRequest
       .get('/pets/name/BUDDY')
       .set('Authorization', `Bearer ${token}`);
 
@@ -130,7 +127,7 @@ describe('Pet - GetPetsByName Controller (integration)', () => {
     const pet1 = await createPet(token1, ownerId1, breedId1, 'Max');
     const pet2 = await createPet(token2, ownerId2, breedId2, 'Max');
 
-    const res1 = await request(app).get('/pets/name/Max').set('Authorization', `Bearer ${token1}`);
+    const res1 = await apiRequest.get('/pets/name/Max').set('Authorization', `Bearer ${token1}`);
 
     expect(res1.status).toBe(200);
     expect(res1.body.some((p: any) => p.id === pet1.id)).toBe(true);
@@ -143,9 +140,9 @@ describe('Pet - GetPetsByName Controller (integration)', () => {
     const ownerId = await createOwner(token);
     const breedId = await createBreed(token, animalId);
 
-    const pet = await createPet(token, ownerId, breedId, 'Fluffy-Max');
+    await createPet(token, ownerId, breedId, 'Fluffy-Max');
 
-    const res = await request(app)
+    const res = await apiRequest
       .get('/pets/name/Fluffy-Max')
       .set('Authorization', `Bearer ${token}`);
 
@@ -162,14 +159,11 @@ describe('Pet - GetPetsByName Controller (integration)', () => {
     const pet1 = await createPet(token, ownerId, breedId, 'Bobby');
     const pet2 = await createPet(token, ownerId, breedId, 'Max');
 
-    const res1 = await request(app).get('/pets/name/Bobby').set('Authorization', `Bearer ${token}`);
+    const res1 = await apiRequest.get('/pets/name/Bobby').set('Authorization', `Bearer ${token}`);
 
-    const res2 = await request(app).get('/pets/name/Max').set('Authorization', `Bearer ${token}`);
+    const res2 = await apiRequest.get('/pets/name/Max').set('Authorization', `Bearer ${token}`);
 
-    const hasBobby = res1.body.some((p: any) => p.id === pet1.id);
-    const hasMax = res2.body.some((p: any) => p.id === pet2.id);
-
-    expect(hasBobby).toBe(true);
-    expect(hasMax).toBe(true);
+    expect(res1.body.some((p: any) => p.id === pet1.id)).toBe(true);
+    expect(res2.body.some((p: any) => p.id === pet2.id)).toBe(true);
   });
 });

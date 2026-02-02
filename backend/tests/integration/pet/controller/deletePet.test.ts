@@ -1,13 +1,12 @@
-import request from 'supertest';
 import { describe, it, expect } from 'vitest';
-import app from '../../../../api/app';
 import '../../../setup/test-setup';
+import { apiRequest } from '../../../setup/apiRequest';
 
 async function createUser() {
   const email = `user-${Date.now()}-delete@test.com`;
   const password = 'Password123!';
 
-  const res = await request(app).post('/auth/register').send({
+  const res = await apiRequest.post('/auth/register').send({
     email,
     password,
     firstName: 'Test',
@@ -18,7 +17,7 @@ async function createUser() {
 }
 
 async function createAnimal(token: string, species = 'Dog') {
-  const res = await request(app)
+  const res = await apiRequest
     .post('/animals')
     .set('Authorization', `Bearer ${token}`)
     .send({ species });
@@ -27,7 +26,7 @@ async function createAnimal(token: string, species = 'Dog') {
 }
 
 async function createOwner(token: string) {
-  const res = await request(app)
+  const res = await apiRequest
     .post('/owners')
     .set('Authorization', `Bearer ${token}`)
     .send({
@@ -40,7 +39,7 @@ async function createOwner(token: string) {
 }
 
 async function createBreed(token: string, animalId: number, name = 'Labrador') {
-  const res = await request(app)
+  const res = await apiRequest
     .post('/breeds')
     .set('Authorization', `Bearer ${token}`)
     .send({ name, animalId });
@@ -49,11 +48,10 @@ async function createBreed(token: string, animalId: number, name = 'Labrador') {
 }
 
 async function createPet(token: string, ownerId: number, breedId: number, name = 'Bobby') {
-  const res = await request(app).post('/pets').set('Authorization', `Bearer ${token}`).send({
-    name,
-    ownerId,
-    breedId,
-  });
+  const res = await apiRequest
+    .post('/pets')
+    .set('Authorization', `Bearer ${token}`)
+    .send({ name, ownerId, breedId });
 
   return res.body.id;
 }
@@ -66,7 +64,7 @@ describe('Pet - DeletePet Controller (integration)', () => {
     const breedId = await createBreed(token, animalId);
     const petId = await createPet(token, ownerId, breedId);
 
-    const res = await request(app).delete(`/pets/${petId}`).set('Authorization', `Bearer ${token}`);
+    const res = await apiRequest.delete(`/pets/${petId}`).set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(204);
   });
@@ -74,14 +72,13 @@ describe('Pet - DeletePet Controller (integration)', () => {
   it('should return 404 if pet does not exist', async () => {
     const token = await createUser();
 
-    const res = await request(app).delete('/pets/99999').set('Authorization', `Bearer ${token}`);
+    const res = await apiRequest.delete('/pets/99999').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(404);
   });
 
   it('should return 401 if user is not authenticated', async () => {
-    const res = await request(app).delete('/pets/1');
-
+    const res = await apiRequest.delete('/pets/1');
     expect(res.status).toBe(401);
   });
 
@@ -92,17 +89,11 @@ describe('Pet - DeletePet Controller (integration)', () => {
     const breedId = await createBreed(token, animalId);
     const petId = await createPet(token, ownerId, breedId);
 
-    // Delete pet first time
-    const res1 = await request(app)
-      .delete(`/pets/${petId}`)
-      .set('Authorization', `Bearer ${token}`);
+    const res1 = await apiRequest.delete(`/pets/${petId}`).set('Authorization', `Bearer ${token}`);
 
     expect(res1.status).toBe(204);
 
-    // Try to delete same pet again
-    const res2 = await request(app)
-      .delete(`/pets/${petId}`)
-      .set('Authorization', `Bearer ${token}`);
+    const res2 = await apiRequest.delete(`/pets/${petId}`).set('Authorization', `Bearer ${token}`);
 
     expect(res2.status).toBe(404);
   });
@@ -116,13 +107,9 @@ describe('Pet - DeletePet Controller (integration)', () => {
     const petId1 = await createPet(token, ownerId, breedId, 'Pet1');
     const petId2 = await createPet(token, ownerId, breedId, 'Pet2');
 
-    const res1 = await request(app)
-      .delete(`/pets/${petId1}`)
-      .set('Authorization', `Bearer ${token}`);
+    const res1 = await apiRequest.delete(`/pets/${petId1}`).set('Authorization', `Bearer ${token}`);
 
-    const res2 = await request(app)
-      .delete(`/pets/${petId2}`)
-      .set('Authorization', `Bearer ${token}`);
+    const res2 = await apiRequest.delete(`/pets/${petId2}`).set('Authorization', `Bearer ${token}`);
 
     expect(res1.status).toBe(204);
     expect(res2.status).toBe(204);

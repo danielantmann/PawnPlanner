@@ -9,6 +9,7 @@ import appointmentsRoutes from './routes/appointments';
 import authRoutes from './routes/auth';
 import usersRoutes from './routes/users';
 import servicesRoutes from './routes/services';
+import dashboardsRoutes from './routes/dashboards';
 
 import { errorHandler } from './middlewares/errorHandler';
 import { setupSwagger } from './swagger';
@@ -31,6 +32,7 @@ app.use(`${API_PREFIX}/appointments`, appointmentsRoutes);
 app.use(`${API_PREFIX}/auth`, authRoutes);
 app.use(`${API_PREFIX}/users`, usersRoutes);
 app.use(`${API_PREFIX}/services`, servicesRoutes);
+app.use(`${API_PREFIX}/dashboards`, dashboardsRoutes);
 
 app.get('/ping', (_req, res) => {
   res.send('pong 🏓');
