@@ -1,13 +1,12 @@
-import request from 'supertest';
 import { describe, it, expect } from 'vitest';
-import app from '../../../../api/app';
 import '../../../setup/test-setup';
+import { apiRequest } from '../../../setup/apiRequest';
 
 async function createUser() {
   const email = `user-${Date.now()}@test.com`;
   const password = 'Password123!';
 
-  const res = await request(app).post('/auth/register').send({
+  const res = await apiRequest.post('/auth/register').send({
     email,
     password,
     firstName: 'Test',
@@ -18,7 +17,7 @@ async function createUser() {
 }
 
 async function createAnimal(token: string, species = 'Dog') {
-  const res = await request(app)
+  const res = await apiRequest
     .post('/animals')
     .set('Authorization', `Bearer ${token}`)
     .send({ species });
@@ -31,7 +30,7 @@ describe('Breed - CreateBreed (integration)', () => {
     const token = await createUser();
     const animalId = await createAnimal(token, 'Dog');
 
-    const res = await request(app)
+    const res = await apiRequest
       .post('/breeds')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Labrador', animalId });
@@ -47,7 +46,7 @@ describe('Breed - CreateBreed (integration)', () => {
     const token = await createUser();
     const animalId = await createAnimal(token);
 
-    const res = await request(app)
+    const res = await apiRequest
       .post('/breeds')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'a', animalId });
@@ -59,7 +58,7 @@ describe('Breed - CreateBreed (integration)', () => {
   it('should return 404 if animal does not exist', async () => {
     const token = await createUser();
 
-    const res = await request(app)
+    const res = await apiRequest
       .post('/breeds')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Labrador', animalId: 9999 });
@@ -71,12 +70,12 @@ describe('Breed - CreateBreed (integration)', () => {
     const token = await createUser();
     const animalId = await createAnimal(token);
 
-    await request(app)
+    await apiRequest
       .post('/breeds')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Labrador', animalId });
 
-    const res = await request(app)
+    const res = await apiRequest
       .post('/breeds')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'labrador', animalId });
@@ -86,7 +85,7 @@ describe('Breed - CreateBreed (integration)', () => {
   });
 
   it('should return 401 if no token is provided', async () => {
-    const res = await request(app).post('/breeds').send({ name: 'Labrador', animalId: 1 });
+    const res = await apiRequest.post('/breeds').send({ name: 'Labrador', animalId: 1 });
     expect(res.status).toBe(401);
   });
 });

@@ -1,13 +1,12 @@
-import request from 'supertest';
 import { describe, it, expect } from 'vitest';
-import app from '../../../../api/app';
 import '../../../setup/test-setup';
+import { apiRequest } from '../../../setup/apiRequest';
 
 async function createUser() {
   const email = `user-${Date.now()}-update@test.com`;
   const password = 'Password123!';
 
-  const res = await request(app).post('/auth/register').send({
+  const res = await apiRequest.post('/auth/register').send({
     email,
     password,
     firstName: 'Test',
@@ -18,7 +17,7 @@ async function createUser() {
 }
 
 async function createAnimal(token: string, species = 'Dog') {
-  const res = await request(app)
+  const res = await apiRequest
     .post('/animals')
     .set('Authorization', `Bearer ${token}`)
     .send({ species });
@@ -27,7 +26,7 @@ async function createAnimal(token: string, species = 'Dog') {
 }
 
 async function createOwner(token: string) {
-  const res = await request(app)
+  const res = await apiRequest
     .post('/owners')
     .set('Authorization', `Bearer ${token}`)
     .send({
@@ -40,7 +39,7 @@ async function createOwner(token: string) {
 }
 
 async function createBreed(token: string, animalId: number, name = 'Labrador') {
-  const res = await request(app)
+  const res = await apiRequest
     .post('/breeds')
     .set('Authorization', `Bearer ${token}`)
     .send({ name, animalId });
@@ -49,11 +48,10 @@ async function createBreed(token: string, animalId: number, name = 'Labrador') {
 }
 
 async function createPet(token: string, ownerId: number, breedId: number, name = 'Bobby') {
-  const res = await request(app).post('/pets').set('Authorization', `Bearer ${token}`).send({
-    name,
-    ownerId,
-    breedId,
-  });
+  const res = await apiRequest
+    .post('/pets')
+    .set('Authorization', `Bearer ${token}`)
+    .send({ name, ownerId, breedId });
 
   return res.body.id;
 }
@@ -66,7 +64,7 @@ describe('Pet - UpdatePet Controller (integration)', () => {
     const breedId = await createBreed(token, animalId);
     const petId = await createPet(token, ownerId, breedId);
 
-    const res = await request(app)
+    const res = await apiRequest
       .put(`/pets/${petId}`)
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Updated Bobby' });
@@ -83,7 +81,7 @@ describe('Pet - UpdatePet Controller (integration)', () => {
     const breedId = await createBreed(token, animalId);
     const petId = await createPet(token, ownerId, breedId);
 
-    const res = await request(app)
+    const res = await apiRequest
       .put(`/pets/${petId}`)
       .set('Authorization', `Bearer ${token}`)
       .send({ birthDate: '2020-01-15' });
@@ -99,7 +97,7 @@ describe('Pet - UpdatePet Controller (integration)', () => {
     const breedId = await createBreed(token, animalId);
     const petId = await createPet(token, ownerId, breedId);
 
-    const res = await request(app)
+    const res = await apiRequest
       .put(`/pets/${petId}`)
       .set('Authorization', `Bearer ${token}`)
       .send({ importantNotes: 'Allergic to chicken' });
@@ -115,7 +113,7 @@ describe('Pet - UpdatePet Controller (integration)', () => {
     const breedId = await createBreed(token, animalId);
     const petId = await createPet(token, ownerId, breedId);
 
-    const res = await request(app)
+    const res = await apiRequest
       .put(`/pets/${petId}`)
       .set('Authorization', `Bearer ${token}`)
       .send({ quickNotes: 'Loves walks' });
@@ -127,7 +125,7 @@ describe('Pet - UpdatePet Controller (integration)', () => {
   it('should return 404 if pet does not exist', async () => {
     const token = await createUser();
 
-    const res = await request(app)
+    const res = await apiRequest
       .put('/pets/99999')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Ghost Pet' });
@@ -136,8 +134,7 @@ describe('Pet - UpdatePet Controller (integration)', () => {
   });
 
   it('should return 401 if user is not authenticated', async () => {
-    const res = await request(app).put('/pets/1').send({ name: 'Unauthorized Update' });
-
+    const res = await apiRequest.put('/pets/1').send({ name: 'Unauthorized Update' });
     expect(res.status).toBe(401);
   });
 
@@ -148,7 +145,7 @@ describe('Pet - UpdatePet Controller (integration)', () => {
     const breedId = await createBreed(token, animalId);
     const petId = await createPet(token, ownerId, breedId);
 
-    const res = await request(app)
+    const res = await apiRequest
       .put(`/pets/${petId}`)
       .set('Authorization', `Bearer ${token}`)
       .send({

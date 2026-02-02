@@ -1,13 +1,12 @@
-import request from 'supertest';
 import { describe, it, expect } from 'vitest';
-import app from '../../../../api/app';
 import '../../../setup/test-setup';
+import { apiRequest } from '../../../setup/apiRequest';
 
 async function createUser() {
   const email = `user-${Date.now()}@test.com`;
   const password = 'Password123!';
 
-  const res = await request(app).post('/auth/register').send({
+  const res = await apiRequest.post('/auth/register').send({
     email,
     password,
     firstName: 'Test',
@@ -18,7 +17,7 @@ async function createUser() {
 }
 
 async function createOwner(token: string) {
-  const res = await request(app)
+  const res = await apiRequest
     .post('/owners')
     .set('Authorization', `Bearer ${token}`)
     .send({
@@ -31,7 +30,7 @@ async function createOwner(token: string) {
 }
 
 async function createAnimal(token: string) {
-  const res = await request(app)
+  const res = await apiRequest
     .post('/animals')
     .set('Authorization', `Bearer ${token}`)
     .send({ species: 'Dog' });
@@ -40,7 +39,7 @@ async function createAnimal(token: string) {
 }
 
 async function createPet(token: string, ownerId: number, animalId: number) {
-  const res = await request(app)
+  const res = await apiRequest
     .post('/pets')
     .set('Authorization', `Bearer ${token}`)
     .send({
@@ -57,7 +56,7 @@ async function createPet(token: string, ownerId: number, animalId: number) {
 }
 
 async function createService(token: string) {
-  const res = await request(app)
+  const res = await apiRequest
     .post('/services')
     .set('Authorization', `Bearer ${token}`)
     .send({ name: 'Corte', price: 20 });
@@ -72,7 +71,7 @@ async function createAppointment(
   start: string,
   end: string
 ) {
-  const res = await request(app)
+  const res = await apiRequest
     .post('/appointments')
     .set('Authorization', `Bearer ${token}`)
     .send({ petId, serviceId, startTime: start, endTime: end });
@@ -97,7 +96,7 @@ describe('Appointment - getAppointmentsByRange (integration)', () => {
     await createAppointment(token, petId, serviceId, start1, end1);
     await createAppointment(token, petId, serviceId, start2, end2);
 
-    const res = await request(app)
+    const res = await apiRequest
       .get('/appointments')
       .set('Authorization', `Bearer ${token}`)
       .query({
@@ -112,7 +111,7 @@ describe('Appointment - getAppointmentsByRange (integration)', () => {
   it('should return 400 for invalid dates', async () => {
     const token = await createUser();
 
-    const res = await request(app)
+    const res = await apiRequest
       .get('/appointments')
       .set('Authorization', `Bearer ${token}`)
       .query({

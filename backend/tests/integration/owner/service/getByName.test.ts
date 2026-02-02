@@ -1,13 +1,12 @@
-import request from 'supertest';
 import { describe, it, expect } from 'vitest';
-import app from '../../../../api/app';
 import '../../../setup/test-setup';
+import { apiRequest } from '../../../setup/apiRequest';
 
 async function createTestUser() {
   const email = `user-${Date.now()}@test.com`;
   const password = 'Password123!';
 
-  const registerRes = await request(app).post('/auth/register').send({
+  const registerRes = await apiRequest.post('/auth/register').send({
     email,
     password,
     firstName: 'Test',
@@ -21,7 +20,7 @@ describe('Owner Service - GetByName', () => {
   it('should return 200 and empty array for non-existing owner', async () => {
     const token = await createTestUser();
 
-    const res = await request(app).get('/owners/name/pepe').set('Authorization', `Bearer ${token}`);
+    const res = await apiRequest.get('/owners/name/pepe').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual([]);
@@ -30,19 +29,17 @@ describe('Owner Service - GetByName', () => {
   it('should return owners by name', async () => {
     const token = await createTestUser();
 
-    await request(app)
+    await apiRequest
       .post('/owners')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'daniel', phone: '1234567', email: 'dan@google.com' });
 
-    await request(app)
+    await apiRequest
       .post('/owners')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'daniel', phone: '4561232', email: 'daniel@test.com' });
 
-    const res = await request(app)
-      .get('/owners/name/daniel')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await apiRequest.get('/owners/name/daniel').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
@@ -53,14 +50,14 @@ describe('Owner Service - GetByName', () => {
   it('should return owner without pets', async () => {
     const token = await createTestUser();
 
-    const createRes = await request(app)
+    const createRes = await apiRequest
       .post('/owners')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Daniel', phone: '123456789', email: 'dan@google.com' });
 
     const ownerName = createRes.body.name;
 
-    const res = await request(app)
+    const res = await apiRequest
       .get(`/owners/name/${ownerName}`)
       .set('Authorization', `Bearer ${token}`);
 
@@ -72,21 +69,21 @@ describe('Owner Service - GetByName', () => {
   it('should return owner with pets', async () => {
     const token = await createTestUser();
 
-    const ownerRes = await request(app)
+    const ownerRes = await apiRequest
       .post('/owners')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Daniel', phone: '123456789', email: 'dan@google.com' });
 
     const ownerName = ownerRes.body.name;
 
-    const animalRes = await request(app)
+    const animalRes = await apiRequest
       .post('/animals')
       .set('Authorization', `Bearer ${token}`)
       .send({ species: 'Dog' });
 
     const animalId = animalRes.body.id;
 
-    await request(app)
+    await apiRequest
       .post('/pets')
       .set('Authorization', `Bearer ${token}`)
       .send({
@@ -95,7 +92,7 @@ describe('Owner Service - GetByName', () => {
         breedData: { name: 'Labrador', animalId },
       });
 
-    const res = await request(app)
+    const res = await apiRequest
       .get(`/owners/name/${ownerName}`)
       .set('Authorization', `Bearer ${token}`);
 
@@ -107,14 +104,14 @@ describe('Owner Service - GetByName', () => {
   it('should return owner with expected fields', async () => {
     const token = await createTestUser();
 
-    const ownerRes = await request(app)
+    const ownerRes = await apiRequest
       .post('/owners')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Laura', phone: '555555555', email: 'laura@test.com' });
 
     const ownerName = ownerRes.body.name;
 
-    const res = await request(app)
+    const res = await apiRequest
       .get(`/owners/name/${ownerName}`)
       .set('Authorization', `Bearer ${token}`);
 
@@ -129,26 +126,26 @@ describe('Owner Service - GetByName', () => {
   it('should return owner with multiple pets', async () => {
     const token = await createTestUser();
 
-    const ownerRes = await request(app)
+    const ownerRes = await apiRequest
       .post('/owners')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Mario', phone: '777777777', email: 'mario@test.com' });
 
     const ownerName = ownerRes.body.name;
 
-    const animalRes = await request(app)
+    const animalRes = await apiRequest
       .post('/animals')
       .set('Authorization', `Bearer ${token}`)
       .send({ species: 'Cat' });
 
     const animalId = animalRes.body.id;
 
-    await request(app)
+    await apiRequest
       .post('/pets')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Michi', ownerId: ownerRes.body.id, breedData: { name: 'Siamese', animalId } });
 
-    await request(app)
+    await apiRequest
       .post('/pets')
       .set('Authorization', `Bearer ${token}`)
       .send({
@@ -157,7 +154,7 @@ describe('Owner Service - GetByName', () => {
         breedData: { name: 'Persian', animalId },
       });
 
-    const res = await request(app)
+    const res = await apiRequest
       .get(`/owners/name/${ownerName}`)
       .set('Authorization', `Bearer ${token}`);
 
@@ -168,14 +165,14 @@ describe('Owner Service - GetByName', () => {
   it('should validate data types in response', async () => {
     const token = await createTestUser();
 
-    const ownerRes = await request(app)
+    const ownerRes = await apiRequest
       .post('/owners')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Ana', phone: '888888888', email: 'ana@test.com' });
 
     const ownerName = ownerRes.body.name;
 
-    const res = await request(app)
+    const res = await apiRequest
       .get(`/owners/name/${ownerName}`)
       .set('Authorization', `Bearer ${token}`);
 
@@ -189,26 +186,26 @@ describe('Owner Service - GetByName', () => {
   it('should ensure pets are returned with id and name', async () => {
     const token = await createTestUser();
 
-    const ownerRes = await request(app)
+    const ownerRes = await apiRequest
       .post('/owners')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Luis', phone: '111111111', email: 'luis@test.com' });
 
     const ownerName = ownerRes.body.name;
 
-    const animalRes = await request(app)
+    const animalRes = await apiRequest
       .post('/animals')
       .set('Authorization', `Bearer ${token}`)
       .send({ species: 'Dog' });
 
     const animalId = animalRes.body.id;
 
-    await request(app)
+    await apiRequest
       .post('/pets')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Bobby', ownerId: ownerRes.body.id, breedData: { name: 'Bulldog', animalId } });
 
-    const res = await request(app)
+    const res = await apiRequest
       .get(`/owners/name/${ownerName}`)
       .set('Authorization', `Bearer ${token}`);
 

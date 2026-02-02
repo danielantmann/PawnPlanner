@@ -1,13 +1,12 @@
-import request from 'supertest';
 import { describe, it, expect } from 'vitest';
-import app from '../../../../api/app';
 import '../../../setup/test-setup';
+import { apiRequest } from '../../../setup/apiRequest';
 
 async function createTestUser() {
   const email = `user-${Date.now()}@test.com`;
   const password = 'Password123!';
 
-  const registerRes = await request(app).post('/auth/register').send({
+  const registerRes = await apiRequest.post('/auth/register').send({
     email,
     password,
     firstName: 'Test',
@@ -21,14 +20,14 @@ describe('Owner service - updateOwner', () => {
   it('should update an existing owner successfully', async () => {
     const token = await createTestUser();
 
-    const createRes = await request(app)
+    const createRes = await apiRequest
       .post('/owners')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Daniel', phone: '1234567', email: 'dan@google.com' });
 
     const ownerId = createRes.body.id;
 
-    const updateRes = await request(app)
+    const updateRes = await apiRequest
       .put(`/owners/${ownerId}`)
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Daniel Updated', phone: '7654321' });
@@ -42,7 +41,7 @@ describe('Owner service - updateOwner', () => {
   it('should return 404 if owner does not exist', async () => {
     const token = await createTestUser();
 
-    const res = await request(app)
+    const res = await apiRequest
       .put('/owners/9999')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Ghost' });
@@ -54,14 +53,14 @@ describe('Owner service - updateOwner', () => {
   it('should return 400 if new email is invalid', async () => {
     const token = await createTestUser();
 
-    const createRes = await request(app)
+    const createRes = await apiRequest
       .post('/owners')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Ana', phone: '1111111', email: 'ana@test.com' });
 
     const ownerId = createRes.body.id;
 
-    const res = await request(app)
+    const res = await apiRequest
       .put(`/owners/${ownerId}`)
       .set('Authorization', `Bearer ${token}`)
       .send({ email: 'not-an-email' });
@@ -73,14 +72,14 @@ describe('Owner service - updateOwner', () => {
   it('should return 400 if new phone is invalid', async () => {
     const token = await createTestUser();
 
-    const createRes = await request(app)
+    const createRes = await apiRequest
       .post('/owners')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Luis', phone: '2222222', email: 'luis@test.com' });
 
     const ownerId = createRes.body.id;
 
-    const res = await request(app)
+    const res = await apiRequest
       .put(`/owners/${ownerId}`)
       .set('Authorization', `Bearer ${token}`)
       .send({ phone: '12' });
@@ -92,17 +91,17 @@ describe('Owner service - updateOwner', () => {
   it('should detect duplicate email on update', async () => {
     const token = await createTestUser();
 
-    await request(app)
+    await apiRequest
       .post('/owners')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Laura', phone: '3333333', email: 'laura@test.com' });
 
-    const owner2 = await request(app)
+    const owner2 = await apiRequest
       .post('/owners')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Mario', phone: '4444444', email: 'mario@test.com' });
 
-    const res = await request(app)
+    const res = await apiRequest
       .put(`/owners/${owner2.body.id}`)
       .set('Authorization', `Bearer ${token}`)
       .send({ email: 'laura@test.com' });
@@ -114,17 +113,17 @@ describe('Owner service - updateOwner', () => {
   it('should detect duplicate phone on update', async () => {
     const token = await createTestUser();
 
-    await request(app)
+    await apiRequest
       .post('/owners')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Carlos', phone: '5555555', email: 'carlos@test.com' });
 
-    const owner2 = await request(app)
+    const owner2 = await apiRequest
       .post('/owners')
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Pepe', phone: '6666666', email: 'pepe@test.com' });
 
-    const res = await request(app)
+    const res = await apiRequest
       .put(`/owners/${owner2.body.id}`)
       .set('Authorization', `Bearer ${token}`)
       .send({ phone: '5555555' });

@@ -1,7 +1,6 @@
-import request from 'supertest';
-import app from '../../../api/app';
 import { describe, it, expect } from 'vitest';
 import '../../setup/test-setup';
+import { apiRequest } from '../../setup/apiRequest';
 
 describe('POST /auth/change-password', () => {
   it('should change password successfully with correct oldPassword', async () => {
@@ -9,17 +8,17 @@ describe('POST /auth/change-password', () => {
     const oldPassword = 'Password123!';
     const newPassword = 'Newpass123!';
 
-    await request(app).post('/auth/register').send({
+    await apiRequest.post('/auth/register').send({
       email,
       password: oldPassword,
       firstName: 'Change',
       lastName: 'User',
     });
 
-    const loginRes = await request(app).post('/auth/login').send({ email, password: oldPassword });
+    const loginRes = await apiRequest.post('/auth/login').send({ email, password: oldPassword });
     const token = loginRes.body.accessToken;
 
-    const res = await request(app)
+    const res = await apiRequest
       .post('/auth/change-password')
       .set('Authorization', `Bearer ${token}`)
       .send({ oldPassword, newPassword });
@@ -33,17 +32,17 @@ describe('POST /auth/change-password', () => {
     const wrongPassword = 'Wrongpass123!';
     const newPassword = 'Newpass123!';
 
-    await request(app).post('/auth/register').send({
+    await apiRequest.post('/auth/register').send({
       email,
       password: oldPassword,
       firstName: 'Change',
       lastName: 'User',
     });
 
-    const loginRes = await request(app).post('/auth/login').send({ email, password: oldPassword });
+    const loginRes = await apiRequest.post('/auth/login').send({ email, password: oldPassword });
     const token = loginRes.body.accessToken;
 
-    const res = await request(app)
+    const res = await apiRequest
       .post('/auth/change-password')
       .set('Authorization', `Bearer ${token}`)
       .send({ oldPassword: wrongPassword, newPassword });
@@ -56,17 +55,17 @@ describe('POST /auth/change-password', () => {
     const oldPassword = 'Password123!';
     const invalidNewPassword = '12';
 
-    await request(app).post('/auth/register').send({
+    await apiRequest.post('/auth/register').send({
       email,
       password: oldPassword,
       firstName: 'Change',
       lastName: 'User',
     });
 
-    const loginRes = await request(app).post('/auth/login').send({ email, password: oldPassword });
+    const loginRes = await apiRequest.post('/auth/login').send({ email, password: oldPassword });
     const token = loginRes.body.accessToken;
 
-    const res = await request(app)
+    const res = await apiRequest
       .post('/auth/change-password')
       .set('Authorization', `Bearer ${token}`)
       .send({ oldPassword, newPassword: invalidNewPassword });

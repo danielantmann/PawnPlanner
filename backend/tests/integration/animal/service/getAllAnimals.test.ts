@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { apiRequest } from '../../../setup/apiRequest';
 import '../../../setup/test-setup';
+import { apiRequest } from '../../../setup/apiRequest';
 
 async function createUser() {
   const email = `user-${Date.now()}@test.com`;

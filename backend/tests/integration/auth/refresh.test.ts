@@ -1,14 +1,13 @@
-import request from 'supertest';
-import app from '../../../api/app';
 import { describe, it, expect } from 'vitest';
 import '../../setup/test-setup';
+import { apiRequest } from '../../setup/apiRequest';
 
 describe('POST /auth/refresh', () => {
   it('should refresh tokens successfully with valid refresh token', async () => {
     const email = `refresh-${Date.now()}@test.com`;
     const password = 'Password123!';
 
-    const registerRes = await request(app).post('/auth/register').send({
+    const registerRes = await apiRequest.post('/auth/register').send({
       email,
       password,
       firstName: 'Refresh',
@@ -17,7 +16,7 @@ describe('POST /auth/refresh', () => {
 
     const refreshToken = registerRes.body.refreshToken;
 
-    const res = await request(app).post('/auth/refresh').send({ refreshToken });
+    const res = await apiRequest.post('/auth/refresh').send({ refreshToken });
 
     expect(res.status).toBe(200);
     expect(res.body.accessToken).toBeDefined();
@@ -25,12 +24,12 @@ describe('POST /auth/refresh', () => {
   });
 
   it('should return 401 if refresh token is invalid', async () => {
-    const res = await request(app).post('/auth/refresh').send({ refreshToken: 'invalid-token' });
+    const res = await apiRequest.post('/auth/refresh').send({ refreshToken: 'invalid-token' });
     expect(res.status).toBe(401);
   });
 
   it('should return 401 if refresh token is expired', async () => {
-    const res = await request(app).post('/auth/refresh').send({ refreshToken: 'expired-token' });
+    const res = await apiRequest.post('/auth/refresh').send({ refreshToken: 'expired-token' });
     expect(res.status).toBe(401);
   });
 });

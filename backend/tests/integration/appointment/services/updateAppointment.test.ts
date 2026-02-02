@@ -1,14 +1,13 @@
-import request from 'supertest';
 import { describe, it, expect } from 'vitest';
-import app from '../../../../api/app';
 import '../../../setup/test-setup';
+import { apiRequest } from '../../../setup/apiRequest';
 
 // Helpers reutilizados del test anterior
 async function createUser() {
   const email = `user-${Date.now()}@test.com`;
   const password = 'Password123!';
 
-  const res = await request(app).post('/auth/register').send({
+  const res = await apiRequest.post('/auth/register').send({
     email,
     password,
     firstName: 'Test',
@@ -21,12 +20,12 @@ async function createUser() {
 async function createOwner(token: string) {
   const timestamp = Date.now().toString().slice(-8); // ⭐ Solo últimos 8 dígitos
 
-  const res = await request(app)
+  const res = await apiRequest
     .post('/owners')
     .set('Authorization', `Bearer ${token}`)
     .send({
       name: 'John Doe',
-      phone: `+${timestamp}`, // ⭐ Ahora genera: +25931213 (9 caracteres)
+      phone: `+${timestamp}`, // ⭐ Genera: +25931213 (9 caracteres)
       email: `owner-${Date.now()}@test.com`,
     });
 
@@ -38,7 +37,7 @@ async function createOwner(token: string) {
 }
 
 async function createAnimal(token: string) {
-  const res = await request(app)
+  const res = await apiRequest
     .post('/animals')
     .set('Authorization', `Bearer ${token}`)
     .send({ species: 'Dog' });
@@ -50,10 +49,10 @@ async function createPet(
   token: string,
   ownerId: number,
   animalId: number,
-  name = `Pet-${Date.now()}`, // único
+  name = `Pet-${Date.now()}`,
   breed = 'Labrador'
 ) {
-  const res = await request(app)
+  const res = await apiRequest
     .post('/pets')
     .set('Authorization', `Bearer ${token}`)
     .send({
@@ -70,7 +69,7 @@ async function createPet(
 }
 
 async function createService(token: string, name = `Service-${Date.now()}`, price = 20) {
-  const res = await request(app)
+  const res = await apiRequest
     .post('/services')
     .set('Authorization', `Bearer ${token}`)
     .send({ name, price });
@@ -99,7 +98,7 @@ describe('Appointment - updateAppointment (integration)', () => {
     const start = new Date(Date.now() + 3600000).toISOString();
     const end = new Date(Date.now() + 7200000).toISOString();
 
-    const createRes = await request(app)
+    const createRes = await apiRequest
       .post('/appointments')
       .set('Authorization', `Bearer ${token}`)
       .send({
@@ -112,7 +111,7 @@ describe('Appointment - updateAppointment (integration)', () => {
     const appointmentId = createRes.body.id;
 
     // Actualizar cita cambiando pet y service
-    const updateRes = await request(app)
+    const updateRes = await apiRequest
       .put(`/appointments/${appointmentId}`)
       .set('Authorization', `Bearer ${token}`)
       .send({
@@ -134,7 +133,7 @@ describe('Appointment - updateAppointment (integration)', () => {
   it('should return 404 if appointment does not exist', async () => {
     const token = await createUser();
 
-    const res = await request(app)
+    const res = await apiRequest
       .put('/appointments/9999')
       .set('Authorization', `Bearer ${token}`)
       .send({ petId: 1 });
@@ -152,14 +151,14 @@ describe('Appointment - updateAppointment (integration)', () => {
     const start = new Date(Date.now() + 3600000).toISOString();
     const end = new Date(Date.now() + 7200000).toISOString();
 
-    const createRes = await request(app)
+    const createRes = await apiRequest
       .post('/appointments')
       .set('Authorization', `Bearer ${token}`)
       .send({ petId: pet, serviceId: service, startTime: start, endTime: end });
 
     const appointmentId = createRes.body.id;
 
-    const res = await request(app)
+    const res = await apiRequest
       .put(`/appointments/${appointmentId}`)
       .set('Authorization', `Bearer ${token}`)
       .send({ finalPrice: -5 });
