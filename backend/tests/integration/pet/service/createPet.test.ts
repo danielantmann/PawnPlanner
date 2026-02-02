@@ -195,4 +195,37 @@ describe('Pet - CreatePet (integration)', () => {
     expect(Array.isArray(res.body.errors)).toBe(true);
     expect(res.body.errors.some((e: any) => e.field === 'ownerData.phone')).toBe(true);
   });
+
+  it('should handle race condition when creating a new breed (SQLITE_CONSTRAINT)', async () => {
+    const token = await createUser();
+    const animalId = await createAnimal(token);
+
+    // Creamos una breed del usuario
+    await apiRequest
+      .post('/breeds')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: 'Beagle', animalId });
+
+    // Ahora intentamos crear un pet con breedData con el MISMO nombre
+    // Esto provoca que SQLite lance SQLITE_CONSTRAINT al intentar crear la breed duplicada
+    const res = await apiRequest
+      .post('/pets')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: 'Rocky',
+        ownerData: {
+          name: 'Daniel',
+          email: `dan-${Date.now()}@test.com`,
+          phone: '12345',
+        },
+        breedData: {
+          name: 'Beagle', // mismo nombre → constraint
+          animalId,
+        },
+      });
+
+    expect(res.status).toBe(201);
+    expect(res.body.name).toBe('Rocky');
+    expect(res.body.breed).toBe('Beagle');
+  });
 });
