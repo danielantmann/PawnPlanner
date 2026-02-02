@@ -1,30 +1,16 @@
-import { useState, useCallback } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { getAppointments } from '../api/appointments.api';
-import type { AppointmentDTO } from '../types/appointment.types';
 
-export function useAppointments() {
-  const [appointments, setAppointments] = useState<AppointmentDTO[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+type UseAppointmentsParams = {
+  start: string;
+  end: string;
+};
 
-  const fetchAppointments = useCallback(async (start: string, end: string) => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const data = await getAppointments({ start, end });
-      setAppointments(data);
-    } catch (err: any) {
-      setError(err?.response?.data?.message || 'Failed to load appointments');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  return {
-    appointments,
-    loading,
-    error,
-    fetchAppointments,
-  };
+export function useAppointments({ start, end }: UseAppointmentsParams) {
+  return useQuery({
+    queryKey: ['appointments', start, end],
+    queryFn: () => getAppointments({ start, end }),
+    staleTime: 1000 * 30, // 30 segundos
+    refetchOnWindowFocus: true,
+  });
 }

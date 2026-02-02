@@ -10,8 +10,3 @@ export async function registerApi(payload: RegisterPayload) {
   const { data } = await api.post('/auth/register', payload);
   return data;
 }
-
-export async function refreshTokenApi(refreshToken: string) {
-  const { data } = await api.post('/auth/refresh', { refreshToken });
-  return data;
-}

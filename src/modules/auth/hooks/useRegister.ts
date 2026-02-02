@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 import { registerApi } from '../api/auth.api';
 import type { RegisterPayload } from '../types/auth.types';
-
 import { useAuthStore } from '../store/auth.store';
+import { router } from 'expo-router';
 
 export function useRegister() {
   const setSession = useAuthStore((state) => state.setSession);
@@ -14,12 +14,16 @@ export function useRegister() {
       console.log('REGISTER RESPONSE:', res);
       return res;
     },
+
     onError: (err) => {
       console.log('REGISTER ERROR:', err);
     },
-    onSuccess: (data) => {
+
+    onSuccess: async (data) => {
       console.log('REGISTER SUCCESS:', data);
-      setSession(data.accessToken, data.refreshToken, data.user);
+
+      await setSession(data.accessToken, data.refreshToken, data.user);
+      router.replace('/(protected)/(tabs)/home');
     },
   });
 }

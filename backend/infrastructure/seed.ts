@@ -85,6 +85,8 @@ async function seed() {
     { name: 'Luna', owner: owners[1], breed: breeds[3] },
     { name: 'Misu', owner: owners[1], breed: breeds[4] },
     { name: 'Rocky', owner: owners[2], breed: breeds[2] },
+    { name: 'Nina', owner: owners[2], breed: breeds[5] },
+    { name: 'Max', owner: owners[0], breed: breeds[0] },
   ];
 
   const pets: PetEntity[] = [];
@@ -93,7 +95,7 @@ async function seed() {
     pets.push(await petRepo.save(pet));
   }
 
-  // Services globales (createdByUser: null)
+  // Services globales
   const serviceRepo = AppDataSource.getRepository(ServiceEntity);
   const servicesData = [
     { name: 'bath', price: 15 },
@@ -101,6 +103,8 @@ async function seed() {
     { name: 'nail trimming', price: 10 },
     { name: 'ear cleaning', price: 12 },
     { name: 'full grooming', price: 35 },
+    { name: 'teeth cleaning', price: 18 },
+    { name: 'deshedding', price: 25 },
   ];
 
   const services: ServiceEntity[] = [];
@@ -108,31 +112,122 @@ async function seed() {
     const service = serviceRepo.create({
       name: s.name,
       price: s.price,
-      createdByUser: null, // ← CORRECTO
+      createdByUser: null,
     });
     services.push(await serviceRepo.save(service));
   }
 
-  const [bath, haircut, nailTrim, earClean, fullGroom] = services;
+  const [bath, haircut, nailTrim, earClean, fullGroom, teethClean, deshedding] = services;
 
   // Appointments realistas
   const appointmentRepo = AppDataSource.getRepository(AppointmentEntity);
+
+  const today = new Date();
+  today.setHours(9, 0, 0, 0);
+
   const appointmentsData = [
-    { date: new Date('2024-01-10T10:00:00'), pet: pets[0], owner: owners[0], service: bath },
-    { date: new Date('2024-02-05T11:00:00'), pet: pets[1], owner: owners[0], service: fullGroom },
-    { date: new Date('2024-03-12T09:30:00'), pet: pets[2], owner: owners[1], service: haircut },
-    { date: new Date('2024-04-01T15:00:00'), pet: pets[3], owner: owners[1], service: nailTrim },
-    { date: new Date('2024-05-20T13:00:00'), pet: pets[4], owner: owners[2], service: earClean },
+    // Hoy (5 citas)
+    { date: new Date(today), pet: pets[0], owner: owners[0], service: bath, status: 'completed' },
+    {
+      date: new Date(today.getTime() + 1 * 3600000),
+      pet: pets[1],
+      owner: owners[0],
+      service: haircut,
+      status: 'no-show',
+    },
+    {
+      date: new Date(today.getTime() + 2 * 3600000),
+      pet: pets[2],
+      owner: owners[1],
+      service: fullGroom,
+      status: 'completed',
+    },
+    {
+      date: new Date(today.getTime() + 3 * 3600000),
+      pet: pets[3],
+      owner: owners[1],
+      service: nailTrim,
+      status: 'cancelled',
+    },
+    {
+      date: new Date(today.getTime() + 4 * 3600000),
+      pet: pets[4],
+      owner: owners[2],
+      service: earClean,
+      status: 'completed',
+    },
+
+    // Esta semana
+    {
+      date: new Date(today.getTime() - 2 * 86400000),
+      pet: pets[5],
+      owner: owners[2],
+      service: deshedding,
+      status: 'completed',
+    },
+    {
+      date: new Date(today.getTime() + 2 * 86400000),
+      pet: pets[6],
+      owner: owners[0],
+      service: teethClean,
+      status: 'no-show',
+    },
+
+    // Este mes
+    {
+      date: new Date(today.getFullYear(), today.getMonth(), 5, 11),
+      pet: pets[1],
+      owner: owners[0],
+      service: fullGroom,
+      status: 'completed',
+    },
+    {
+      date: new Date(today.getFullYear(), today.getMonth(), 12, 15),
+      pet: pets[2],
+      owner: owners[1],
+      service: bath,
+      status: 'completed',
+    },
+
+    // Este año
+    {
+      date: new Date(today.getFullYear(), 1, 10, 10),
+      pet: pets[3],
+      owner: owners[1],
+      service: haircut,
+      status: 'completed',
+    },
+    {
+      date: new Date(today.getFullYear(), 3, 22, 14),
+      pet: pets[4],
+      owner: owners[2],
+      service: deshedding,
+      status: 'completed',
+    },
+
+    // Futuras
+    {
+      date: new Date(today.getTime() + 10 * 86400000),
+      pet: pets[0],
+      owner: owners[0],
+      service: fullGroom,
+      status: 'completed',
+    },
+    {
+      date: new Date(today.getTime() + 20 * 86400000),
+      pet: pets[2],
+      owner: owners[1],
+      service: bath,
+      status: 'no-show',
+    },
   ];
 
   for (const a of appointmentsData) {
     const start = a.date;
     const end = new Date(start.getTime() + 60 * 60 * 1000);
-    const durationMinutes = 60;
 
     const appointment = appointmentRepo.create({
       userId: user.id,
-
       petId: a.pet.id,
       ownerId: a.owner.id,
       serviceId: a.service.id,
@@ -148,9 +243,9 @@ async function seed() {
 
       startTime: start,
       endTime: end,
-      durationMinutes,
+      durationMinutes: 60,
 
-      status: 'completed',
+      status: a.status as 'completed' | 'no-show' | 'cancelled',
       reminderSent: false,
     });
 

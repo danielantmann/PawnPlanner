@@ -4,19 +4,13 @@
     "slug": "pawn-planner",
     "version": "1.0.0",
     "scheme": "pawn-planner",
-    "platforms": [
-      "ios",
-      "android"
-    ],
+    "platforms": ["ios", "android"],
     "web": {
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-router",
-      "expo-secure-store"
-    ],
+    "plugins": ["expo-router", "expo-secure-store"],
     "experiments": {
       "typedRoutes": true,
       "tsconfigPaths": true
@@ -29,9 +23,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
