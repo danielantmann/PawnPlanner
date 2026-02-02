@@ -1,3 +1,16 @@
+export type User = {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+};
+
+export type AuthResponse = {
+  accessToken: string;
+  refreshToken: string;
+  user: User;
+};
+
 export type AuthMode = 'login' | 'register';
 
 export type AuthFormState = {

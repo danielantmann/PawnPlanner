@@ -1,7 +1,7 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AppHeader } from '../../src/ui/components/patterns/AppHeader';
+import { AppHeader } from '../../../src/ui/components/patterns/AppHeader';
 import { useColorScheme } from 'react-native';
 import { useTranslation } from 'react-i18next';
 

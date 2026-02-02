@@ -1259,3 +1259,186 @@ Coverage improvements:
 - All mappers and utils now have full unit test coverage.
 - Prefix issue resolved and routes fully operational.
 - Backend is stable, predictable, and ready for the Dashboard UI integration.
+
+# [Home Screen Module & Authentication Flow] - 2026-02-02
+
+### Overview
+
+This branch delivers the complete Home Screen module for PawnPlanner, including full backend integration, session management, token refresh logic, and modularized hooks architecture.  
+The goal is to provide a production-ready home dashboard that displays real-time data from the backend while maintaining a clean, scalable component structure.
+
+---
+
+### Key Changes
+
+#### 1. Authentication & Session Management
+
+- Implemented robust JWT token refresh mechanism with automatic session restoration.
+- Fixed critical require cycle: `axios.ts` → `refresh.api.ts` → `axios.ts`
+  - Implemented dynamic imports in axios interceptors to prevent initialization issues.
+- Added typed User model with proper TypeScript support:
+  - `id`, `firstName`, `lastName`, `email`
+- Implemented `AuthResponse` type for standardized login/register payloads.
+- Added automatic token expiration handling with silent logout.
+- Persistent session storage using `expo-secure-store` for refresh tokens.
+
+---
+
+#### 2. Token Manager & Axios Interceptors
+
+- Created centralized `tokenManager` for in-memory token management.
+- Implemented axios request interceptor that automatically adds Bearer tokens.
+- Implemented axios response interceptor for automatic token refresh on 401.
+- Token refresh happens seamlessly without user interaction.
+- Tokens are stored securely in device secure storage (not in-memory only).
+
+---
+
+#### 3. Root Layout & Navigation Flow
+
+- Implemented `initialRouteName` logic based on `isAuthenticated` state.
+- Added `SplashScreen` component for professional loading experience.
+- Fixed race condition: Zustand state updates now properly trigger re-renders.
+- Proper sequencing: init i18n → load session → set app ready → render routes.
+- Automatic routing to `(protected)` or `(auth)` based on authentication state.
+
+---
+
+#### 4. Home Screen Architecture
+
+- **Modularized hooks by feature:**
+  - `useHomeUtils` → User data, date formatting, translations
+  - `useHomeAppointments` → Appointment fetching, mapping, filtering
+  - `useHomeDashboard` → Stats data (today & weekly), loading states
+- Separated concerns: Business logic in hooks, presentation in component.
+- Implemented proper error handling with user-friendly messages.
+- Added skeleton loading states for async data.
+
+---
+
+#### 5. Dashboard Integration
+
+- Connected to real backend dashboard endpoints:
+  - `/dashboards/today` → Daily stats (income, completed, no-shows)
+  - `/dashboards/weekly` → Weekly stats (appointments, revenue, cancellations)
+- Implemented `useDashboardToday` hook for daily metrics.
+- Implemented `useDashboardWeekly` hook for weekly overview.
+- Real-time data flow: Backend → React Query → Zustand → Component.
+
+---
+
+#### 6. Appointments Integration
+
+- Fetched appointments for current day using UTC-corrected date range.
+- Implemented `useHomeAppointments` hook with proper error handling.
+- Mapped appointment data to card components with:
+  - Pet name, owner name, service type, time
+- Proper handling of edge cases:
+  - No appointments → Empty state card
+  - 1 appointment → Full-width card
+  - Multiple appointments → Horizontal scrollable list
+- Click handling → Navigate to appointment details.
+
+---
+
+#### 7. UI/UX Improvements
+
+- Added `Skeleton` component for professional loading states.
+- Implemented dark mode support throughout with color system.
+- Added responsive layout for appointments (full-width, scroll, grid).
+- Proper spacing, typography, and visual hierarchy.
+- Added "See all" links to navigate to Agenda screen.
+
+---
+
+#### 8. Type Safety & Code Quality
+
+- Full TypeScript support with proper types for:
+  - User model
+  - Auth responses
+  - Dashboard data structures
+  - Appointment cards
+- Removed ESLint warnings (unused variables, duplicate imports).
+- Proper error boundaries for async operations.
+- Consistent code formatting and naming conventions.
+
+---
+
+#### 9. Component Structure
+
+Home Screen hierarchy:
+
+```
+HomeScreen
+├─ ScreenHeader (user greeting, date, appointment count)
+├─ QuickActions (Calendar, Client, Pet buttons)
+├─ AppointmentsToday (adaptive rendering)
+│  ├─ EmptyAppointmentsCard
+│  ├─ MiniAppointmentCard (single)
+│  └─ Horizontal scroll (multiple)
+├─ DailyStats (income, completed, no-shows)
+└─ WeeklySummary (total appointments, revenue, cancellations)
+```
+
+---
+
+### Architecture Decisions
+
+#### Modular Hooks Pattern
+
+Instead of monolithic component logic:
+
+```typescript
+// ❌ Before: Everything in component
+export default function HomeScreen() {
+  const [appointments, setAppointments] = useState(...);
+  const [stats, setStats] = useState(...);
+  // ... 100+ lines of logic
+}
+
+// ✅ After: Separated by feature
+const { user, formatted, t } = useHomeUtils();
+const { mappedAppointments, isLoading } = useHomeAppointments();
+const { todayStats, weeklyStats } = useHomeDashboard();
+```
+
+Benefits:
+
+- Reusable across screens (Stats, Dashboard, etc.)
+- Easy to test
+- Clean component (just presentation)
+- Scalable architecture
+
+---
+
+### Notes
+
+- Home Screen is fully functional with real backend data.
+- All data flows are stable and production-ready.
+- Token refresh happens silently without user intervention.
+- Session persistence works across app restarts.
+- Error handling is user-friendly and informative.
+- Ready for next steps: Agenda, Profile, Stats screens.
+
+---
+
+### Outcome
+
+- Home Screen displays real-time dashboard data from backend.
+- Authentication flow is secure and seamless.
+- Token management is centralized and bulletproof.
+- Architecture is modular and highly maintainable.
+- All TypeScript types are properly defined.
+- App is ready for completion of remaining screens.
+
+---
+
+### Next Steps
+
+1. **Agenda Screen** → Day/week/month view with appointment timeline
+2. **Profile Screen** → User data editing and logout
+3. **Stats Screen** → Detailed analytics and reports
+4. **Search Screen** → Global search functionality
+5. **Owners/Pets CRUD** → Management screens
+6. **Animations & Polish** → Premium feel with transitions
+7. **Testing** → Unit + integration tests for frontend
