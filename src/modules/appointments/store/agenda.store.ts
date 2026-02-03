@@ -1,0 +1,79 @@
+// src/modules/appointments/store/agenda.store.ts
+
+import { create } from 'zustand';
+
+type ViewMode = 'day' | 'week' | 'month' | '3days';
+
+interface SelectedAppointment {
+  id: number;
+  petId: number;
+  serviceId: number;
+  petName: string;
+  ownerName: string;
+  serviceName: string;
+  startTime: string;
+  endTime: string;
+  status: 'completed' | 'no-show' | 'cancelled';
+  finalPrice?: number;
+}
+
+interface AgendaState {
+  // UI State
+  viewMode: ViewMode;
+  selectedDate: Date;
+
+  // Modal State
+  createModalVisible: boolean;
+  editModalVisible: boolean;
+  deleteModalVisible: boolean;
+  selectedAppointment: SelectedAppointment | null;
+
+  // Time range (for day view)
+  startHour: number;
+  endHour: number;
+
+  // Actions
+  setViewMode: (mode: ViewMode) => void;
+  setSelectedDate: (date: Date) => void;
+
+  openCreateModal: () => void;
+  closeCreateModal: () => void;
+
+  openEditModal: (appointment: SelectedAppointment) => void;
+  closeEditModal: () => void;
+
+  openDeleteModal: (appointment: SelectedAppointment) => void;
+  closeDeleteModal: () => void;
+
+  setTimeRange: (start: number, end: number) => void;
+}
+
+export const useAgendaStore = create<AgendaState>((set) => ({
+  // Initial State
+  viewMode: 'day',
+  selectedDate: new Date(),
+
+  createModalVisible: false,
+  editModalVisible: false,
+  deleteModalVisible: false,
+  selectedAppointment: null,
+
+  startHour: 8,
+  endHour: 22,
+
+  // Actions
+  setViewMode: (mode) => set({ viewMode: mode }),
+  setSelectedDate: (date) => set({ selectedDate: date }),
+
+  openCreateModal: () => set({ createModalVisible: true }),
+  closeCreateModal: () => set({ createModalVisible: false }),
+
+  openEditModal: (appointment) => set({ editModalVisible: true, selectedAppointment: appointment }),
+  closeEditModal: () => set({ editModalVisible: false, selectedAppointment: null }),
+
+  openDeleteModal: (appointment) =>
+    set({ deleteModalVisible: true, selectedAppointment: appointment }),
+  closeDeleteModal: () => set({ deleteModalVisible: false, selectedAppointment: null }),
+
+  setTimeRange: (start, end) => set({ startHour: start, endHour: end }),
+}));
