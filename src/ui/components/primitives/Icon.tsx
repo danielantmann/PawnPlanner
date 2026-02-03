@@ -31,9 +31,24 @@ type IoniconComponent = (props: IoniconProps) => React.ReactElement;
 
 const iconMap = {
   pawPrint: PawPrint as SvgIconComponent,
+
+  // Calendario
   calendar: ((props: IoniconProps) => (
     <Ionicons name="calendar-outline" {...props} />
   )) as IoniconComponent,
+
+  // NUEVOS ICONOS
+  add: ((props: IoniconProps) => <Ionicons name="add-outline" {...props} />) as IoniconComponent,
+
+  addCircle: ((props: IoniconProps) => (
+    <Ionicons name="add-circle-outline" {...props} />
+  )) as IoniconComponent,
+
+  calendarToday: ((props: IoniconProps) => (
+    <Ionicons name="calendar-clear-outline" {...props} />
+  )) as IoniconComponent,
+
+  // Otros iconos existentes
   cash: ((props: IoniconProps) => <Ionicons name="cash-outline" {...props} />) as IoniconComponent,
   close: ((props: IoniconProps) => (
     <Ionicons name="close-circle-outline" {...props} />

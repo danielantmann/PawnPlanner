@@ -31,11 +31,6 @@ export function CustomCalendarHeader({
     else onDateChange(addDays(date, 1));
   };
 
-  const goToday = () => {
-    onModeChange('day');
-    onDateChange(new Date());
-  };
-
   const headerTitle =
     mode === 'day'
       ? format(date, 'EEEE d MMMM')
@@ -47,7 +42,7 @@ export function CustomCalendarHeader({
 
   return (
     <View className="px-4 pb-2 pt-4">
-      {/* Tabs + Hoy */}
+      {/* Tabs */}
       <View className="mb-2 flex-row items-center gap-2">
         {(['day', '3days', 'week', 'month'] as const).map((m) => {
           const isActive = mode === m;
@@ -72,20 +67,6 @@ export function CustomCalendarHeader({
             </Button>
           );
         })}
-
-        {/* Botón HOY */}
-        <Button
-          variant="outline"
-          size="sm"
-          onPress={goToday}
-          className="flex-1 !border-primary !px-1">
-          <Text
-            adjustsFontSizeToFit
-            numberOfLines={1}
-            className="text-sm font-semibold text-primary dark:text-primary">
-            Hoy
-          </Text>
-        </Button>
       </View>
 
       {/* Fecha / Navegación */}

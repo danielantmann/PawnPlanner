@@ -6,10 +6,10 @@ import { useAgendaStore } from '@/src/modules/appointments/store/agenda.store';
 import { useAppointments } from '@/src/modules/appointments/hooks/useAppointments';
 import { CreateAppointmentModal } from '@/src/modules/appointments/components/Modals/CreateAppointmentModal';
 import { ScreenHeader } from '@/src/ui/components/patterns/ScreenHeader';
-import { Button } from '@/src/ui/components/primitives/Button';
 import { startOfMonth, endOfMonth } from 'date-fns';
 import { colors } from '@/src/ui/theme/colors';
 import { CustomCalendarHeader } from '@/src/modules/appointments/components/CustomCalendarHeader';
+import { SpeedDialDialog } from '@/src/ui/components/primitives/SpeedDialDialog';
 
 export default function AgendaScreenBigCalendar() {
   const {
@@ -101,7 +101,6 @@ export default function AgendaScreenBigCalendar() {
             scrollOffsetMinutes={480}
             ampm={false}
             locale="es"
-            // --- CUSTOM HEADERS CORRECTOS ---
             renderHeader={() => (
               <CustomCalendarHeader
                 date={selectedDate}
@@ -121,9 +120,27 @@ export default function AgendaScreenBigCalendar() {
           />
         </GestureHandlerRootView>
 
-        {/* Floating Action Button */}
-        <View className="absolute bottom-6 right-6 z-50">
-          <Button icon="calendar" circle="lg" onPress={openCreateModal} />
+        {/* SpeedDial estilo macOS */}
+        <View className="absolute bottom-6 right-4 z-50">
+          <SpeedDialDialog
+            actions={[
+              {
+                id: 'create',
+                label: 'Nueva cita',
+                icon: 'add',
+                onPress: openCreateModal,
+              },
+              {
+                id: 'today',
+                label: 'Ir a hoy',
+                icon: 'event',
+                onPress: () => {
+                  setViewMode('day');
+                  setSelectedDate(new Date());
+                },
+              },
+            ]}
+          />
         </View>
       </View>
 

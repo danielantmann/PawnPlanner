@@ -11,8 +11,18 @@ const buttonStyles = cva('items-center justify-center flex-col rounded-lg', {
     variant: {
       primary: 'bg-primary dark:bg-primaryDark',
       secondary: 'bg-gray-600 dark:bg-gray-700',
-      disabled: 'bg-gray-300 dark:bg-gray-600', // ⭐ gris bonito para disabled
+      disabled: 'bg-gray-300 dark:bg-gray-600',
       outline: 'border border-gray-400 dark:border-gray-600',
+
+      // ⭐ NUEVO VARIANT PARA SPEEDDIAL (vertical)
+      floating: `
+        bg-backgroundAlt dark:bg-backgroundAltDark
+        shadow-md
+        rounded-xl
+        px-4 py-3
+        flex-col items-center justify-center
+        gap-1
+      `,
     },
 
     size: {
@@ -22,7 +32,7 @@ const buttonStyles = cva('items-center justify-center flex-col rounded-lg', {
     },
 
     disabled: {
-      true: 'opacity-100', // ⭐ NO usamos opacity-50 porque queda feo
+      true: 'opacity-100',
       false: '',
     },
   },
@@ -34,7 +44,7 @@ const buttonStyles = cva('items-center justify-center flex-col rounded-lg', {
   },
 });
 
-// ⭐ Estilos del texto (separado para evitar heredar bg-primary)
+// ⭐ Estilos del texto
 const textStyles = cva('font-semibold leading-none mt-1 text-center', {
   variants: {
     textColor: {
@@ -44,6 +54,7 @@ const textStyles = cva('font-semibold leading-none mt-1 text-center', {
       dark: 'text-white',
       light: 'text-black',
     },
+
     textSize: {
       xs: 'text-xs',
       sm: 'text-sm',
@@ -51,6 +62,7 @@ const textStyles = cva('font-semibold leading-none mt-1 text-center', {
       lg: 'text-lg',
     },
   },
+
   defaultVariants: {
     textColor: 'white',
     textSize: 'base',
@@ -61,6 +73,7 @@ interface ButtonProps extends VariantProps<typeof buttonStyles> {
   children?: React.ReactNode;
   icon?: IconName;
   iconSize?: number;
+  iconColor?: string; // ⭐ NUEVO
   circle?: 'sm' | 'md' | 'lg';
   onPress?: () => void;
   className?: string;
@@ -72,6 +85,7 @@ export const Button: FC<ButtonProps> = ({
   children,
   icon,
   iconSize = 22,
+  iconColor,
   variant,
   size,
   circle,
@@ -94,9 +108,9 @@ export const Button: FC<ButtonProps> = ({
     <Pressable
       disabled={disabled}
       onPress={onPress}
-      android_ripple={null} // ⭐ elimina highlight azul
-      focusable={false} // ⭐ elimina borde de enfoque
-      pressRetentionOffset={0} // ⭐ elimina retención rara
+      android_ripple={null}
+      focusable={false}
+      pressRetentionOffset={0}
       className={cn(
         buttonStyles({ variant, size, disabled }),
         circleClasses,
@@ -104,7 +118,7 @@ export const Button: FC<ButtonProps> = ({
         'flex-col items-center justify-center',
         className
       )}>
-      {icon && <Icon name={icon} size={iconSize} color="white" fixedColor />}
+      {icon && <Icon name={icon} size={iconSize} color={iconColor ?? 'white'} fixedColor />}
 
       {children && (
         <Text className={cn(textStyles({ textColor, textSize }))} numberOfLines={1}>
