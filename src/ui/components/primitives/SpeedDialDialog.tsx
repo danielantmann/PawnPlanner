@@ -32,12 +32,11 @@ export const SpeedDialDialog = ({
   const [open, setOpen] = useState(false);
   const anim = useRef(new Animated.Value(0)).current;
   const scheme = useColorScheme();
+  const isDark = scheme === 'dark';
 
-  const panelBackground = scheme === 'dark' ? 'rgba(20,20,20,0.75)' : 'rgba(255,255,255,0.95)';
-
-  const panelBorderColor = scheme === 'dark' ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.1)';
-
-  const separatorColor = scheme === 'dark' ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.08)';
+  const panelBackground = isDark ? 'rgba(20,20,20,0.85)' : 'rgba(255,255,255,0.95)';
+  const panelBorderColor = isDark ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.1)';
+  const separatorColor = isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.08)';
 
   const toggle = useCallback(() => {
     Animated.timing(anim, {
@@ -66,19 +65,21 @@ export const SpeedDialDialog = ({
 
   const FAB_HEIGHT = 56;
 
+  const panelShadow = isDark
+    ? {}
+    : {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.15,
+        shadowRadius: 4,
+        elevation: 4,
+      };
+
   return (
-    <View style={{ position: 'relative' }}>
+    <View className="relative">
       {open && (
         <TouchableWithoutFeedback onPress={toggle}>
-          <View
-            style={{
-              position: 'absolute',
-              top: -1000,
-              left: -1000,
-              right: 0,
-              bottom: 0,
-            }}
-          />
+          <View className="absolute inset-0 bg-transparent" />
         </TouchableWithoutFeedback>
       )}
 
@@ -86,9 +87,8 @@ export const SpeedDialDialog = ({
       <Animated.View style={{ transform: [{ rotate }] }}>
         <Pressable
           onPress={toggle}
+          className="rounded-full p-4"
           style={{
-            borderRadius: 999,
-            padding: 16,
             backgroundColor: primaryDarkColor,
             shadowColor: '#000',
             shadowOffset: { width: 0, height: 2 },
@@ -100,61 +100,36 @@ export const SpeedDialDialog = ({
         </Pressable>
       </Animated.View>
 
-      {/* Panel */}
+      {/* PANEL */}
       {open && (
         <Animated.View
           style={{
-            position: 'absolute',
-            bottom: FAB_HEIGHT + 12,
-            right: 0,
             opacity,
             transform: [{ scale }],
             backgroundColor: panelBackground,
             borderColor: panelBorderColor,
-            borderWidth: 1,
-            borderRadius: 16,
-            paddingVertical: 6,
-            paddingHorizontal: 10,
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.15,
-            shadowRadius: 4,
-            elevation: 4,
-          }}>
+            ...panelShadow,
+            position: 'absolute',
+            bottom: FAB_HEIGHT + 12,
+            right: 0,
+          }}
+          className="rounded-2xl border px-3 py-1.5">
           {actions.map((action, index) => (
             <View key={action.id}>
               <Pressable
                 onPress={() => handleActionPress(action)}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  gap: 10,
-                  paddingVertical: 8,
-                  paddingHorizontal: 12,
-                  borderRadius: 12,
-                  minWidth: 150,
-                }}>
+                className="min-w-[150px] flex-row items-center gap-2 rounded-xl px-3 py-2">
                 <MaterialIcons name={action.icon as any} size={22} color={colors.primary} />
                 <Text
-                  style={{
-                    fontSize: 15,
-                    fontWeight: '600',
-                    color: scheme === 'dark' ? 'white' : colors.textPrimary,
-                    flexShrink: 1,
-                  }}>
+                  className={`flex-shrink text-[15px] font-semibold ${
+                    isDark ? 'text-white' : 'text-textPrimary'
+                  }`}>
                   {action.label}
                 </Text>
               </Pressable>
 
               {index < actions.length - 1 && (
-                <View
-                  style={{
-                    height: 1,
-                    backgroundColor: separatorColor,
-                    marginVertical: 4,
-                    marginHorizontal: 4,
-                  }}
-                />
+                <View style={{ backgroundColor: separatorColor }} className="mx-1 my-1 h-[1px]" />
               )}
             </View>
           ))}

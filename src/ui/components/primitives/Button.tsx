@@ -12,7 +12,8 @@ const buttonStyles = cva('items-center justify-center flex-col rounded-lg', {
       primary: 'bg-primary dark:bg-primaryDark',
       secondary: 'bg-gray-600 dark:bg-gray-700',
       disabled: 'bg-gray-300 dark:bg-gray-600',
-      outline: 'border border-gray-400 dark:border-gray-600',
+      outline: 'border border-primary dark:border-primary',
+      'outline-active': 'bg-primary border border-primary dark:bg-primaryDark dark:border-primary',
 
       // ⭐ NUEVO VARIANT PARA SPEEDDIAL (vertical)
       floating: `

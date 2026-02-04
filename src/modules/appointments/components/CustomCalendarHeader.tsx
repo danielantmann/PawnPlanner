@@ -1,5 +1,5 @@
-import { View, Pressable, Text } from 'react-native';
-import { format, addDays } from 'date-fns';
+import { View, Pressable, Text, useColorScheme } from 'react-native';
+import { format, addDays, addMonths, startOfWeek } from 'date-fns';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/src/ui/theme/colors';
 import { Button } from '@/src/ui/components/primitives/Button';
@@ -17,15 +17,19 @@ export function CustomCalendarHeader({
   onDateChange,
   onModeChange,
 }: CalendarHeaderProps) {
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === 'dark';
+
+  // ⭐ Flechas corregidas según comportamiento deseado
   const goPrev = () => {
-    if (mode === 'month') onDateChange(new Date(date.getFullYear(), date.getMonth() - 1, 1));
+    if (mode === 'month') onDateChange(addMonths(date, -1));
     else if (mode === 'week') onDateChange(addDays(date, -7));
     else if (mode === '3days') onDateChange(addDays(date, -3));
     else onDateChange(addDays(date, -1));
   };
 
   const goNext = () => {
-    if (mode === 'month') onDateChange(new Date(date.getFullYear(), date.getMonth() + 1, 1));
+    if (mode === 'month') onDateChange(addMonths(date, 1));
     else if (mode === 'week') onDateChange(addDays(date, 7));
     else if (mode === '3days') onDateChange(addDays(date, 3));
     else onDateChange(addDays(date, 1));
@@ -41,41 +45,34 @@ export function CustomCalendarHeader({
           : format(date, 'MMMM yyyy');
 
   return (
-    <View className="px-4 pb-2 pt-4">
+    <View className={`px-4 pb-2 pt-4 ${isDark ? 'bg-backgroundDark' : 'bg-background'}`}>
       {/* Tabs */}
-      <View className="mb-2 flex-row items-center gap-2">
+      <View className="mb-3 flex-row items-center gap-2">
         {(['day', '3days', 'week', 'month'] as const).map((m) => {
           const isActive = mode === m;
 
           return (
             <Button
               key={m}
-              variant={isActive ? 'primary' : 'outline'}
+              variant={isActive ? 'outline-active' : 'outline'}
               size="sm"
               onPress={() => onModeChange(m)}
-              className={`flex-1 !px-1 ${!isActive ? '!border-primary' : ''}`}>
-              <Text
-                adjustsFontSizeToFit
-                numberOfLines={1}
-                className={
-                  isActive
-                    ? 'text-sm font-semibold text-white'
-                    : 'text-sm font-semibold text-primary dark:text-primary'
-                }>
-                {m === 'day' ? 'Día' : m === '3days' ? '3 Días' : m === 'week' ? 'Semana' : 'Mes'}
-              </Text>
+              className="flex-1 !px-1"
+              textColor={isActive ? 'white' : 'primary'}>
+              {m === 'day' ? 'Día' : m === '3days' ? '3 Días' : m === 'week' ? 'Semana' : 'Mes'}
             </Button>
           );
         })}
       </View>
 
       {/* Fecha / Navegación */}
-      <View className="mb-2 flex-row items-center justify-between">
+      <View className="flex-row items-center justify-between">
         <Pressable onPress={goPrev} className="p-2">
           <Ionicons name="chevron-back" size={22} color={colors.primary} />
         </Pressable>
 
-        <Text className="text-base font-bold text-textPrimary dark:text-textPrimaryDark">
+        <Text
+          className={`text-base font-bold ${isDark ? 'text-textPrimaryDark' : 'text-textPrimary'}`}>
           {headerTitle}
         </Text>
 
