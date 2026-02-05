@@ -1,5 +1,3 @@
-// src/modules/appointments/store/agenda.store.ts
-
 import { create } from 'zustand';
 
 type ViewMode = 'day' | 'week' | 'month' | '3days';
@@ -32,6 +30,10 @@ interface AgendaState {
   startHour: number;
   endHour: number;
 
+  // Selected time from calendar
+  selectedHour: number | null;
+  selectedMinute: number | null;
+
   // Actions
   setViewMode: (mode: ViewMode) => void;
   setSelectedDate: (date: Date) => void;
@@ -46,6 +48,9 @@ interface AgendaState {
   closeDeleteModal: () => void;
 
   setTimeRange: (start: number, end: number) => void;
+
+  setSelectedHour: (hour: number | null) => void;
+  setSelectedMinute: (minute: number | null) => void;
 }
 
 export const useAgendaStore = create<AgendaState>((set) => ({
@@ -61,12 +66,21 @@ export const useAgendaStore = create<AgendaState>((set) => ({
   startHour: 8,
   endHour: 22,
 
+  // Selected time from calendar
+  selectedHour: null,
+  selectedMinute: null,
+
   // Actions
   setViewMode: (mode) => set({ viewMode: mode }),
   setSelectedDate: (date) => set({ selectedDate: date }),
 
   openCreateModal: () => set({ createModalVisible: true }),
-  closeCreateModal: () => set({ createModalVisible: false }),
+  closeCreateModal: () =>
+    set({
+      createModalVisible: false,
+      selectedHour: null,
+      selectedMinute: null,
+    }),
 
   openEditModal: (appointment) => set({ editModalVisible: true, selectedAppointment: appointment }),
   closeEditModal: () => set({ editModalVisible: false, selectedAppointment: null }),
@@ -76,4 +90,7 @@ export const useAgendaStore = create<AgendaState>((set) => ({
   closeDeleteModal: () => set({ deleteModalVisible: false, selectedAppointment: null }),
 
   setTimeRange: (start, end) => set({ startHour: start, endHour: end }),
+
+  setSelectedHour: (hour) => set({ selectedHour: hour }),
+  setSelectedMinute: (minute) => set({ selectedMinute: minute }),
 }));

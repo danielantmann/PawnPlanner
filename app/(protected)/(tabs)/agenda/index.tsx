@@ -23,6 +23,8 @@ export default function AgendaScreenBigCalendar() {
     setViewMode,
     closeCreateModal,
     openCreateModal,
+    setSelectedHour,
+    setSelectedMinute,
   } = useAgendaStore();
 
   const monthStart = startOfMonth(selectedDate);
@@ -47,7 +49,6 @@ export default function AgendaScreenBigCalendar() {
     [appointments]
   );
 
-  // ⭐ Cambiar modo según comportamiento deseado
   const handleModeChange = useCallback(
     (mode: 'day' | '3days' | 'week' | 'month') => {
       setViewMode(mode);
@@ -57,24 +58,16 @@ export default function AgendaScreenBigCalendar() {
       } else if (mode === 'week') {
         setSelectedDate(startOfWeek(new Date(), { weekStartsOn: 1 }));
       }
-      // Mes → no tocamos la fecha
     },
     [setViewMode, setSelectedDate]
   );
 
-  // ⭐ Solo actualizamos fecha cuando tiene sentido
   const handleDateChange = useCallback(
     (dates: any) => {
       if (!dates) return;
       const newDate = Array.isArray(dates) ? dates[0] : dates;
 
-      // Día → swipe cambia fecha
-      if (viewMode === 'day') {
-        setSelectedDate(newDate);
-      }
-
-      // Mes → swipe cambia mes
-      if (viewMode === 'month') {
+      if (viewMode === 'day' || viewMode === 'month') {
         setSelectedDate(newDate);
       }
     },
@@ -83,22 +76,28 @@ export default function AgendaScreenBigCalendar() {
 
   const handlePressEvent = useCallback((event: CalendarEvent) => {}, []);
 
+  // ⭐ AQUÍ ES DONDE SE CAPTURA LA HORA DEL CALENDARIO
   const handlePressCell = useCallback(
     (date: Date) => {
       setSelectedDate(date);
+
+      const hour = date.getHours();
+      const minute = date.getMinutes();
+
+      setSelectedHour(hour);
+      setSelectedMinute(minute);
+
       openCreateModal();
     },
-    [setSelectedDate, openCreateModal]
+    [setSelectedDate, setSelectedHour, setSelectedMinute, openCreateModal]
   );
 
   return (
     <SafeAreaView className="flex-1 bg-background dark:bg-backgroundDark">
-      {/* Header superior */}
       <View className="px-4 pb-2 pt-4">
         <ScreenHeader title="Agenda" subtitle="Gestiona tus citas" />
       </View>
 
-      {/* Custom Header */}
       <CustomCalendarHeader
         date={selectedDate}
         mode={viewMode}
@@ -106,7 +105,6 @@ export default function AgendaScreenBigCalendar() {
         onModeChange={handleModeChange}
       />
 
-      {/* Calendario */}
       <View className="relative flex-1 bg-white">
         <GestureHandlerRootView style={{ flex: 1 }}>
           <Calendar<CalendarEvent>
@@ -150,22 +148,15 @@ export default function AgendaScreenBigCalendar() {
               borderRadius: 0,
               padding: 0,
               margin: 0,
-              elevation: 0,
-              shadowOpacity: 0,
-              shadowColor: 'transparent',
-              shadowRadius: 0,
-              shadowOffset: { width: 0, height: 0 },
             })}
             renderEvent={(event, touchableOpacityProps) => {
               if (viewMode === 'month') {
-                // En modo mes, renderizar la card de resumen
                 const dayEvents = events.filter(
                   (e) =>
                     e.start.toDateString() === event.start.toDateString() ||
                     e.end.toDateString() === event.start.toDateString()
                 );
 
-                // Solo renderizar una vez por día (primer evento)
                 if (event.id === dayEvents[0]?.id) {
                   return (
                     <View style={{ width: '100%', alignItems: 'center', paddingTop: 4 }}>
@@ -182,7 +173,6 @@ export default function AgendaScreenBigCalendar() {
                 return null;
               }
 
-              // Otros modos
               const { key, style, ...rest } = touchableOpacityProps;
               return (
                 <View key={key} {...rest} style={[style, { backgroundColor: 'transparent' }]}>
@@ -193,7 +183,6 @@ export default function AgendaScreenBigCalendar() {
           />
         </GestureHandlerRootView>
 
-        {/* Speed Dial */}
         <View className="absolute bottom-6 right-4 z-50">
           <SpeedDialDialog
             actions={[
@@ -216,12 +205,7 @@ export default function AgendaScreenBigCalendar() {
         </View>
       </View>
 
-      {/* Modal */}
-      <CreateAppointmentModal
-        visible={createModalVisible}
-        onClose={closeCreateModal}
-        selectedDate={selectedDate}
-      />
+      <CreateAppointmentModal visible={createModalVisible} onClose={closeCreateModal} />
     </SafeAreaView>
   );
 }

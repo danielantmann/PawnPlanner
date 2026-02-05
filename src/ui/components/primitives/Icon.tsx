@@ -78,6 +78,16 @@ const iconMap = {
   eyeOff: ((props: IoniconProps) => (
     <Ionicons name="eye-off-outline" {...props} />
   )) as IoniconComponent,
+  scissors: ((props: IoniconProps) => (
+    <Ionicons name="cut-outline" {...props} />
+  )) as IoniconComponent,
+  chevronDown: ((props: IoniconProps) => (
+    <Ionicons name="chevron-down-outline" {...props} />
+  )) as IoniconComponent,
+  clock: ((props: IoniconProps) => <Ionicons name="time-outline" {...props} />) as IoniconComponent,
+  pricetag: ((props: IoniconProps) => (
+    <Ionicons name="pricetag-outline" {...props} />
+  )) as IoniconComponent,
 } as const;
 
 export type IconName = keyof typeof iconMap;
@@ -89,7 +99,7 @@ type IconProps = {
   name: IconName;
   size?: SizeName | number;
   color?: ColorName | string;
-  strokeColor?: ColorName | string; // ← AÑADIDO
+  strokeColor?: ColorName | string;
   fixedColor?: boolean;
 };
 
@@ -108,24 +118,22 @@ export const Icon = ({ name, size = 'md', color, strokeColor, fixedColor = false
 
   const resolvedStroke = strokeColor
     ? (colors[strokeColor as ColorName] ?? strokeColor)
-    : resolvedColor; // ← si no se pasa stroke, usamos el mismo color
+    : resolvedColor;
 
   const Component = iconMap[name];
 
-  // Ionicons
   if (typeof Component === 'function' && name !== 'pawPrint') {
     return Component({ size: resolvedSize, color: resolvedColor });
   }
 
-  // SVG Icons
   const SvgComp = Component as SvgIconComponent;
   return (
     <SvgComp
       width={resolvedSize}
       height={resolvedSize}
       fill={resolvedColor}
-      stroke={resolvedStroke} // ← AÑADIDO
-      strokeWidth={2} // ← Ajustable
+      stroke={resolvedStroke}
+      strokeWidth={2}
     />
   );
 };
