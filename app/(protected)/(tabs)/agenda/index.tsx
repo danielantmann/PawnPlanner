@@ -1,5 +1,5 @@
 import { SafeAreaView, View } from 'react-native';
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Calendar } from 'react-native-big-calendar';
 import { useAgendaStore } from '@/src/modules/appointments/store/agenda.store';
@@ -10,7 +10,8 @@ import { startOfMonth, endOfMonth, startOfWeek } from 'date-fns';
 import { CustomCalendarHeader } from '@/src/modules/appointments/components/CustomCalendarHeader';
 import { SpeedDialDialog } from '@/src/ui/components/primitives/SpeedDialDialog';
 
-import { CalendarEvent } from '@/src/modules/appointments/types/calendar-event.types';
+import type { CalendarEvent } from '@/src/modules/appointments/types/calendar-event.types';
+import type { AppointmentDTO } from '@/src/modules/appointments/types/appointment.types';
 import { EventCard } from '@/src/modules/appointments/components/EventCard/EventCard';
 import { MonthSummaryCard } from '@/src/modules/appointments/components/EventCard/MonthSummaryCard';
 
@@ -26,6 +27,11 @@ export default function AgendaScreenBigCalendar() {
     setSelectedHour,
     setSelectedMinute,
   } = useAgendaStore();
+
+  // ⭐ ESTADO PARA EDICIÓN
+  const [editingAppointment, setEditingAppointment] = useState<AppointmentDTO | null>(null);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editModalVisible, setEditModalVisible] = useState(false);
 
   const monthStart = startOfMonth(selectedDate);
   const monthEnd = endOfMonth(selectedDate);
@@ -45,6 +51,8 @@ export default function AgendaScreenBigCalendar() {
         start: new Date(apt.startTime),
         end: new Date(apt.endTime),
         status: apt.status,
+        // ⭐ PASAR DATOS COMPLETOS
+        appointmentData: apt,
       })),
     [appointments]
   );
@@ -74,7 +82,14 @@ export default function AgendaScreenBigCalendar() {
     [viewMode, setSelectedDate]
   );
 
-  const handlePressEvent = useCallback((event: CalendarEvent) => {}, []);
+  const handlePressEvent = useCallback((event: CalendarEvent) => {
+    if (!event.appointmentData) {
+      return;
+    }
+    setEditingAppointment(event.appointmentData);
+    setIsEditMode(true);
+    setEditModalVisible(true);
+  }, []);
 
   // ⭐ AQUÍ ES DONDE SE CAPTURA LA HORA DEL CALENDARIO
   const handlePressCell = useCallback(
@@ -87,10 +102,19 @@ export default function AgendaScreenBigCalendar() {
       setSelectedHour(hour);
       setSelectedMinute(minute);
 
+      // ⭐ RESETEAR EDICIÓN Y ABRIR MODAL DE CREACIÓN
+      setEditingAppointment(null);
+      setIsEditMode(false);
       openCreateModal();
     },
     [setSelectedDate, setSelectedHour, setSelectedMinute, openCreateModal]
   );
+
+  const handleCloseEditModal = () => {
+    setEditModalVisible(false);
+    setEditingAppointment(null);
+    setIsEditMode(false);
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-background dark:bg-backgroundDark">
@@ -148,15 +172,22 @@ export default function AgendaScreenBigCalendar() {
               borderRadius: 0,
               padding: 0,
               margin: 0,
+              elevation: 0,
+              shadowOpacity: 0,
+              shadowColor: 'transparent',
+              shadowRadius: 0,
+              shadowOffset: { width: 0, height: 0 },
             })}
             renderEvent={(event, touchableOpacityProps) => {
               if (viewMode === 'month') {
+                // En modo mes, renderizar la card de resumen
                 const dayEvents = events.filter(
                   (e) =>
                     e.start.toDateString() === event.start.toDateString() ||
                     e.end.toDateString() === event.start.toDateString()
                 );
 
+                // Solo renderizar una vez por día (primer evento)
                 if (event.id === dayEvents[0]?.id) {
                   return (
                     <View style={{ width: '100%', alignItems: 'center', paddingTop: 4 }}>
@@ -173,10 +204,11 @@ export default function AgendaScreenBigCalendar() {
                 return null;
               }
 
+              // Otros modos - ⭐ PASAR onPress A EventCard
               const { key, style, ...rest } = touchableOpacityProps;
               return (
                 <View key={key} {...rest} style={[style, { backgroundColor: 'transparent' }]}>
-                  <EventCard event={event} mode={viewMode} />
+                  <EventCard event={event} mode={viewMode} onPress={handlePressEvent} />
                 </View>
               );
             }}
@@ -195,7 +227,7 @@ export default function AgendaScreenBigCalendar() {
               {
                 id: 'today',
                 label: 'Ir a hoy',
-                icon: 'event',
+                icon: 'calendarToday',
                 onPress: () => {
                   handleModeChange('day');
                 },
@@ -205,7 +237,16 @@ export default function AgendaScreenBigCalendar() {
         </View>
       </View>
 
+      {/* ⭐ MODAL DE CREACIÓN */}
       <CreateAppointmentModal visible={createModalVisible} onClose={closeCreateModal} />
+
+      {/* ⭐ MODAL DE EDICIÓN */}
+      <CreateAppointmentModal
+        visible={editModalVisible}
+        onClose={handleCloseEditModal}
+        appointment={editingAppointment}
+        isEditMode={isEditMode}
+      />
     </SafeAreaView>
   );
 }

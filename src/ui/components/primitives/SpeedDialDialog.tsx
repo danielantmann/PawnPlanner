@@ -8,19 +8,19 @@ import {
   Easing,
 } from 'react-native';
 import { useRef, useState, useCallback } from 'react';
-import { MaterialIcons } from '@expo/vector-icons';
 import { colors } from '@/src/ui/theme/colors';
+import { Icon, type IconName } from '@/src/ui/components/primitives/Icon';
 
 export interface SpeedDialAction {
   id: string;
   label: string;
-  icon: string;
+  icon: IconName;
   onPress: () => void;
 }
 
 interface SpeedDialDialogProps {
   actions: SpeedDialAction[];
-  mainIcon?: string;
+  mainIcon?: IconName;
   primaryDarkColor?: string;
 }
 
@@ -96,7 +96,7 @@ export const SpeedDialDialog = ({
             shadowRadius: 3.84,
             elevation: 5,
           }}>
-          <MaterialIcons name={mainIcon as any} size={24} color="white" />
+          <Icon name={mainIcon} size="lg" color="white" />
         </Pressable>
       </Animated.View>
 
@@ -119,7 +119,7 @@ export const SpeedDialDialog = ({
               <Pressable
                 onPress={() => handleActionPress(action)}
                 className="min-w-[150px] flex-row items-center gap-2 rounded-xl px-3 py-2">
-                <MaterialIcons name={action.icon as any} size={22} color={colors.primary} />
+                <Icon name={action.icon} size="md" color="primary" />
                 <Text
                   className={`flex-shrink text-[15px] font-semibold ${
                     isDark ? 'text-white' : 'text-textPrimary'

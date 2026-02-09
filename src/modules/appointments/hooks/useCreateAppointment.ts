@@ -11,9 +11,17 @@ export function useCreateAppointment() {
       return response.data;
     },
     onSuccess: () => {
-      // Invalida las queries de appointments para que se refresquen
+      // ⭐ INVALIDA TODAS LAS QUERIES DE APPOINTMENTS
       queryClient.invalidateQueries({
         queryKey: ['appointments'],
+      });
+
+      // ⭐ INVALIDA LAS STATS DEL DASHBOARD
+      queryClient.invalidateQueries({
+        queryKey: ['dashboard-today'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['dashboard-weekly'],
       });
     },
   });

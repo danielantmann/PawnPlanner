@@ -4,9 +4,16 @@ import { Button } from '@/src/ui/components/primitives/Button';
 import { Input } from '@/src/ui/components/primitives/Input';
 import { Label } from '@/src/ui/components/primitives/Label';
 import { Title } from '@/src/ui/components/primitives/Title';
+
 import { useCreateAppointment } from '../../hooks/useCreateAppointment';
-import { useTranslation } from 'react-i18next';
-import type { CreateAppointmentPayload } from '../../types/appointment.types';
+import { useUpdateAppointment } from '../../hooks/useUpdateAppointment';
+import { useDeleteAppointment } from '../../hooks/useDeleteAppointment';
+
+import type {
+  CreateAppointmentPayload,
+  AppointmentDTO,
+  AppointmentStatus,
+} from '../../types/appointment.types';
 
 import { PetAutocomplete } from '@/src/modules/pets/components/PetAutocomplete';
 import type { PetSearchResult } from '@/src/modules/pets/types/pet.types';
@@ -16,20 +23,35 @@ import type { ServiceDTO } from '@/src/modules/services/types/service.types';
 
 import { InputSelect } from '@/src/ui/components/primitives/InputSelect';
 import { TimePickerModal } from '@/src/ui/components/patterns/TimePickerModal';
-import { useAgendaStore } from '../../store/agenda.store';
 
+import { useAgendaStore } from '../../store/agenda.store';
+import { appointmentFormSchema } from '../../schemas/appointment.schema';
+
+import { StatusDropdown } from '../StatusDropdown';
+import { useDropdownStore } from '@/src/store/dropdown.store';
+
+// ⭐ TIPADO CORRECTO DE PROPS
 interface CreateAppointmentModalProps {
   visible: boolean;
   onClose: () => void;
+  appointment?: AppointmentDTO | null;
+  isEditMode?: boolean;
 }
 
-export function CreateAppointmentModal({ visible, onClose }: CreateAppointmentModalProps) {
-  const { t } = useTranslation();
-  const { mutate: createAppointment } = useCreateAppointment();
+export function CreateAppointmentModal({
+  visible,
+  onClose,
+  appointment,
+  isEditMode = false,
+}: CreateAppointmentModalProps) {
+  const closeAllDropdowns = useDropdownStore((s) => s.closeAllDropdowns);
 
   const { selectedDate, selectedHour, selectedMinute } = useAgendaStore();
 
-  // Form state
+  const { mutate: createAppointment } = useCreateAppointment();
+  const { mutate: updateAppointment } = useUpdateAppointment();
+  const { mutate: deleteAppointment } = useDeleteAppointment();
+
   const [selectedPet, setSelectedPet] = useState<PetSearchResult | null>(null);
   const [petId, setPetId] = useState('');
 
@@ -42,25 +64,80 @@ export function CreateAppointmentModal({ visible, onClose }: CreateAppointmentMo
   const [startTime, setStartTime] = useState('09:00');
   const [endTime, setEndTime] = useState('10:00');
 
+  const [status, setStatus] = useState<AppointmentStatus>('completed');
+
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
 
-  // ⭐ Cuando se abre el modal desde el calendario → usar esa hora
+  const [errors, setErrors] = useState<Record<string, string[]>>({});
+
+  // ⭐ INIT EDIT MODE
   useEffect(() => {
-    if (selectedHour != null && selectedMinute != null) {
-      const start = `${String(selectedHour).padStart(2, '0')}:${String(selectedMinute).padStart(2, '0')}`;
-      const end = `${String(selectedHour + 1).padStart(2, '0')}:${String(selectedMinute).padStart(2, '0')}`;
+    if (isEditMode && appointment) {
+      setPetId(String(appointment.petId));
+      setServiceId(String(appointment.serviceId));
+      setFinalPrice(String(appointment.finalPrice || 0));
+      setStatus(appointment.status);
 
-      setStartTime(start);
-      setEndTime(end);
-    }
-  }, [selectedHour, selectedMinute, visible]);
+      const startISO = new Date(appointment.startTime);
+      const endISO = new Date(appointment.endTime);
 
-  const handleCreate = async () => {
-    if (!petId || !serviceId || !startTime || !endTime) {
-      Alert.alert('Error', 'Por favor completa todos los campos');
-      return;
+      setStartTime(
+        `${String(startISO.getHours()).padStart(2, '0')}:${String(startISO.getMinutes()).padStart(2, '0')}`
+      );
+      setEndTime(
+        `${String(endISO.getHours()).padStart(2, '0')}:${String(endISO.getMinutes()).padStart(2, '0')}`
+      );
+
+      setRecommendedPrice(String(appointment.finalPrice || 0));
+
+      setTimeout(() => {
+        setSelectedPet({
+          id: appointment.petId,
+          name: appointment.petName,
+        } as any);
+
+        setSelectedService({
+          id: appointment.serviceId,
+          name: appointment.serviceName,
+          price: appointment.finalPrice || 0,
+        } as any);
+      }, 0);
+    } else {
+      if (selectedHour != null && selectedMinute != null && visible) {
+        const start = `${String(selectedHour).padStart(2, '0')}:${String(selectedMinute).padStart(2, '0')}`;
+        const end = `${String(selectedHour + 1).padStart(2, '0')}:${String(selectedMinute).padStart(2, '0')}`;
+
+        setStartTime(start);
+        setEndTime(end);
+      }
     }
+  }, [isEditMode, appointment, selectedHour, selectedMinute, visible]);
+
+  // ⭐ VALIDATION
+  const validateForm = () => {
+    const formData = {
+      petId: parseInt(petId),
+      serviceId: parseInt(serviceId),
+      startTime,
+      endTime,
+      finalPrice: finalPrice ? parseFloat(finalPrice) : undefined,
+    };
+
+    const result = appointmentFormSchema.safeParse(formData);
+
+    if (!result.success) {
+      setErrors(result.error.flatten().fieldErrors as Record<string, string[]>);
+      return false;
+    }
+
+    setErrors({});
+    return true;
+  };
+
+  // ⭐ SUBMIT
+  const handleSubmit = () => {
+    if (!validateForm()) return;
 
     const year = selectedDate.getFullYear();
     const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
@@ -69,125 +146,214 @@ export function CreateAppointmentModal({ visible, onClose }: CreateAppointmentMo
     const startISO = `${year}-${month}-${day}T${startTime}:00Z`;
     const endISO = `${year}-${month}-${day}T${endTime}:00Z`;
 
-    const payload: CreateAppointmentPayload = {
-      petId: parseInt(petId),
-      serviceId: parseInt(serviceId),
-      startTime: startISO,
-      endTime: endISO,
-      finalPrice: finalPrice ? parseFloat(finalPrice) : undefined,
-    };
+    if (isEditMode && appointment) {
+      updateAppointment(
+        {
+          id: appointment.id,
+          data: {
+            petId: parseInt(petId),
+            serviceId: parseInt(serviceId),
+            startTime: startISO,
+            endTime: endISO,
+            finalPrice: finalPrice ? parseFloat(finalPrice) : undefined,
+            status,
+          },
+        },
+        {
+          onSuccess: () => {
+            onClose();
+            Alert.alert('✅', 'Cita actualizada exitosamente');
+          },
+          onError: (error: any) => {
+            console.log('ERROR RAW >>>', error);
 
-    createAppointment(payload, {
-      onSuccess: () => {
-        onClose();
-        setSelectedPet(null);
-        setPetId('');
-        setSelectedService(null);
-        setServiceId('');
-        setStartTime('09:00');
-        setEndTime('10:00');
-        setRecommendedPrice('');
-        setFinalPrice('');
-        Alert.alert('✅', 'Cita creada exitosamente');
+            let backendMessage = error.message;
+
+            try {
+              const raw = error?.request?._response;
+              if (raw) {
+                const parsed = JSON.parse(raw);
+                backendMessage = parsed.message || backendMessage;
+              }
+            } catch (_) {}
+
+            Alert.alert('❌', backendMessage);
+          },
+        }
+      );
+    } else {
+      const payload: CreateAppointmentPayload = {
+        petId: parseInt(petId),
+        serviceId: parseInt(serviceId),
+        startTime: startISO,
+        endTime: endISO,
+        finalPrice: finalPrice ? parseFloat(finalPrice) : undefined,
+      };
+
+      createAppointment(payload, {
+        onSuccess: () => {
+          onClose();
+          Alert.alert('✅', 'Cita creada exitosamente');
+        },
+        onError: (error: any) => {
+          Alert.alert('❌', error.message || 'Error al crear la cita');
+        },
+      });
+    }
+  };
+
+  // ⭐ DELETE
+  const handleDelete = () => {
+    if (!isEditMode || !appointment) return;
+
+    Alert.alert('Eliminar cita', '¿Estás seguro de que deseas eliminar esta cita?', [
+      { text: 'Cancelar', style: 'cancel' },
+      {
+        text: 'Eliminar',
+        style: 'destructive',
+        onPress: () => {
+          deleteAppointment(appointment.id, {
+            onSuccess: () => {
+              onClose();
+              Alert.alert('✅', 'Cita eliminada exitosamente');
+            },
+            onError: (error: any) => {
+              Alert.alert('❌', error.message || 'Error al eliminar la cita');
+            },
+          });
+        },
       },
-      onError: (error: any) => {
-        Alert.alert('❌', error.message || 'Error al crear la cita');
-      },
-    });
+    ]);
   };
 
   return (
     <Modal visible={visible} animationType="slide" transparent>
-      <View className="flex-1 items-center justify-end bg-black/50">
+      {/* ⭐ ESTE CONTENEDOR CIERRA LOS DROPDOWNS SIN BLOQUEAR TOQUES */}
+      <View
+        className="flex-1 items-center justify-end bg-black/50"
+        onStartShouldSetResponder={() => {
+          closeAllDropdowns();
+          return false;
+        }}>
         <View className="max-h-4/5 w-full rounded-t-3xl bg-background p-6 dark:bg-backgroundDark">
           {/* HEADER */}
           <View className="mb-6 flex-row items-center justify-between">
-            <Title>Nueva Cita</Title>
+            <Title>{isEditMode ? 'Editar Cita' : 'Nueva Cita'}</Title>
             <Pressable onPress={onClose}>
               <Label className="text-xl">✕</Label>
             </Pressable>
           </View>
 
-          <ScrollView contentContainerStyle={{ paddingBottom: 24 }}>
-            {/* 1. Mascota */}
-            <View className="mb-2">
+          {/* FORM */}
+          <ScrollView
+            contentContainerStyle={{ paddingBottom: 24 }}
+            showsVerticalScrollIndicator
+            nestedScrollEnabled
+            onScrollBeginDrag={closeAllDropdowns} // ⭐ Cierra dropdowns al hacer scroll
+          >
+            <View style={{ gap: 16 }}>
               <PetAutocomplete
                 label="Mascota"
                 value={selectedPet}
                 onSelect={(pet) => {
-                  setSelectedPet(pet);
+                  closeAllDropdowns(); // ⭐ Cierra dropdowns al tocar Mascota
+                  setSelectedPet({ ...pet });
                   setPetId(String(pet.id));
                 }}
               />
-            </View>
 
-            {/* 2. Hora inicio */}
-            <View className="mb-6">
               <InputSelect
                 label="Hora de inicio"
                 value={startTime}
                 leftIcon="clock"
-                onPress={() => setShowStartPicker(true)}
+                onPress={() => {
+                  closeAllDropdowns(); // ⭐ Cierra dropdowns
+                  setShowStartPicker(true);
+                }}
               />
-            </View>
 
-            {/* 3. Hora fin */}
-            <View className="mb-4">
               <InputSelect
                 label="Hora de fin"
                 value={endTime}
                 leftIcon="clock"
-                onPress={() => setShowEndPicker(true)}
+                onPress={() => {
+                  closeAllDropdowns(); // ⭐ Cierra dropdowns
+                  setShowEndPicker(true);
+                }}
               />
-            </View>
 
-            {/* 4. Servicio */}
-            <View className="mb-3">
+              <StatusDropdown
+                label="Estado"
+                value={status}
+                onSelect={(newStatus) => {
+                  closeAllDropdowns(); // ⭐ Cierra dropdowns
+                  setStatus(newStatus);
+                }}
+              />
+
               <ServiceDropdown
                 label="Servicio"
                 value={selectedService}
                 onSelect={(service) => {
+                  closeAllDropdowns(); // ⭐ Cierra dropdowns
                   setSelectedService(service);
                   setServiceId(String(service.id));
-
-                  // ⭐ Precio recomendado
                   setRecommendedPrice(String(service.price));
-
-                  // ⭐ Precio final editable
                   setFinalPrice(String(service.price));
                 }}
               />
-            </View>
 
-            {/* 5. Precio recomendado (solo lectura) */}
-            <View className="mb-2">
-              <Label className="mb-2 font-semibold">Precio recomendado</Label>
-              <Input
-                value={recommendedPrice}
-                onChangeText={() => {}} // ⭐ requerido por InputProps
-                editable={false}
-                leftIcon="pricetag"
-                type="number"
-              />
-            </View>
+              <View>
+                <Label className="mb-2 font-semibold">Precio recomendado</Label>
 
-            {/* 6. Precio final (editable) */}
-            <View className="mb-6">
-              <Label className="mb-2 font-semibold">Precio final</Label>
-              <Input
-                placeholder="0.00"
-                value={finalPrice}
-                onChangeText={setFinalPrice}
-                leftIcon="cash"
-                type="number"
-              />
+                {/* ⭐ ENVUELTO EN PRESSABLE PARA CERRAR DROPDOWNS */}
+                <Pressable onPressIn={closeAllDropdowns}>
+                  <Input
+                    value={recommendedPrice}
+                    editable={false}
+                    leftIcon="pricetag"
+                    type="number"
+                    onChangeText={() => {}}
+                  />
+                </Pressable>
+              </View>
+
+              <View>
+                <Label className="mb-2 font-semibold">Precio final</Label>
+
+                {/* ⭐ ENVUELTO EN PRESSABLE PARA CERRAR DROPDOWNS */}
+                <Pressable onPressIn={closeAllDropdowns}>
+                  <Input
+                    placeholder="0.00"
+                    value={finalPrice}
+                    onChangeText={(v) => setFinalPrice(v)}
+                    leftIcon="cash"
+                    type="number"
+                  />
+                </Pressable>
+              </View>
             </View>
           </ScrollView>
 
           {/* BOTONES */}
           <View className="mt-6 flex-row gap-3">
-            <Button onPress={onClose} icon="close" className="flex-1" />
-            <Button onPress={handleCreate} icon="check" className="flex-1" />
+            {isEditMode ? (
+              <>
+                <Button
+                  onPress={handleDelete}
+                  icon="trash"
+                  className="flex-1"
+                  variant="secondary"
+                />
+                <Button onPress={onClose} icon="close" className="flex-1" />
+                <Button onPress={handleSubmit} icon="check" className="flex-1" />
+              </>
+            ) : (
+              <>
+                <Button onPress={onClose} icon="close" className="flex-1" />
+                <Button onPress={handleSubmit} icon="check" className="flex-1" />
+              </>
+            )}
           </View>
         </View>
       </View>
@@ -199,14 +365,10 @@ export function CreateAppointmentModal({ visible, onClose }: CreateAppointmentMo
         initialMinute={parseInt(startTime.split(':')[1])}
         onClose={() => setShowStartPicker(false)}
         onConfirm={(h, m) => {
+          closeAllDropdowns(); // ⭐ Cierra dropdowns al confirmar picker
           const formatted = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
           setStartTime(formatted);
-
-          // ⭐ AUTOCOMPLETAR FIN +1 HORA
-          const endHour = h + 1;
-          const formattedEnd = `${endHour.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
-          setEndTime(formattedEnd);
-
+          setEndTime(`${String(h + 1).padStart(2, '0')}:${String(m).padStart(2, '0')}`);
           setShowStartPicker(false);
         }}
       />
@@ -217,7 +379,8 @@ export function CreateAppointmentModal({ visible, onClose }: CreateAppointmentMo
         initialMinute={parseInt(endTime.split(':')[1])}
         onClose={() => setShowEndPicker(false)}
         onConfirm={(h, m) => {
-          const formatted = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+          closeAllDropdowns(); // ⭐ Cierra dropdowns al confirmar picker
+          const formatted = `${h.toString().padStart(2, '0')}:${String(m).padStart(2, '0')}`;
           setEndTime(formatted);
           setShowEndPicker(false);
         }}

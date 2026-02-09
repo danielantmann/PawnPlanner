@@ -39,7 +39,7 @@ export function Input({
           : 'default';
 
   return (
-    <View className="z-10 mb-4 w-full">
+    <View className="z-10 w-full">
       {label && <Text className="mb-1 font-medium text-gray-700 dark:text-gray-300">{label}</Text>}
 
       <View

@@ -88,6 +88,9 @@ const iconMap = {
   pricetag: ((props: IoniconProps) => (
     <Ionicons name="pricetag-outline" {...props} />
   )) as IoniconComponent,
+  trash: ((props: IoniconProps) => (
+    <Ionicons name="trash-outline" {...props} />
+  )) as IoniconComponent,
 } as const;
 
 export type IconName = keyof typeof iconMap;

@@ -1,5 +1,5 @@
 import { ICalendarEventBase } from 'react-native-big-calendar';
-import { AppointmentStatus } from './appointment.types';
+import type { AppointmentStatus, AppointmentDTO } from './appointment.types';
 
 export interface CalendarEvent extends ICalendarEventBase {
   id: string;
@@ -7,4 +7,6 @@ export interface CalendarEvent extends ICalendarEventBase {
   petName: string;
   serviceName: string;
   status: AppointmentStatus;
+  // ⭐ Datos completos de la cita para edición
+  appointmentData?: AppointmentDTO;
 }
