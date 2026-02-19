@@ -5,6 +5,7 @@ import { IPetRepository } from '../../../core/pets/domain/IPetRepository';
 import { IOwnerRepository } from '../../../core/owners/domain/IOwnerRepository';
 import { IServiceRepository } from '../../../core/services/domain/IServiceRepository';
 import { IBreedRepository } from '../../../core/breeds/domain/IBreedRepository';
+import { IWorkerRepository } from '../../../core/workers/domain/IWorkerRepository';
 
 import { AppointmentMapper } from '../mappers/AppointmentMapper';
 import { NotFoundError } from '../../../shared/errors/NotFoundError';
@@ -18,22 +19,24 @@ export class UpdateAppointmentService {
     @inject('PetRepository') private pets: IPetRepository,
     @inject('OwnerRepository') private owners: IOwnerRepository,
     @inject('ServiceRepository') private services: IServiceRepository,
-    @inject('BreedRepository') private breeds: IBreedRepository
+    @inject('BreedRepository') private breeds: IBreedRepository,
+    @inject('WorkerRepository') private workers: IWorkerRepository
   ) {}
 
   async execute(id: number, data: any, userId: number) {
-    // Convertir strings a números (Express siempre manda strings)
     if (data.petId !== undefined && data.petId !== null) {
       data.petId = Number(data.petId);
     }
     if (data.serviceId !== undefined && data.serviceId !== null) {
       data.serviceId = Number(data.serviceId);
     }
+    if (data.workerId !== undefined && data.workerId !== null) {
+      data.workerId = Number(data.workerId);
+    }
 
     const existing = await this.appointments.findById(id, userId);
     if (!existing) throw new NotFoundError(`Appointment with id ${id} not found`);
 
-    // Cambia pet → cambia owner, breed, petName, ownerPhone, ownerId
     if (data.petId !== undefined && data.petId !== null && data.petId !== existing.petId) {
       const pet = await this.pets.findById(data.petId, userId);
       if (!pet) throw new NotFoundError(`Pet with id ${data.petId} not found`);
@@ -53,7 +56,6 @@ export class UpdateAppointmentService {
       existing.ownerPhone = owner.phone;
     }
 
-    // Cambia service
     if (
       data.serviceId !== undefined &&
       data.serviceId !== null &&
@@ -71,7 +73,18 @@ export class UpdateAppointmentService {
       }
     }
 
-    // Cambia fechas
+    if (data.workerId !== undefined && data.workerId !== existing.workerId) {
+      if (data.workerId === null) {
+        existing.workerId = null;
+        existing.workerName = null;
+      } else {
+        const worker = await this.workers.findById(data.workerId, userId);
+        if (!worker) throw new NotFoundError(`Worker with id ${data.workerId} not found`);
+        existing.workerId = worker.id!;
+        existing.workerName = worker.name;
+      }
+    }
+
     if (data.startTime || data.endTime) {
       const start = data.startTime ? new Date(data.startTime) : existing.startTime;
       const end = data.endTime ? new Date(data.endTime) : existing.endTime;
@@ -84,10 +97,18 @@ export class UpdateAppointmentService {
         throw new BadRequestError('startTime must be before endTime');
       }
 
-      const overlapping = await this.appointments.findOverlapping(userId, start, end);
-      const conflict = overlapping.some((a) => a.id !== existing.id);
+      if (existing.workerId != null) {
+        const worker = await this.workers.findById(existing.workerId, userId);
+        if (worker && worker.maxSimultaneous != null) {
+          const concurrent = await this.appointments.countConcurrent(existing.workerId, start, end);
 
-      if (conflict) throw new ConflictError('Appointment overlaps with an existing one');
+          if (concurrent >= worker.maxSimultaneous) {
+            throw new ConflictError(
+              `Worker can only handle ${worker.maxSimultaneous} appointment(s) simultaneously`
+            );
+          }
+        }
+      }
 
       existing.startTime = start;
       existing.endTime = end;

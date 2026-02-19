@@ -10,6 +10,9 @@ export class AppointmentResponseDTO {
   serviceId!: number;
   serviceName!: string;
 
+  workerId: number | null = null;
+  workerName: string | null = null;
+
   estimatedPrice!: number;
   finalPrice!: number;
 

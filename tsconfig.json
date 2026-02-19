@@ -5,6 +5,7 @@
     "baseUrl": ".",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "types": ["jest", "node", "react-native"],
     "paths": {
       "@/*": ["*"],
       "@assets/*": ["assets/*"],

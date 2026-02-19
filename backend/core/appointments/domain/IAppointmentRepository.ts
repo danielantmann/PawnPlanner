@@ -15,4 +15,6 @@ export interface IAppointmentRepository {
 
   // Para estadísticas (solo citas completadas)
   findCompletedInRange(userId: number, start: Date, end: Date): Promise<Appointment[]>;
+
+  countConcurrent(workerId: number, startTime: Date, endTime: Date): Promise<number>;
 }

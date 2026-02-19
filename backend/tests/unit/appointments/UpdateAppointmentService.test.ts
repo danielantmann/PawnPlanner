@@ -10,7 +10,7 @@ describe('UpdateAppointmentService', () => {
   const mockAppointmentRepo = {
     findById: vi.fn(),
     update: vi.fn(),
-    findOverlapping: vi.fn(),
+    countConcurrent: vi.fn(),
   };
 
   const mockPetRepo = {
@@ -29,12 +29,17 @@ describe('UpdateAppointmentService', () => {
     findById: vi.fn(),
   };
 
+  const mockWorkerRepo = {
+    findById: vi.fn(),
+  };
+
   const service = new UpdateAppointmentService(
     mockAppointmentRepo as any,
     mockPetRepo as any,
     mockOwnerRepo as any,
     mockServiceRepo as any,
-    mockBreedRepo as any
+    mockBreedRepo as any,
+    mockWorkerRepo as any
   );
 
   const userId = 1;
@@ -45,12 +50,14 @@ describe('UpdateAppointmentService', () => {
     userId,
     petId: 1,
     ownerId: 1,
+    workerId: null,
     petName: 'Michi',
     breedName: 'Labrador',
     serviceId: 1,
     serviceName: 'Baño',
     estimatedPrice: 100,
     finalPrice: 100,
+    workerName: null,
     ownerName: 'Juan',
     ownerPhone: '555',
     startTime: new Date('2026-01-25T10:00:00Z'),
@@ -85,7 +92,7 @@ describe('UpdateAppointmentService', () => {
     };
 
     mockAppointmentRepo.findById.mockResolvedValue(existingAppointment);
-    mockAppointmentRepo.findOverlapping.mockResolvedValue([]);
+    mockAppointmentRepo.countConcurrent.mockResolvedValue(0);
     mockAppointmentRepo.update.mockResolvedValue({
       ...existingAppointment,
       startTime: new Date(updateDto.startTime!),
@@ -110,20 +117,21 @@ describe('UpdateAppointmentService', () => {
     );
   });
 
-  it('should detect overlap when updating dates', async () => {
+  it('should detect conflict when updating times with worker at capacity', async () => {
     const updateDto: UpdateAppointmentDTO = {
       startTime: '2026-01-25T10:30:00Z',
       endTime: '2026-01-25T11:30:00Z',
     };
 
-    mockAppointmentRepo.findById.mockResolvedValue(existingAppointment);
-    mockAppointmentRepo.findOverlapping.mockResolvedValue([
-      {
-        id: 2,
-        startTime: new Date('2026-01-25T11:00:00Z'),
-        endTime: new Date('2026-01-25T12:00:00Z'),
-      },
-    ]);
+    const appointmentWithWorker = {
+      ...existingAppointment,
+      workerId: 1,
+      workerName: 'Daniel',
+    };
+
+    mockAppointmentRepo.findById.mockResolvedValue(appointmentWithWorker);
+    mockWorkerRepo.findById.mockResolvedValue({ id: 1, name: 'Daniel', maxSimultaneous: 1 });
+    mockAppointmentRepo.countConcurrent.mockResolvedValue(1);
 
     await expect(service.execute(appointmentId, updateDto, userId)).rejects.toThrow(ConflictError);
   });
@@ -207,7 +215,7 @@ describe('UpdateAppointmentService', () => {
     };
 
     mockAppointmentRepo.findById.mockResolvedValue(existingAppointment);
-    mockAppointmentRepo.findOverlapping.mockResolvedValue([]);
+    mockAppointmentRepo.countConcurrent.mockResolvedValue(0);
     mockAppointmentRepo.update.mockResolvedValue({
       ...existingAppointment,
       startTime: new Date(updateDto.startTime!),
@@ -217,5 +225,42 @@ describe('UpdateAppointmentService', () => {
 
     const result = await service.execute(appointmentId, updateDto, userId);
     expect(result.durationMinutes).toBe(180);
+  });
+
+  it('should update worker', async () => {
+    const updateDto: UpdateAppointmentDTO = { workerId: 2 };
+
+    mockAppointmentRepo.findById.mockResolvedValue(existingAppointment);
+    mockWorkerRepo.findById.mockResolvedValue({ id: 2, name: 'Carlos', maxSimultaneous: null });
+
+    mockAppointmentRepo.update.mockResolvedValue({
+      ...existingAppointment,
+      workerId: 2,
+      workerName: 'Carlos',
+    });
+
+    const result = await service.execute(appointmentId, updateDto, userId);
+    expect(result.workerId).toBe(2);
+    expect(result.workerName).toBe('Carlos');
+  });
+
+  it('should remove worker when workerId is null', async () => {
+    const updateDto: UpdateAppointmentDTO = { workerId: null };
+
+    const appointmentWithWorker = {
+      ...existingAppointment,
+      workerId: 1,
+      workerName: 'Daniel',
+    };
+
+    mockAppointmentRepo.findById.mockResolvedValue(appointmentWithWorker);
+    mockAppointmentRepo.update.mockResolvedValue({
+      ...existingAppointment,
+      workerId: null,
+      workerName: null,
+    });
+
+    const result = await service.execute(appointmentId, updateDto, userId);
+    expect(result.workerId).toBeNull();
   });
 });

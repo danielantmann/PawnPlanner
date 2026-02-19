@@ -17,6 +17,11 @@ export class CreateAppointmentDTO {
   endTime!: string;
 
   @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  workerId?: number;
+
+  @IsOptional()
   @IsNumber()
   finalPrice?: number;
 }

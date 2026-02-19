@@ -1,11 +1,10 @@
 import type { FC } from 'react';
-import { Pressable, Text } from 'react-native';
+import { Pressable, Text, ActivityIndicator } from 'react-native';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../../utils/cn';
 import { Icon } from '@ui/components/primitives/Icon';
 import type { IconName } from '@ui/components/primitives/Icon';
 
-// ⭐ Estilos del contenedor (fondo, padding, disabled, etc.)
 const buttonStyles = cva('items-center justify-center flex-col rounded-lg', {
   variants: {
     variant: {
@@ -14,8 +13,6 @@ const buttonStyles = cva('items-center justify-center flex-col rounded-lg', {
       disabled: 'bg-gray-300 dark:bg-gray-600',
       outline: 'border border-primary dark:border-primary',
       'outline-active': 'bg-primary border border-primary dark:bg-primaryDark dark:border-primary',
-
-      // ⭐ NUEVO VARIANT PARA SPEEDDIAL (vertical)
       floating: `
         bg-backgroundAlt dark:bg-backgroundAltDark
         shadow-md
@@ -25,19 +22,16 @@ const buttonStyles = cva('items-center justify-center flex-col rounded-lg', {
         gap-1
       `,
     },
-
     size: {
       sm: 'px-3 py-2',
       md: 'px-4 py-3',
       lg: 'px-6 py-4',
     },
-
     disabled: {
       true: 'opacity-100',
       false: '',
     },
   },
-
   defaultVariants: {
     variant: 'primary',
     size: 'md',
@@ -45,7 +39,6 @@ const buttonStyles = cva('items-center justify-center flex-col rounded-lg', {
   },
 });
 
-// ⭐ Estilos del texto
 const textStyles = cva('font-semibold leading-none mt-1 text-center', {
   variants: {
     textColor: {
@@ -55,7 +48,6 @@ const textStyles = cva('font-semibold leading-none mt-1 text-center', {
       dark: 'text-white',
       light: 'text-black',
     },
-
     textSize: {
       xs: 'text-xs',
       sm: 'text-sm',
@@ -63,7 +55,6 @@ const textStyles = cva('font-semibold leading-none mt-1 text-center', {
       lg: 'text-lg',
     },
   },
-
   defaultVariants: {
     textColor: 'white',
     textSize: 'base',
@@ -74,12 +65,13 @@ interface ButtonProps extends VariantProps<typeof buttonStyles> {
   children?: React.ReactNode;
   icon?: IconName;
   iconSize?: number;
-  iconColor?: string; // ⭐ NUEVO
+  iconColor?: string;
   circle?: 'sm' | 'md' | 'lg';
   onPress?: () => void;
   className?: string;
   textColor?: VariantProps<typeof textStyles>['textColor'];
   textSize?: VariantProps<typeof textStyles>['textSize'];
+  loading?: boolean;
 }
 
 export const Button: FC<ButtonProps> = ({
@@ -95,7 +87,10 @@ export const Button: FC<ButtonProps> = ({
   textSize,
   className,
   onPress,
+  loading = false,
 }) => {
+  const isDisabled = disabled || loading;
+
   const circleClasses =
     circle === 'sm'
       ? 'w-12 h-12 rounded-full'
@@ -107,24 +102,29 @@ export const Button: FC<ButtonProps> = ({
 
   return (
     <Pressable
-      disabled={disabled}
+      disabled={isDisabled}
       onPress={onPress}
       android_ripple={null}
       focusable={false}
       pressRetentionOffset={0}
       className={cn(
-        buttonStyles({ variant, size, disabled }),
+        buttonStyles({ variant, size, disabled: isDisabled }),
         circleClasses,
         'active:opacity-60',
         'flex-col items-center justify-center',
         className
       )}>
-      {icon && <Icon name={icon} size={iconSize} color={iconColor ?? 'white'} fixedColor />}
-
-      {children && (
-        <Text className={cn(textStyles({ textColor, textSize }))} numberOfLines={1}>
-          {children}
-        </Text>
+      {loading ? (
+        <ActivityIndicator size="small" color={iconColor ?? 'white'} />
+      ) : (
+        <>
+          {icon && <Icon name={icon} size={iconSize} color={iconColor ?? 'white'} fixedColor />}
+          {children && (
+            <Text className={cn(textStyles({ textColor, textSize }))} numberOfLines={1}>
+              {children}
+            </Text>
+          )}
+        </>
       )}
     </Pressable>
   );

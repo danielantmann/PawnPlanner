@@ -35,12 +35,10 @@
     "confirmPassword": "Confirm password",
     "loginButton": "Sign in",
     "registerButton": "Register",
-
     "goToRegisterPrefix": "Don't have an account?",
     "goToRegisterAction": "Register",
     "goToLoginPrefix": "Already have an account?",
     "goToLoginAction": "Sign in",
-
     "errors": {
       "firstNameRequired": "First name is required",
       "lastNameRequired": "Last name is required",
@@ -56,5 +54,60 @@
     "emailExists": "This email is already registered",
     "unexpected": "Unexpected error. Please try again.",
     "forgotPassword": "Forgot password?"
+  },
+  "errors": {
+    "network": "No internet connection. Check your connection.",
+    "timeout": "Request took too long. Try again.",
+    "unauthorized": "Your session expired. Sign in again.",
+    "forbidden": "You don't have permission for this action.",
+    "notFound": "Resource not found.",
+    "conflict": "This action can't be done now.",
+    "serverError": "Server error. Try again later.",
+    "serviceUnavailable": "Service unavailable. Try again later.",
+    "validationError": "Check the highlighted fields.",
+    "unknownError": "Something went wrong. Try again."
+  },
+  "appointments": {
+    "title": "Appointments",
+    "new": "New Appointment",
+    "edit": "Edit Appointment",
+    "delete": "Delete Appointment",
+    "created": "Appointment created successfully",
+    "updated": "Appointment updated successfully",
+    "deleted": "Appointment deleted successfully",
+    "confirmDelete": "Are you sure you want to delete this appointment?",
+    "fields": {
+      "pet": "Pet",
+      "service": "Service",
+      "worker": "Worker",
+      "startTime": "Start time",
+      "endTime": "End time",
+      "recommendedPrice": "Recommended price",
+      "finalPrice": "Final price",
+      "status": "Status"
+    },
+    "agenda": {
+      "title": "Agenda",
+      "subtitle": "Manage your appointments"
+    },
+    "viewModes": {
+      "day": "Day",
+      "threeDays": "3 Days",
+      "week": "Week",
+      "month": "Month"
+    },
+    "errors": {
+      "petRequired": "Select a pet",
+      "serviceRequired": "Select a service",
+      "startTimeRequired": "Start time is required",
+      "endTimeRequired": "End time is required",
+      "endTimeAfterStart": "End time must be after start time",
+      "priceFormat": "The price must have a valid format. Examples: 12, 12.5 or 12.50",
+      "priceGreaterThanZero": "The price must be greater than 0"
+    },
+    "speedDial": {
+      "newAppointment": "New Appointment",
+      "goToday": "Go to today"
+    }
   }
 }

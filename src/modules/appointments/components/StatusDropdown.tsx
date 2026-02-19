@@ -2,7 +2,7 @@ import { View, Pressable, Text, ScrollView } from 'react-native';
 import { InputSelect } from '@/src/ui/components/primitives/InputSelect';
 import type { AppointmentStatus } from '../types/appointment.types';
 import { cn } from '@/src/utils/cn';
-import { useDropdownStore } from '@/src/store/dropdown.store';
+import { useDropdown } from '@/src/store/useDropdown';
 
 type StatusDropdownProps = {
   label?: string;
@@ -19,29 +19,14 @@ const STATUS_OPTIONS: { label: string; value: AppointmentStatus }[] = [
 const DROPDOWN_ID = 'status-dropdown';
 
 export const StatusDropdown = ({ label, value, onSelect }: StatusDropdownProps) => {
-  const isOpen = useDropdownStore((s) => s.isDropdownOpen(DROPDOWN_ID));
-  const openDropdown = useDropdownStore((s) => s.openDropdown);
-  const closeDropdown = useDropdownStore((s) => s.closeDropdown);
-  const closeAllDropdowns = useDropdownStore((s) => s.closeAllDropdowns);
+  const { isOpen, handleToggle, handleSelect } = useDropdown(DROPDOWN_ID);
 
   const selectedLabel =
     STATUS_OPTIONS.find((opt) => opt.value === value)?.label || 'Seleccionar estado';
 
   return (
     <View className="relative w-full">
-      <InputSelect
-        label={label}
-        value={selectedLabel}
-        leftIcon="check"
-        onPress={() => {
-          if (isOpen) {
-            closeDropdown(DROPDOWN_ID);
-          } else {
-            closeAllDropdowns(); // ⭐ Cierra los otros dropdowns
-            openDropdown(DROPDOWN_ID); // ⭐ Abre este
-          }
-        }}
-      />
+      <InputSelect label={label} value={selectedLabel} leftIcon="check" onPress={handleToggle} />
 
       {isOpen && (
         <View
@@ -55,10 +40,7 @@ export const StatusDropdown = ({ label, value, onSelect }: StatusDropdownProps) 
             {STATUS_OPTIONS.map((option) => (
               <Pressable
                 key={option.value}
-                onPress={() => {
-                  onSelect(option.value);
-                  closeDropdown(DROPDOWN_ID);
-                }}
+                onPress={() => handleSelect(() => onSelect(option.value))}
                 className="border-b border-gray-300 px-4 py-3 dark:border-neutral-700">
                 <Text className="font-semibold text-gray-900 dark:text-gray-100">
                   {option.label}

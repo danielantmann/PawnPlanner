@@ -1,5 +1,5 @@
 import { Modal, View, Pressable, Text, useColorScheme } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import WheelPicker from '@quidone/react-native-wheel-picker';
 
 interface TimePickerModalProps {
@@ -8,6 +8,7 @@ interface TimePickerModalProps {
   initialMinute: number;
   onClose: () => void;
   onConfirm: (hour: number, minute: number) => void;
+  maxHour?: number;
 }
 
 export function TimePickerModal({
@@ -16,16 +17,14 @@ export function TimePickerModal({
   initialMinute,
   onClose,
   onConfirm,
+  maxHour = 22,
 }: TimePickerModalProps) {
-  // Horario del negocio
   const OPEN_HOUR = 8;
-  const CLOSE_HOUR = 22;
+  const CLOSE_HOUR = maxHour;
 
-  // Modo oscuro
   const scheme = useColorScheme();
   const textColor = scheme === 'dark' ? '#FFFFFF' : '#000000';
 
-  // Horas limitadas
   const hours = Array.from({ length: CLOSE_HOUR - OPEN_HOUR + 1 }, (_, i) => {
     const hour = OPEN_HOUR + i;
     return {
@@ -34,7 +33,6 @@ export function TimePickerModal({
     };
   });
 
-  // Minutos en intervalos de 5
   const minutes = Array.from({ length: 12 }, (_, i) => {
     const value = i * 5;
     return {
@@ -43,32 +41,36 @@ export function TimePickerModal({
     };
   });
 
-  const [hour, setHour] = useState(initialHour);
-  const [minute, setMinute] = useState(initialMinute);
+  const [selectedHour, setSelectedHour] = useState(initialHour);
+  const [selectedMinute, setSelectedMinute] = useState(initialMinute);
 
-  // ⭐ Overlay con dos líneas moradas un pelín más largas
+  useEffect(() => {
+    if (visible) {
+      setSelectedHour(initialHour);
+      setSelectedMinute(initialMinute);
+    }
+  }, [visible, initialHour, initialMinute]);
+
   const overlay = () => (
     <View style={{ position: 'absolute', width: '100%', height: '100%' }}>
-      {/* Línea superior */}
       <View
         style={{
           position: 'absolute',
           top: '42%',
           height: 3,
-          left: -4, // ← un pelín más larga
-          right: -4, // ← un pelín más larga
+          left: -4,
+          right: -4,
           backgroundColor: '#4F46E5',
         }}
       />
 
-      {/* Línea inferior */}
       <View
         style={{
           position: 'absolute',
           top: '58%',
           height: 3,
-          left: -4, // ← un pelín más larga
-          right: -4, // ← un pelín más larga
+          left: -4,
+          right: -4,
           backgroundColor: '#4F46E5',
         }}
       />
@@ -77,7 +79,6 @@ export function TimePickerModal({
 
   return (
     <Modal visible={visible} transparent animationType="fade">
-      {/* Fondo oscuro */}
       <Pressable className="flex-1 bg-black/50" onPress={onClose} />
 
       <View className="absolute bottom-0 w-full rounded-t-2xl bg-white p-6 dark:bg-neutral-900">
@@ -86,11 +87,10 @@ export function TimePickerModal({
         </Text>
 
         <View className="flex-row items-center justify-center gap-2">
-          {/* HORAS */}
           <WheelPicker
             data={hours}
-            value={hour}
-            onValueChanged={({ item }) => setHour(item.value)}
+            value={selectedHour}
+            onValueChanged={({ item }) => setSelectedHour(item.value)}
             style={{ width: 80, height: 200 }}
             itemTextStyle={{
               color: textColor,
@@ -100,7 +100,6 @@ export function TimePickerModal({
             renderOverlay={overlay}
           />
 
-          {/* DOS PUNTOS */}
           <Text
             style={{
               color: textColor,
@@ -112,11 +111,10 @@ export function TimePickerModal({
             :
           </Text>
 
-          {/* MINUTOS */}
           <WheelPicker
             data={minutes}
-            value={minute}
-            onValueChanged={({ item }) => setMinute(item.value)}
+            value={selectedMinute}
+            onValueChanged={({ item }) => setSelectedMinute(item.value)}
             style={{ width: 80, height: 200 }}
             itemTextStyle={{
               color: textColor,
@@ -129,7 +127,7 @@ export function TimePickerModal({
 
         <Pressable
           className="mt-6 rounded-lg bg-primary py-3"
-          onPress={() => onConfirm(hour, minute)}>
+          onPress={() => onConfirm(selectedHour, selectedMinute)}>
           <Text className="text-center font-semibold text-white">Confirmar</Text>
         </Pressable>
       </View>

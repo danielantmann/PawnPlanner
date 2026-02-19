@@ -1,8 +1,9 @@
 import { View, Pressable, Text, useColorScheme } from 'react-native';
-import { format, addDays, addMonths, startOfWeek } from 'date-fns';
+import { format, addDays, addMonths } from 'date-fns';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/src/ui/theme/colors';
 import { Button } from '@/src/ui/components/primitives/Button';
+import { useTranslation } from 'react-i18next';
 
 interface CalendarHeaderProps {
   date: Date;
@@ -17,10 +18,10 @@ export function CustomCalendarHeader({
   onDateChange,
   onModeChange,
 }: CalendarHeaderProps) {
+  const { t } = useTranslation();
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
 
-  // ⭐ Flechas corregidas según comportamiento deseado
   const goPrev = () => {
     if (mode === 'month') onDateChange(addMonths(date, -1));
     else if (mode === 'week') onDateChange(addDays(date, -7));
@@ -59,7 +60,13 @@ export function CustomCalendarHeader({
               onPress={() => onModeChange(m)}
               className="flex-1 !px-1"
               textColor={isActive ? 'white' : 'primary'}>
-              {m === 'day' ? 'Día' : m === '3days' ? '3 Días' : m === 'week' ? 'Semana' : 'Mes'}
+              {m === 'day'
+                ? t('appointments.viewModes.day')
+                : m === '3days'
+                  ? t('appointments.viewModes.threeDays')
+                  : m === 'week'
+                    ? t('appointments.viewModes.week')
+                    : t('appointments.viewModes.month')}
             </Button>
           );
         })}

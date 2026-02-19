@@ -8,6 +8,7 @@ import { PetEntity } from './orm/entities/PetEntity';
 import { UserEntity } from './orm/entities/UserEntity';
 import { ServiceEntity } from './orm/entities/ServiceEntity';
 import { AppointmentEntity } from './orm/entities/AppointmentEntity';
+import { WorkerEntity } from './orm/entities/WorkerEntity';
 
 import * as bcrypt from 'bcrypt';
 
@@ -15,17 +16,16 @@ async function seed() {
   await AppDataSource.initialize();
   console.log('📦 Database connected for seeding');
 
-  // Limpieza total
   await AppDataSource.getRepository(AppointmentEntity).clear();
   await AppDataSource.getRepository(ServiceEntity).clear();
   await AppDataSource.getRepository(PetEntity).clear();
   await AppDataSource.getRepository(BreedEntity).clear();
   await AppDataSource.getRepository(AnimalEntity).clear();
   await AppDataSource.getRepository(OwnerEntity).clear();
+  await AppDataSource.getRepository(WorkerEntity).clear();
   await AppDataSource.getRepository(UserEntity).clear();
   console.log('🧹 All tables cleared');
 
-  // Crear usuario principal
   const hashedPassword = await bcrypt.hash('Daniel123!', 10);
   const user = AppDataSource.getRepository(UserEntity).create({
     firstName: 'Daniel',
@@ -36,7 +36,16 @@ async function seed() {
   });
   await AppDataSource.getRepository(UserEntity).save(user);
 
-  // Owners
+  const workerRepo = AppDataSource.getRepository(WorkerEntity);
+  const worker = workerRepo.create({
+    userId: user.id,
+    name: 'Daniel User',
+    phone: '+34666666666',
+    isActive: true,
+    maxSimultaneous: null,
+  });
+  await workerRepo.save(worker);
+
   const ownerRepo = AppDataSource.getRepository(OwnerEntity);
   const ownersData = [
     { name: 'Carlos Pérez', email: 'carlos@example.com', phone: '+34111111111' },
@@ -50,7 +59,6 @@ async function seed() {
     owners.push(await ownerRepo.save(owner));
   }
 
-  // Animals globales
   const animalRepo = AppDataSource.getRepository(AnimalEntity);
   const animals: AnimalEntity[] = [];
   for (const a of [{ species: 'dog' }, { species: 'cat' }]) {
@@ -60,7 +68,6 @@ async function seed() {
 
   const [dog, cat] = animals;
 
-  // Breeds globales
   const breedRepo = AppDataSource.getRepository(BreedEntity);
   const breedsData = [
     { name: 'labrador', animal: dog },
@@ -77,7 +84,6 @@ async function seed() {
     breeds.push(await breedRepo.save(breed));
   }
 
-  // Pets
   const petRepo = AppDataSource.getRepository(PetEntity);
   const petsData = [
     { name: 'Firulais', owner: owners[0], breed: breeds[0] },
@@ -95,7 +101,6 @@ async function seed() {
     pets.push(await petRepo.save(pet));
   }
 
-  // Services globales
   const serviceRepo = AppDataSource.getRepository(ServiceEntity);
   const servicesData = [
     { name: 'bath', price: 15 },
@@ -119,14 +124,12 @@ async function seed() {
 
   const [bath, haircut, nailTrim, earClean, fullGroom, teethClean, deshedding] = services;
 
-  // Appointments realistas
   const appointmentRepo = AppDataSource.getRepository(AppointmentEntity);
 
   const today = new Date();
   today.setHours(9, 0, 0, 0);
 
   const appointmentsData = [
-    // Hoy (5 citas)
     { date: new Date(today), pet: pets[0], owner: owners[0], service: bath, status: 'completed' },
     {
       date: new Date(today.getTime() + 1 * 3600000),
@@ -157,7 +160,6 @@ async function seed() {
       status: 'completed',
     },
 
-    // Esta semana
     {
       date: new Date(today.getTime() - 2 * 86400000),
       pet: pets[5],
@@ -173,7 +175,6 @@ async function seed() {
       status: 'no-show',
     },
 
-    // Este mes
     {
       date: new Date(today.getFullYear(), today.getMonth(), 5, 11),
       pet: pets[1],
@@ -189,7 +190,6 @@ async function seed() {
       status: 'completed',
     },
 
-    // Este año
     {
       date: new Date(today.getFullYear(), 1, 10, 10),
       pet: pets[3],
@@ -205,7 +205,6 @@ async function seed() {
       status: 'completed',
     },
 
-    // Futuras
     {
       date: new Date(today.getTime() + 10 * 86400000),
       pet: pets[0],
@@ -231,6 +230,7 @@ async function seed() {
       petId: a.pet.id,
       ownerId: a.owner.id,
       serviceId: a.service.id,
+      workerId: worker.id,
 
       petName: a.pet.name,
       breedName: a.pet.breed.name,
@@ -238,6 +238,7 @@ async function seed() {
       ownerPhone: a.owner.phone,
 
       serviceName: a.service.name,
+      workerName: worker.name,
       estimatedPrice: a.service.price,
       finalPrice: a.service.price,
 

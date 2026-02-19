@@ -3,7 +3,7 @@ import { InputSelect } from '@/src/ui/components/primitives/InputSelect';
 import { useServices } from '../hooks/useServices';
 import type { ServiceDTO } from '../types/service.types';
 import { cn } from '@/src/utils/cn';
-import { useDropdownStore } from '@/src/store/dropdown.store';
+import { useDropdown } from '@/src/store/useDropdown';
 
 const DROPDOWN_ID = 'service-dropdown';
 
@@ -15,31 +15,16 @@ type ServiceDropdownProps = {
 
 export const ServiceDropdown = ({ label, value, onSelect }: ServiceDropdownProps) => {
   const { data: services } = useServices();
-
-  // ⭐ Usar Zustand para el overlay global
-  const isOpen = useDropdownStore((state) => state.isDropdownOpen(DROPDOWN_ID));
-  const openDropdown = useDropdownStore((state) => state.openDropdown);
-  const closeDropdown = useDropdownStore((state) => state.closeDropdown);
-
-  const handleSelect = (service: ServiceDTO) => {
-    onSelect(service); // ⭐ NOTIFICAR AL PADRE
-    closeDropdown(DROPDOWN_ID);
-  };
+  const { isOpen, handleToggle, handleSelect } = useDropdown(DROPDOWN_ID);
 
   return (
     <View className="relative w-full">
       <InputSelect
         label={label}
         placeholder="Seleccionar servicio..."
-        value={value?.name} // ⭐ YA MUESTRA EL NOMBRE CORRECTAMENTE
+        value={value?.name}
         leftIcon="scissors"
-        onPress={() => {
-          if (isOpen) {
-            closeDropdown(DROPDOWN_ID);
-          } else {
-            openDropdown(DROPDOWN_ID);
-          }
-        }}
+        onPress={handleToggle}
       />
 
       {isOpen && services && (
@@ -54,7 +39,7 @@ export const ServiceDropdown = ({ label, value, onSelect }: ServiceDropdownProps
             {services.map((service: ServiceDTO) => (
               <Pressable
                 key={service.id}
-                onPress={() => handleSelect(service)}
+                onPress={() => handleSelect(() => onSelect(service))}
                 className="border-b border-gray-300 px-4 py-3 dark:border-neutral-700">
                 <Text className="font-semibold text-gray-900 dark:text-gray-100">
                   {service.name}

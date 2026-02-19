@@ -4,7 +4,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Calendar } from 'react-native-big-calendar';
 import { useAgendaStore } from '@/src/modules/appointments/store/agenda.store';
 import { useAppointments } from '@/src/modules/appointments/hooks/useAppointments';
-import { CreateAppointmentModal } from '@/src/modules/appointments/components/Modals/CreateAppointmentModal';
+import { AppointmentFormModal } from '@/src/modules/appointments/components/Modals/AppointmentFormModal';
 import { ScreenHeader } from '@/src/ui/components/patterns/ScreenHeader';
 import { startOfMonth, endOfMonth, startOfWeek } from 'date-fns';
 import { CustomCalendarHeader } from '@/src/modules/appointments/components/CustomCalendarHeader';
@@ -15,7 +15,11 @@ import type { AppointmentDTO } from '@/src/modules/appointments/types/appointmen
 import { EventCard } from '@/src/modules/appointments/components/EventCard/EventCard';
 import { MonthSummaryCard } from '@/src/modules/appointments/components/EventCard/MonthSummaryCard';
 
+import { useTranslation } from 'react-i18next';
+
 export default function AgendaScreenBigCalendar() {
+  const { t } = useTranslation();
+
   const {
     viewMode,
     selectedDate,
@@ -28,7 +32,6 @@ export default function AgendaScreenBigCalendar() {
     setSelectedMinute,
   } = useAgendaStore();
 
-  // ⭐ ESTADO PARA EDICIÓN
   const [editingAppointment, setEditingAppointment] = useState<AppointmentDTO | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
@@ -51,7 +54,6 @@ export default function AgendaScreenBigCalendar() {
         start: new Date(apt.startTime),
         end: new Date(apt.endTime),
         status: apt.status,
-        // ⭐ PASAR DATOS COMPLETOS
         appointmentData: apt,
       })),
     [appointments]
@@ -83,15 +85,13 @@ export default function AgendaScreenBigCalendar() {
   );
 
   const handlePressEvent = useCallback((event: CalendarEvent) => {
-    if (!event.appointmentData) {
-      return;
-    }
+    if (!event.appointmentData) return;
+
     setEditingAppointment(event.appointmentData);
     setIsEditMode(true);
     setEditModalVisible(true);
   }, []);
 
-  // ⭐ AQUÍ ES DONDE SE CAPTURA LA HORA DEL CALENDARIO
   const handlePressCell = useCallback(
     (date: Date) => {
       setSelectedDate(date);
@@ -102,7 +102,6 @@ export default function AgendaScreenBigCalendar() {
       setSelectedHour(hour);
       setSelectedMinute(minute);
 
-      // ⭐ RESETEAR EDICIÓN Y ABRIR MODAL DE CREACIÓN
       setEditingAppointment(null);
       setIsEditMode(false);
       openCreateModal();
@@ -119,7 +118,10 @@ export default function AgendaScreenBigCalendar() {
   return (
     <SafeAreaView className="flex-1 bg-background dark:bg-backgroundDark">
       <View className="px-4 pb-2 pt-4">
-        <ScreenHeader title="Agenda" subtitle="Gestiona tus citas" />
+        <ScreenHeader
+          title={t('appointments.agenda.title')}
+          subtitle={t('appointments.agenda.subtitle')}
+        />
       </View>
 
       <CustomCalendarHeader
@@ -149,6 +151,7 @@ export default function AgendaScreenBigCalendar() {
             weekStartsOn={1}
             maxVisibleEventCount={viewMode === 'month' ? 1 : 3}
             moreLabel=""
+            overlapOffset={70}
             theme={{
               palette: {
                 primary: { main: '#4F46E5', contrastText: '#fff' },
@@ -180,14 +183,12 @@ export default function AgendaScreenBigCalendar() {
             })}
             renderEvent={(event, touchableOpacityProps) => {
               if (viewMode === 'month') {
-                // En modo mes, renderizar la card de resumen
                 const dayEvents = events.filter(
                   (e) =>
                     e.start.toDateString() === event.start.toDateString() ||
                     e.end.toDateString() === event.start.toDateString()
                 );
 
-                // Solo renderizar una vez por día (primer evento)
                 if (event.id === dayEvents[0]?.id) {
                   return (
                     <View style={{ width: '100%', alignItems: 'center', paddingTop: 4 }}>
@@ -204,11 +205,21 @@ export default function AgendaScreenBigCalendar() {
                 return null;
               }
 
-              // Otros modos - ⭐ PASAR onPress A EventCard
+              const eventDurationMinutes = Math.round(
+                (event.end.getTime() - event.start.getTime()) / (1000 * 60)
+              );
+
+              const isCompressed = eventDurationMinutes < 30;
+
               const { key, style, ...rest } = touchableOpacityProps;
               return (
                 <View key={key} {...rest} style={[style, { backgroundColor: 'transparent' }]}>
-                  <EventCard event={event} mode={viewMode} onPress={handlePressEvent} />
+                  <EventCard
+                    event={event}
+                    mode={viewMode}
+                    onPress={handlePressEvent}
+                    isCompressed={isCompressed}
+                  />
                 </View>
               );
             }}
@@ -220,13 +231,13 @@ export default function AgendaScreenBigCalendar() {
             actions={[
               {
                 id: 'create',
-                label: 'Nueva cita',
+                label: t('appointments.speedDial.newAppointment'),
                 icon: 'add',
                 onPress: openCreateModal,
               },
               {
                 id: 'today',
-                label: 'Ir a hoy',
+                label: t('appointments.speedDial.goToday'),
                 icon: 'calendarToday',
                 onPress: () => {
                   handleModeChange('day');
@@ -237,11 +248,9 @@ export default function AgendaScreenBigCalendar() {
         </View>
       </View>
 
-      {/* ⭐ MODAL DE CREACIÓN */}
-      <CreateAppointmentModal visible={createModalVisible} onClose={closeCreateModal} />
+      <AppointmentFormModal visible={createModalVisible} onClose={closeCreateModal} />
 
-      {/* ⭐ MODAL DE EDICIÓN */}
-      <CreateAppointmentModal
+      <AppointmentFormModal
         visible={editModalVisible}
         onClose={handleCloseEditModal}
         appointment={editingAppointment}

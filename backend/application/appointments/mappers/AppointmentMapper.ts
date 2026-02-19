@@ -15,6 +15,9 @@ export class AppointmentMapper {
       serviceId: appointment.serviceId,
       serviceName: appointment.serviceName,
 
+      workerId: appointment.workerId ?? null,
+      workerName: appointment.workerName ?? null,
+
       estimatedPrice: appointment.estimatedPrice,
       finalPrice: appointment.finalPrice,
 

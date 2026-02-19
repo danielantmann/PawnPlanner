@@ -45,19 +45,22 @@ export const SpeedDialDialog = ({
       easing: Easing.out(Easing.ease),
       useNativeDriver: true,
     }).start(() => setOpen(!open));
-  }, [open]);
+  }, [open, anim]);
 
-  const handleActionPress = useCallback((action: SpeedDialAction) => {
-    Animated.timing(anim, {
-      toValue: 0,
-      duration: 150,
-      easing: Easing.out(Easing.ease),
-      useNativeDriver: true,
-    }).start(() => {
-      setOpen(false);
-      action.onPress();
-    });
-  }, []);
+  const handleActionPress = useCallback(
+    (action: SpeedDialAction) => {
+      Animated.timing(anim, {
+        toValue: 0,
+        duration: 150,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
+      }).start(() => {
+        setOpen(false);
+        action.onPress();
+      });
+    },
+    [anim]
+  );
 
   const scale = anim.interpolate({ inputRange: [0, 1], outputRange: [0.9, 1] });
   const opacity = anim.interpolate({ inputRange: [0, 1], outputRange: [0, 1] });

@@ -13,7 +13,6 @@ export class AppointmentRepository implements IAppointmentRepository {
     this.ormRepo = dataSource.getRepository(AppointmentEntity);
   }
 
-  // ORM → Dominio
   private toDomain(entity: AppointmentEntity): Appointment {
     return new Appointment(
       entity.id,
@@ -21,6 +20,7 @@ export class AppointmentRepository implements IAppointmentRepository {
       entity.petId,
       entity.ownerId,
       entity.serviceId,
+      entity.workerId === undefined ? null : entity.workerId,
 
       entity.petName,
       entity.breedName,
@@ -28,6 +28,7 @@ export class AppointmentRepository implements IAppointmentRepository {
       entity.ownerPhone,
 
       entity.serviceName,
+      entity.workerName === undefined ? null : entity.workerName,
       Number(entity.estimatedPrice),
       Number(entity.finalPrice),
 
@@ -40,7 +41,6 @@ export class AppointmentRepository implements IAppointmentRepository {
     );
   }
 
-  // Dominio → ORM
   private toEntity(domain: Appointment): AppointmentEntity {
     const entity = new AppointmentEntity();
 
@@ -50,6 +50,7 @@ export class AppointmentRepository implements IAppointmentRepository {
     entity.petId = domain.petId;
     entity.ownerId = domain.ownerId;
     entity.serviceId = domain.serviceId;
+    entity.workerId = domain.workerId ?? undefined;
 
     entity.petName = domain.petName;
     entity.breedName = domain.breedName;
@@ -57,6 +58,7 @@ export class AppointmentRepository implements IAppointmentRepository {
     entity.ownerPhone = domain.ownerPhone;
 
     entity.serviceName = domain.serviceName;
+    entity.workerName = domain.workerName ?? undefined;
     entity.estimatedPrice = domain.estimatedPrice;
     entity.finalPrice = domain.finalPrice;
 
@@ -108,6 +110,17 @@ export class AppointmentRepository implements IAppointmentRepository {
     return entities
       .filter((e) => e.endTime > startTime && e.startTime < endTime)
       .map((e) => this.toDomain(e));
+  }
+
+  async countConcurrent(workerId: number, startTime: Date, endTime: Date): Promise<number> {
+    const entities = await this.ormRepo.find({
+      where: {
+        workerId,
+        startTime: Between(startTime, new Date(endTime.getTime() - 1)),
+      },
+    });
+
+    return entities.filter((e) => e.endTime > startTime && e.startTime < endTime).length;
   }
 
   async findByDateRange(userId: number, start: Date, end: Date): Promise<Appointment[]> {

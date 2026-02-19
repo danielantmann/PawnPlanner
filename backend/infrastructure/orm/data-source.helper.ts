@@ -8,6 +8,7 @@ import { OwnerEntity } from './entities/OwnerEntity';
 import { PetEntity } from './entities/PetEntity';
 import { ServiceEntity } from './entities/ServiceEntity';
 import { UserEntity } from './entities/UserEntity';
+import { WorkerEntity } from './entities/WorkerEntity';
 
 export const TestDataSource = new DataSource({
   type: 'sqlite',
@@ -22,5 +23,6 @@ export const TestDataSource = new DataSource({
     PetEntity,
     ServiceEntity,
     UserEntity,
+    WorkerEntity,
   ],
 });

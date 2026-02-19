@@ -5,6 +5,7 @@ export class Appointment {
     public petId: number,
     public ownerId: number,
     public serviceId: number,
+    public workerId: number | null = null, // ⭐ CAMBIAR
 
     public petName: string,
     public breedName: string,
@@ -12,6 +13,7 @@ export class Appointment {
     public ownerPhone: string,
 
     public serviceName: string,
+    public workerName: string | null = null,
     public estimatedPrice: number,
     public finalPrice: number,
 

@@ -1,5 +1,3 @@
-// src/modules/appointments/types/appointment.types.ts
-
 export type AppointmentStatus = 'completed' | 'no-show' | 'cancelled';
 
 export interface AppointmentDTO {
@@ -10,18 +8,22 @@ export interface AppointmentDTO {
   ownerName: string;
   ownerPhone: string;
   serviceName: string;
-  startTime: string; // ISO string
-  endTime: string; // ISO string
+  workerId?: number | null;
+  workerName?: string | null;
+  startTime: string;
+  endTime: string;
   status: AppointmentStatus;
+  estimatedPrice: number;
   finalPrice?: number;
 }
 
 export interface CreateAppointmentPayload {
   petId: number;
   serviceId: number;
-  startTime: string; // ISO string
-  endTime: string; // ISO string
+  startTime: string;
+  endTime: string;
   finalPrice?: number;
+  workerId?: number;
 }
 
 export interface UpdateAppointmentPayload {
@@ -31,14 +33,20 @@ export interface UpdateAppointmentPayload {
   endTime?: string;
   finalPrice?: number;
   status?: AppointmentStatus;
+  workerId?: number;
 }
 
-export interface AppointmentFormData {
-  petId: number;
-  serviceId: number;
-  date: Date;
-  startTime: string; // HH:mm format
-  endTime: string; // HH:mm format
-  finalPrice?: number;
-  status?: AppointmentStatus;
+export interface AppointmentFormState {
+  petId: string;
+  serviceId: string;
+  workerId: string;
+  startTime: string;
+  endTime: string;
+  finalPrice: string;
+  status: AppointmentStatus;
 }
+
+export type AppointmentFormAction =
+  | { type: 'SET_FIELD'; field: keyof AppointmentFormState; value: string }
+  | { type: 'RESET' }
+  | { type: 'SET_STATE'; state: AppointmentFormState };
