@@ -20,25 +20,32 @@ export class DashboardRepository implements IDashboardRepository {
       return new DashboardPeriodStats(0, 0, 0, 0, 0, 0, 0, 0, null);
     }
 
-    const income = appointments.reduce((sum, a) => sum + (a.finalPrice || 0), 0);
-    const durationMinutes = appointments.reduce((sum, a) => sum + (a.durationMinutes || 0), 0);
+    let income = 0;
+    let durationMinutes = 0;
 
-    const completed = appointments.filter((a) => a.status === 'completed').length;
-    const cancelled = appointments.filter((a) => a.status === 'cancelled').length;
-    const noShow = appointments.filter((a) => a.status === 'no-show').length;
+    let completed = 0;
+    let cancelled = 0;
+    let noShow = 0;
 
-    const revenuePerHour = durationMinutes > 0 ? income / (durationMinutes / 60) : 0;
-
-    const ticketAverage = appointments.length > 0 ? income / appointments.length : 0;
-
-    // Top service
     const serviceCount: Record<string, number> = {};
+
     for (const a of appointments) {
-      if (!serviceCount[a.serviceName]) serviceCount[a.serviceName] = 0;
-      serviceCount[a.serviceName]++;
+      if (a.status === 'completed') {
+        completed++;
+        income += a.finalPrice ?? 0;
+        durationMinutes += a.durationMinutes ?? 0;
+
+        serviceCount[a.serviceName] = (serviceCount[a.serviceName] ?? 0) + 1;
+      }
+
+      if (a.status === 'cancelled') cancelled++;
+      if (a.status === 'no-show') noShow++;
     }
 
-    const topService = Object.entries(serviceCount).sort((a, b) => b[1] - a[1])[0]?.[0] || null;
+    const ticketAverage = completed > 0 ? income / completed : 0;
+    const revenuePerHour = durationMinutes > 0 ? income / (durationMinutes / 60) : 0;
+
+    const topService = Object.entries(serviceCount).sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
 
     return new DashboardPeriodStats(
       income,

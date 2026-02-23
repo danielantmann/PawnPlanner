@@ -10,6 +10,14 @@
     "stats": { "income": "Ingresos", "completed": "Completadas", "noShows": "No-shows" },
     "more": "Ver más"
   },
+  "pets": {
+    "searchPlaceholder": "Buscar mascota...",
+    "noResults": "No hay resultados"
+  },
+  "services": {
+    "searchPlaceholder": "Seleccionar servicio...",
+    "price": "Precio"
+  },
   "navigation": {
     "home": "Inicio",
     "agenda": "Agenda",
@@ -35,12 +43,10 @@
     "confirmPassword": "Confirmar contraseña",
     "loginButton": "Entrar",
     "registerButton": "Registrarse",
-
     "goToRegisterPrefix": "¿No tienes cuenta?",
     "goToRegisterAction": "Regístrate",
     "goToLoginPrefix": "¿Ya tienes cuenta?",
     "goToLoginAction": "Inicia sesión",
-
     "errors": {
       "firstNameRequired": "El nombre es obligatorio",
       "lastNameRequired": "Los apellidos son obligatorios",
@@ -56,5 +62,72 @@
     "emailExists": "Este correo ya está registrado",
     "unexpected": "Error inesperado. Inténtalo de nuevo.",
     "forgotPassword": "¿Olvidaste tu contraseña?"
+  },
+  "errors": {
+    "network": "Sin conexión a internet. Verifica tu conexión.",
+    "timeout": "La solicitud tardó demasiado. Intenta de nuevo.",
+    "unauthorized": "Tu sesión expiró. Inicia sesión de nuevo.",
+    "forbidden": "No tienes permiso para esta acción.",
+    "notFound": "Recurso no encontrado.",
+    "conflict": "Esta acción no puede realizarse ahora.",
+    "serverError": "Error del servidor. Intenta de nuevo más tarde.",
+    "serviceUnavailable": "Servicio no disponible. Intenta de nuevo más tarde.",
+    "validationError": "Revisa los campos marcados.",
+    "unknownError": "Algo salió mal. Intenta de nuevo."
+  },
+  "appointments": {
+    "title": "Citas",
+    "new": "Nueva cita",
+    "edit": "Editar cita",
+    "delete": "Eliminar cita",
+    "created": "Cita creada exitosamente",
+    "updated": "Cita actualizada exitosamente",
+    "deleted": "Cita eliminada exitosamente",
+    "confirmDelete": "¿Estás seguro de que deseas eliminar esta cita?",
+    "fields": {
+      "pet": "Mascota",
+      "service": "Servicio",
+      "worker": "Trabajador",
+      "startTime": "Hora de inicio",
+      "endTime": "Hora de fin",
+      "recommendedPrice": "Precio recomendado",
+      "finalPrice": "Precio final",
+      "status": "Estado"
+    },
+    "summary": {
+      "single": "cita",
+      "plural": "citas"
+    },
+    "status": {
+      "completed": "Completada",
+      "noShow": "No se presentó",
+      "cancelled": "Cancelada"
+    },
+    "worker": {
+      "unassigned": "Sin asignar"
+    },
+    "agenda": {
+      "title": "Agenda",
+      "subtitle": "Gestiona tus citas"
+    },
+    "viewModes": {
+      "day": "Día",
+      "threeDays": "3 Días",
+      "week": "Semana",
+      "month": "Mes"
+    },
+    "errors": {
+      "petRequired": "Selecciona una mascota",
+      "serviceRequired": "Selecciona un servicio",
+      "startTimeRequired": "La hora de inicio es obligatoria",
+      "endTimeRequired": "La hora de fin es obligatoria",
+      "endTimeAfterStart": "La hora de fin debe ser posterior a la hora de inicio",
+      "priceFormat": "El precio debe tener un formato válido. Ejemplos: 12, 12.5 o 12.50",
+      "priceGreaterThanZero": "El precio debe ser mayor que 0"
+    },
+    "speedDial": {
+      "newAppointment": "Nueva cita",
+      "goToday": "Ir a hoy"
+    }
   }
 }

@@ -14,6 +14,7 @@ import { AppointmentEntity } from './AppointmentEntity';
 import { ServiceEntity } from './ServiceEntity';
 import { AnimalEntity } from './AnimalEntity';
 import { BreedEntity } from './BreedEntity';
+import { WorkerEntity } from './WorkerEntity';
 
 import { normalizeEmail } from '../../../shared/normalizers/normalizeEmail';
 import { normalizeName } from '../../../shared/normalizers/normalizeName';
@@ -56,6 +57,9 @@ export class UserEntity {
 
   @OneToMany(() => BreedEntity, (breed) => breed.createdByUser)
   breeds!: BreedEntity[];
+
+  @OneToMany(() => WorkerEntity, (worker) => worker.user) // ⭐ AGREGAR
+  workers!: WorkerEntity[];
 
   @BeforeInsert()
   @BeforeUpdate()

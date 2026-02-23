@@ -183,7 +183,7 @@ describe('Appointment - createAppointment (integration)', () => {
     expect(res.status).toBe(400);
   });
 
-  it('should return 409 if appointment overlaps with an existing one', async () => {
+  it('should allow overlapping appointments when no worker is assigned', async () => {
     const token = await createUser();
     const ownerId = await createOwner(token);
     const animalId = await createAnimal(token);
@@ -193,11 +193,13 @@ describe('Appointment - createAppointment (integration)', () => {
     const start = new Date(Date.now() + 3600000).toISOString();
     const end = new Date(Date.now() + 7200000).toISOString();
 
+    // Primera cita
     await apiRequest
       .post('/appointments')
       .set('Authorization', `Bearer ${token}`)
       .send({ petId, serviceId, startTime: start, endTime: end });
 
+    // Segunda cita solapada → ahora debe PERMITIRSE
     const res = await apiRequest
       .post('/appointments')
       .set('Authorization', `Bearer ${token}`)
@@ -208,7 +210,7 @@ describe('Appointment - createAppointment (integration)', () => {
         endTime: end,
       });
 
-    expect(res.status).toBe(409);
+    expect(res.status).toBe(201);
   });
 
   it('should return 400 if finalPrice is negative', async () => {

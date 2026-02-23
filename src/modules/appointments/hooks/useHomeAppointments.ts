@@ -5,13 +5,18 @@ import type { MiniAppointmentCardProps } from '@/src/modules/appointments/compon
 export function useHomeAppointments() {
   const locale = i18n.language;
 
-  // RANGO DE HOY (UTC CORREGIDO)
+  // USAR UTC CORRECTAMENTE
   const today = new Date();
-  const start = new Date(today);
-  start.setUTCHours(0, 0, 0, 0);
 
-  const end = new Date(today);
-  end.setUTCHours(23, 59, 59, 999);
+  // Inicio del día (00:00:00)
+  const start = new Date(
+    Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate(), 0, 0, 0, 0)
+  );
+
+  // Final del día (23:59:59)
+  const end = new Date(
+    Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate(), 23, 59, 59, 999)
+  );
 
   const startISO = start.toISOString();
   const endISO = end.toISOString();

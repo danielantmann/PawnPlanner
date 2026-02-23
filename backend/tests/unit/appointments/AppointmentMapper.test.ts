@@ -10,11 +10,13 @@ describe('AppointmentMapper', () => {
     1,
     1,
     1,
+    null,
     'Michi',
     'Labrador',
     'Juan',
     '555-1234',
     'Baño',
+    null,
     100,
     120,
     new Date('2026-01-25T10:00:00Z'),
@@ -65,11 +67,13 @@ describe('AppointmentMapper', () => {
         1,
         1,
         1,
+        null,
         'Michi',
         'Labrador',
         'Juan',
         '555-1234',
         'Baño',
+        null,
         100,
         100,
         new Date('2026-02-01T10:00:00Z'),
@@ -87,6 +91,40 @@ describe('AppointmentMapper', () => {
       const result = AppointmentMapper.toDTO(appointment);
       expect(result.estimatedPrice).toBe(100);
       expect(result.finalPrice).toBe(120);
+    });
+
+    it('should include workerId and workerName', () => {
+      const result = AppointmentMapper.toDTO(appointment);
+      expect(result).toHaveProperty('workerId');
+      expect(result).toHaveProperty('workerName');
+    });
+
+    it('should map workerId and workerName correctly', () => {
+      const appointmentWithWorker = new Appointment(
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        'Michi',
+        'Labrador',
+        'Juan',
+        '555-1234',
+        'Baño',
+        'Daniel',
+        100,
+        120,
+        new Date('2026-01-25T10:00:00Z'),
+        new Date('2026-01-25T11:00:00Z'),
+        60,
+        'completed',
+        false
+      );
+
+      const result = AppointmentMapper.toDTO(appointmentWithWorker);
+      expect(result.workerId).toBe(1);
+      expect(result.workerName).toBe('Daniel');
     });
   });
 });

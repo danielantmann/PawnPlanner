@@ -2,6 +2,7 @@ import '../global.css';
 import { Stack } from 'expo-router';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import Toast from 'react-native-toast-message';
 import { initI18n } from '@/src/i18n';
 import { useAuthStore } from '@/src/modules/auth/store/auth.store';
 import { SplashScreen } from '@/src/ui/components/patterns/SplashScreen';
@@ -34,6 +35,7 @@ export default function RootLayout() {
         <Stack.Screen name="(auth)" />
         <Stack.Screen name="(protected)" />
       </Stack>
+      <Toast />
     </QueryClientProvider>
   );
 }

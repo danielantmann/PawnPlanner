@@ -19,6 +19,8 @@ describe('DeleteAppointmentService', () => {
       userId,
       petId: 1,
       serviceId: 1,
+      workerId: null,
+      workerName: null,
       startTime: new Date('2026-01-25T10:00:00Z'),
       endTime: new Date('2026-01-25T11:00:00Z'),
     });

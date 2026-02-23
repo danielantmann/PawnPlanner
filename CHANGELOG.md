@@ -1442,3 +1442,37 @@ Benefits:
 5. **Owners/Pets CRUD** → Management screens
 6. **Animations & Polish** → Premium feel with transitions
 7. **Testing** → Unit + integration tests for frontend
+
+## Appointments Module + Worker Backend + Home Integration - [23/2]
+
+### Added
+
+- Full Appointments module with create/edit/delete workflows
+- Calendar views (Day, 3 Days, Week, Month) with event grouping and overlap logic
+- Appointment form with dropdowns, autocomplete, validation and time pickers
+- Worker backend integration with full CRUD support
+- Home Screen backend integration:
+  - /dashboards/today
+  - /dashboards/weekly
+  - /appointments/today
+- Session persistence with silent JWT refresh
+- Skeleton loaders for Home and Appointments
+- Dark mode support across all new components
+
+### Improved
+
+- Axios interceptor with robust token refresh and retry logic
+- Modular architecture: hooks split by domain (appointments, workers, dashboard)
+- UI/UX consistency across screens (spacing, typography, colors)
+- Error handling with inline validation messages and toast notifications
+
+### Fixed
+
+- Require cycle in axios refresh logic
+- Race condition when restoring session on app startup
+- Dropdown interaction issues inside scrollable modals
+
+### Notes
+
+- Module ready for integration with Profile and Stats screens
+- Calendar module prepared for future animations and polish

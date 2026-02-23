@@ -12,6 +12,7 @@ type InputProps = {
   type?: 'text' | 'email' | 'password' | 'number' | 'phone';
   leftIcon?: IconName;
   error?: string;
+  editable?: boolean; // ⭐ AÑADIDO
 };
 
 export function Input({
@@ -22,6 +23,7 @@ export function Input({
   type = 'text',
   leftIcon,
   error,
+  editable = true, // ⭐ por defecto editable
 }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -37,7 +39,7 @@ export function Input({
           : 'default';
 
   return (
-    <View className="z-10 mb-4 w-full">
+    <View className="z-10 w-full">
       {label && <Text className="mb-1 font-medium text-gray-700 dark:text-gray-300">{label}</Text>}
 
       <View
@@ -45,7 +47,8 @@ export function Input({
           'flex-row items-center overflow-hidden rounded-lg border px-3 py-2',
           'bg-white dark:bg-neutral-900',
           'border-gray-300 dark:border-neutral-700',
-          error && 'border-red-500'
+          error && 'border-red-500',
+          !editable && 'opacity-60' // ⭐ visualmente desactivado
         )}>
         {leftIcon && <Icon name={leftIcon} size={20} color="muted" />}
 
@@ -58,6 +61,7 @@ export function Input({
           secureTextEntry={isPassword && !showPassword}
           autoCapitalize={type === 'email' ? 'none' : 'sentences'}
           keyboardType={keyboardType}
+          editable={editable} // ⭐ AHORA FUNCIONA
         />
 
         {isPassword && (

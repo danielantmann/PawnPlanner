@@ -3,6 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 't
 import { UserEntity } from './UserEntity';
 import { PetEntity } from './PetEntity';
 import { ServiceEntity } from './ServiceEntity';
+import { WorkerEntity } from './WorkerEntity';
 
 @Entity('appointments')
 export class AppointmentEntity {
@@ -21,6 +22,9 @@ export class AppointmentEntity {
   @Column({ type: 'int' })
   serviceId!: number;
 
+  @Column({ type: 'int', nullable: true }) // ⭐ AGREGAR
+  workerId?: number;
+
   // Copias para evitar joins y mantener histórico
   @Column({ type: 'varchar', length: 100 })
   petName!: string;
@@ -36,6 +40,9 @@ export class AppointmentEntity {
 
   @Column({ type: 'varchar', length: 255 })
   serviceName!: string;
+
+  @Column({ type: 'varchar', length: 100, nullable: true }) // ⭐ AGREGAR
+  workerName?: string;
 
   @Column('decimal', { precision: 10, scale: 2 })
   estimatedPrice!: number;
@@ -69,4 +76,8 @@ export class AppointmentEntity {
   @ManyToOne(() => ServiceEntity, (service) => service.appointments, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'serviceId' })
   service!: ServiceEntity;
+
+  @ManyToOne(() => WorkerEntity, (worker) => worker.appointments) // ⭐ AGREGAR
+  @JoinColumn({ name: 'workerId' })
+  worker?: WorkerEntity;
 }

@@ -9,6 +9,7 @@ import { ServiceEntity } from './entities/ServiceEntity';
 import { BreedEntity } from './entities/BreedEntity';
 import { AnimalEntity } from './entities/AnimalEntity';
 import { UserEntity } from './entities/UserEntity';
+import { WorkerEntity } from './entities/WorkerEntity';
 
 dotenv.config();
 export const AppDataSource = new DataSource({
@@ -24,5 +25,6 @@ export const AppDataSource = new DataSource({
     BreedEntity,
     AnimalEntity,
     UserEntity,
+    WorkerEntity,
   ],
 });

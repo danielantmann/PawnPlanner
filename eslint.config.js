@@ -7,7 +7,7 @@ module.exports = defineConfig([
 
   // Ignorar dist
   {
-    ignores: ['dist/*'],
+    ignores: ['dist/*', 'jest.setup.js', 'jest.config.js'],
   },
 
   // Resolver de alias (⬅️ ESTA ES LA CLAVE REAL)

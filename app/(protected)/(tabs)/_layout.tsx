@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AppHeader } from '../../../src/ui/components/patterns/AppHeader';
 import { useColorScheme } from 'react-native';
 import { useTranslation } from 'react-i18next';
@@ -9,6 +9,7 @@ export default function TabsLayout() {
   const scheme = useColorScheme();
   const isDark = scheme === 'dark';
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets(); // 👈 FIX CLAVE
 
   return (
     <>
@@ -24,7 +25,9 @@ export default function TabsLayout() {
           tabBarStyle: {
             backgroundColor: isDark ? '#1A1A22' : '#FFFFFF',
             borderTopWidth: 0,
-            height: 60,
+            height: 60 + insets.bottom, // 👈 AÑADE ALTURA REAL
+            paddingBottom: insets.bottom, // 👈 EVITA QUE SE TAPE
+            paddingTop: 10,
           },
         }}>
         <Tabs.Screen

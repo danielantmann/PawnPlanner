@@ -22,6 +22,11 @@ export class UpdateAppointmentDTO {
 
   @IsOptional()
   @Type(() => Number)
+  @IsInt()
+  workerId?: number | null | undefined;
+
+  @IsOptional()
+  @Type(() => Number)
   @IsNumber()
   finalPrice?: number;
 
