@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { View, Text, Pressable, ActivityIndicator, ScrollView } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Input } from '@/src/ui/components/primitives/Input';
 import { Label } from '@/src/ui/components/primitives/Label';
 import { useSearchPets } from '../hooks/useSearchPets';
 import type { PetSearchResult } from '../types/pet.types';
 import { cn } from '@/src/utils/cn';
 import { useDropdownStore } from '@/src/store/dropdown.store';
+import { colors } from '@/src/ui/theme/colors';
 
 const DROPDOWN_ID = 'pet-autocomplete';
 
@@ -16,6 +18,7 @@ type PetAutocompleteProps = {
 };
 
 export const PetAutocomplete = ({ label, value, onSelect }: PetAutocompleteProps) => {
+  const { t } = useTranslation();
   const [query, setQuery] = useState('');
 
   const isOpen = useDropdownStore((s) => s.isDropdownOpen(DROPDOWN_ID));
@@ -24,7 +27,7 @@ export const PetAutocomplete = ({ label, value, onSelect }: PetAutocompleteProps
 
   const { data, isLoading } = useSearchPets(query);
 
-  // ⭐ Sincronizar input con value del padre
+  // Sincronizar input con value del padre
   useEffect(() => {
     if (value?.name) {
       setQuery(value.name);
@@ -42,12 +45,10 @@ export const PetAutocomplete = ({ label, value, onSelect }: PetAutocompleteProps
 
   return (
     <View className="relative w-full">
-      {/* LABEL */}
       {label && <Label className="mb-1 font-semibold">{label}</Label>}
 
-      {/* INPUT */}
       <Input
-        placeholder="Buscar mascota..."
+        placeholder={t('pets.searchPlaceholder')}
         value={query}
         onChangeText={(text) => {
           setQuery(text);
@@ -57,7 +58,6 @@ export const PetAutocomplete = ({ label, value, onSelect }: PetAutocompleteProps
         leftIcon="search"
       />
 
-      {/* ⭐ OVERLAY LOCAL (HERMANO DEL DROPDOWN) */}
       {isOpen && (
         <Pressable
           className="absolute inset-0"
@@ -66,7 +66,6 @@ export const PetAutocomplete = ({ label, value, onSelect }: PetAutocompleteProps
         />
       )}
 
-      {/* ⭐ DROPDOWN */}
       {isOpen && query.length > 1 && (
         <View
           style={{ zIndex: 50 }}
@@ -84,12 +83,14 @@ export const PetAutocomplete = ({ label, value, onSelect }: PetAutocompleteProps
 
           {!isLoading && data?.length === 0 && (
             <View className="p-4">
-              <Text className="text-gray-500 dark:text-gray-400">No hay resultados</Text>
+              <Text style={{ color: colors.textSecondary }} className="dark:text-textSecondaryDark">
+                {t('pets.noResults')}
+              </Text>
             </View>
           )}
 
           {!isLoading && data && (
-            <ScrollView>
+            <ScrollView nestedScrollEnabled keyboardShouldPersistTaps="handled">
               {data.map((pet) => (
                 <Pressable
                   key={pet.id}
@@ -99,7 +100,9 @@ export const PetAutocomplete = ({ label, value, onSelect }: PetAutocompleteProps
                     {pet.name} {pet.breed ? `– ${pet.breed}` : ''}
                   </Text>
 
-                  <Text className="text-sm text-gray-600 dark:text-gray-400">
+                  <Text
+                    style={{ color: colors.textSecondary }}
+                    className="text-sm dark:text-textSecondaryDark">
                     {pet.ownerName} · {pet.ownerPhone}
                   </Text>
                 </Pressable>

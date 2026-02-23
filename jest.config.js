@@ -13,4 +13,6 @@ module.exports = {
   transformIgnorePatterns: [
     'node_modules/(?!(expo|expo-localization|react-native|@react-native|@react-navigation)/)',
   ],
+  forceExit: true,
+  detectOpenHandles: false,
 };

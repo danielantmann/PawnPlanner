@@ -1,16 +1,36 @@
-import { renderHook, act } from '@testing-library/react-hooks';
+import { renderHook, act, waitFor } from '@testing-library/react-native';
 import { useAppointmentForm } from '../../hooks/useAppointmentForm';
 
 // Mock workers hook
-jest.mock('@/src/modules/workers/hooks/useGetWorkers', () => ({
+jest.mock('../../../workers/hooks/useGetWorkers', () => ({
   useGetWorkers: () => ({
     data: [{ id: 1, name: 'Worker 1', isActive: true, maxSimultaneous: null }],
   }),
 }));
 
-// Mock reducer (we trust its logic, only test integration)
+// Mock pets hook
+jest.mock('../../../pets/hooks/useSearchPets', () => ({
+  useSearchPets: () => ({
+    data: [
+      { id: 10, name: 'Firulais' },
+      { id: 11, name: 'Otro perro' },
+    ],
+  }),
+}));
+
+// Mock services hook
+jest.mock('../../../services/hooks/useServices', () => ({
+  useServices: () => ({
+    data: [
+      { id: 20, name: 'Baño', price: 25 },
+      { id: 21, name: 'Corte', price: 30 },
+    ],
+  }),
+}));
+
+// Mock reducer
 jest.mock('../../reducers/appointmentFormReducer', () => ({
-  appointmentFormReducer: (state, action) => {
+  appointmentFormReducer: (state: any, action: any) => {
     if (action.type === 'SET_FIELD') {
       return { ...state, [action.field]: action.value };
     }
@@ -43,6 +63,10 @@ jest.mock('../../reducers/appointmentInitialState', () => ({
 
 describe('useAppointmentForm', () => {
   const mockAppointment = {
+    id: 1,
+    ownerName: 'Test Owner',
+    ownerPhone: '000000000',
+
     petId: 10,
     petName: 'Firulais',
     serviceId: 20,
@@ -54,7 +78,7 @@ describe('useAppointmentForm', () => {
     startTime: '2024-01-01T10:00:00Z',
     endTime: '2024-01-01T11:00:00Z',
     status: 'completed',
-  };
+  } as const;
 
   it('should initialize empty form in create mode', () => {
     const { result } = renderHook(() => useAppointmentForm({ visible: true, isEditMode: false }));
@@ -72,7 +96,7 @@ describe('useAppointmentForm', () => {
     expect(result.current.formState.workerId).toBe('1');
   });
 
-  it('should initialize form in edit mode', () => {
+  it('should initialize form in edit mode', async () => {
     const { result } = renderHook(() =>
       useAppointmentForm({
         visible: true,
@@ -84,8 +108,11 @@ describe('useAppointmentForm', () => {
     expect(result.current.formState.petId).toBe('10');
     expect(result.current.formState.serviceId).toBe('20');
     expect(result.current.formState.finalPrice).toBe('30');
-    expect(result.current.selectedPet?.name).toBe('Firulais');
-    expect(result.current.selectedService?.name).toBe('Baño');
+
+    await waitFor(() => expect(result.current.selectedPet?.name).toBe('Firulais'));
+
+    await waitFor(() => expect(result.current.selectedService?.name).toBe('Baño'));
+
     expect(result.current.recommendedPrice).toBe('25');
   });
 
@@ -105,7 +132,7 @@ describe('useAppointmentForm', () => {
   });
 
   it('should reset form when modal closes', () => {
-    const { result, rerender } = renderHook((props) => useAppointmentForm(props), {
+    const { result, rerender } = renderHook((props: any) => useAppointmentForm(props), {
       initialProps: { visible: true },
     });
 
@@ -133,7 +160,7 @@ describe('useAppointmentForm', () => {
   });
 
   it('should not reinitialize when visible stays true', () => {
-    const { result, rerender } = renderHook((props) => useAppointmentForm(props), {
+    const { result, rerender } = renderHook((props: any) => useAppointmentForm(props), {
       initialProps: { visible: true },
     });
 

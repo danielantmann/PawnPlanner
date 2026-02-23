@@ -1,4 +1,5 @@
 import { View, Text, Pressable, ScrollView } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { InputSelect } from '@/src/ui/components/primitives/InputSelect';
 import { useGetWorkers } from '../hooks/useGetWorkers';
 import type { WorkerDTO } from '../types/worker.types';
@@ -14,15 +15,18 @@ type WorkerDropdownProps = {
 };
 
 export const WorkerDropdown = ({ label, value, onSelect }: WorkerDropdownProps) => {
+  const { t } = useTranslation();
   const { data: workers } = useGetWorkers();
   const { isOpen, handleToggle, handleSelect } = useDropdown(DROPDOWN_ID);
+
+  const selectedLabel = value?.name || t('appointments.worker.unassigned');
 
   return (
     <View className="relative w-full">
       <InputSelect
         label={label}
-        placeholder="Seleccionar trabajador..."
-        value={value?.name || 'Sin asignar'}
+        placeholder={t('appointments.worker.unassigned')}
+        value={selectedLabel}
         leftIcon="person"
         onPress={handleToggle}
       />
@@ -43,7 +47,8 @@ export const WorkerDropdown = ({ label, value, onSelect }: WorkerDropdownProps) 
             overflow: 'hidden',
           }}
           className="dark:border-neutral-700 dark:bg-neutral-900">
-          <ScrollView>
+          <ScrollView nestedScrollEnabled keyboardShouldPersistTaps="handled">
+            {/* Opción: Sin asignar */}
             <Pressable
               onPress={() => handleSelect(() => onSelect(null))}
               style={{
@@ -54,15 +59,13 @@ export const WorkerDropdown = ({ label, value, onSelect }: WorkerDropdownProps) 
               }}
               className="dark:border-neutral-700">
               <Text
-                style={{
-                  fontWeight: '600',
-                  color: colors.textPrimary,
-                }}
+                style={{ fontWeight: '600', color: colors.textPrimary }}
                 className="dark:text-gray-100">
-                Sin asignar
+                {t('appointments.worker.unassigned')}
               </Text>
             </Pressable>
 
+            {/* Lista de trabajadores */}
             {workers.map((worker: WorkerDTO) => (
               <Pressable
                 key={worker.id}
@@ -75,10 +78,7 @@ export const WorkerDropdown = ({ label, value, onSelect }: WorkerDropdownProps) 
                 }}
                 className="dark:border-neutral-700">
                 <Text
-                  style={{
-                    fontWeight: '600',
-                    color: colors.textPrimary,
-                  }}
+                  style={{ fontWeight: '600', color: colors.textPrimary }}
                   className="dark:text-gray-100">
                   {worker.name}
                 </Text>

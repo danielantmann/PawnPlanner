@@ -1,27 +1,55 @@
 /* eslint-disable no-undef */
-jest.mock('axios', () => ({
-  isAxiosError: (error) => !!error?.isAxiosError,
-}));
 
+//  Mock axios COMPLETO
+jest.mock('axios', () => {
+  const mockAxios = {
+    get: jest.fn(),
+    post: jest.fn(),
+    put: jest.fn(),
+    delete: jest.fn(),
+    create: jest.fn(function () {
+      return mockAxios;
+    }),
+    isAxiosError: (error) => !!error?.isAxiosError,
+    interceptors: {
+      request: { use: () => {} },
+      response: { use: () => {} },
+    },
+  };
+  return mockAxios;
+});
+
+//  Mock expo-localization
 jest.mock('expo-localization', () => ({
   getLocales: () => [{ languageCode: 'es' }],
 }));
 
+//  Mock async-storage
 jest.mock('@react-native-async-storage/async-storage', () => ({
   getItem: jest.fn(),
   setItem: jest.fn(),
   removeItem: jest.fn(),
 }));
 
-jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter', () => ({
-  __esModule: true,
-  default: class NativeEventEmitter {},
-}));
+//  Mock NativeEventEmitter
+jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter', () => {
+  const EventEmitter = require('events');
+  return {
+    __esModule: true,
+    default: class MockNativeEventEmitter extends EventEmitter {
+      addListener() {
+        return { remove: () => {} };
+      }
+      removeAllListeners() {}
+    },
+  };
+});
 
-// ⭐ Mock i18next
+//  Mock i18n (CON TUS TRADUCCIONES)
 jest.mock('@/src/i18n', () => ({
   __esModule: true,
   default: {
+    language: 'es',
     t: (key) => {
       const translations = {
         'errors.network': 'Sin conexión a internet. Verifica tu conexión.',
@@ -39,3 +67,21 @@ jest.mock('@/src/i18n', () => ({
     },
   },
 }));
+
+//  Mock react-i18next
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key) => key,
+  }),
+}));
+
+//  React Query v5 cleanup fix
+afterAll(() => {
+  const events = ['visibilitychange', 'focus', 'online', 'offline'];
+  events.forEach((event) => {
+    try {
+      // @ts-ignore
+      window.removeEventListener(event, () => {});
+    } catch {}
+  });
+});

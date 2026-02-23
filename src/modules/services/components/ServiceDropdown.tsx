@@ -1,9 +1,11 @@
 import { View, Text, Pressable, ScrollView } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { InputSelect } from '@/src/ui/components/primitives/InputSelect';
 import { useServices } from '../hooks/useServices';
 import type { ServiceDTO } from '../types/service.types';
 import { cn } from '@/src/utils/cn';
 import { useDropdown } from '@/src/store/useDropdown';
+import { colors } from '@/src/ui/theme/colors';
 
 const DROPDOWN_ID = 'service-dropdown';
 
@@ -14,6 +16,7 @@ type ServiceDropdownProps = {
 };
 
 export const ServiceDropdown = ({ label, value, onSelect }: ServiceDropdownProps) => {
+  const { t } = useTranslation();
   const { data: services } = useServices();
   const { isOpen, handleToggle, handleSelect } = useDropdown(DROPDOWN_ID);
 
@@ -21,7 +24,7 @@ export const ServiceDropdown = ({ label, value, onSelect }: ServiceDropdownProps
     <View className="relative w-full">
       <InputSelect
         label={label}
-        placeholder="Seleccionar servicio..."
+        placeholder={t('services.searchPlaceholder')}
         value={value?.name}
         leftIcon="scissors"
         onPress={handleToggle}
@@ -35,7 +38,7 @@ export const ServiceDropdown = ({ label, value, onSelect }: ServiceDropdownProps
             'border-gray-300 dark:border-neutral-700',
             'max-h-60 overflow-hidden'
           )}>
-          <ScrollView>
+          <ScrollView nestedScrollEnabled keyboardShouldPersistTaps="handled">
             {services.map((service: ServiceDTO) => (
               <Pressable
                 key={service.id}
@@ -45,8 +48,10 @@ export const ServiceDropdown = ({ label, value, onSelect }: ServiceDropdownProps
                   {service.name}
                 </Text>
 
-                <Text className="text-sm text-gray-600 dark:text-gray-400">
-                  Precio: {service.price}€
+                <Text
+                  style={{ color: colors.textSecondary }}
+                  className="text-sm dark:text-textSecondaryDark">
+                  {t('services.price')}: {service.price}€
                 </Text>
               </Pressable>
             ))}

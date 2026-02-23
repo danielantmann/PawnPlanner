@@ -10,6 +10,14 @@
     "stats": { "income": "Ingresos", "completed": "Completadas", "noShows": "No-shows" },
     "more": "Ver más"
   },
+  "pets": {
+    "searchPlaceholder": "Buscar mascota...",
+    "noResults": "No hay resultados"
+  },
+  "services": {
+    "searchPlaceholder": "Seleccionar servicio...",
+    "price": "Precio"
+  },
   "navigation": {
     "home": "Inicio",
     "agenda": "Agenda",
@@ -85,6 +93,18 @@
       "recommendedPrice": "Precio recomendado",
       "finalPrice": "Precio final",
       "status": "Estado"
+    },
+    "summary": {
+      "single": "cita",
+      "plural": "citas"
+    },
+    "status": {
+      "completed": "Completada",
+      "noShow": "No se presentó",
+      "cancelled": "Cancelada"
+    },
+    "worker": {
+      "unassigned": "Sin asignar"
     },
     "agenda": {
       "title": "Agenda",

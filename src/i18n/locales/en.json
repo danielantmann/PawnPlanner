@@ -10,6 +10,14 @@
     "stats": { "income": "Income", "completed": "Completed", "noShows": "No-shows" },
     "more": "See more"
   },
+  "pets": {
+    "searchPlaceholder": "Search pet...",
+    "noResults": "No results"
+  },
+  "services": {
+    "searchPlaceholder": "Select service...",
+    "price": "Price"
+  },
   "navigation": {
     "home": "Home",
     "agenda": "Agenda",
@@ -85,6 +93,18 @@
       "recommendedPrice": "Recommended price",
       "finalPrice": "Final price",
       "status": "Status"
+    },
+    "summary": {
+      "single": "appt",
+      "plural": "appts"
+    },
+    "status": {
+      "completed": "Completed",
+      "noShow": "No-show",
+      "cancelled": "Cancelled"
+    },
+    "worker": {
+      "unassigned": "Unassigned"
     },
     "agenda": {
       "title": "Agenda",

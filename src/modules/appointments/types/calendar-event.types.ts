@@ -9,4 +9,6 @@ export interface CalendarEvent extends ICalendarEventBase {
   workerName?: string | null;
   status: AppointmentStatus;
   appointmentData?: AppointmentDTO;
+  overlappingCount?: number;
+  count?: number;
 }

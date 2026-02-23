@@ -5,7 +5,7 @@ import type { MiniAppointmentCardProps } from '@/src/modules/appointments/compon
 export function useHomeAppointments() {
   const locale = i18n.language;
 
-  // ⭐ USAR UTC CORRECTAMENTE
+  // USAR UTC CORRECTAMENTE
   const today = new Date();
 
   // Inicio del día (00:00:00)

@@ -83,6 +83,8 @@ export function AppointmentFormModal({
     onClose();
   };
 
+  const hasOpenDropdowns = useDropdownStore((s) => s.openDropdowns.size > 0);
+
   const handleDeletePress = () => {
     if (isSubmitting) return;
     setShowDeleteConfirm(true);
@@ -118,6 +120,7 @@ export function AppointmentFormModal({
               contentContainerStyle={{ paddingBottom: 24 }}
               showsVerticalScrollIndicator
               onScrollBeginDrag={closeAllDropdowns}
+              scrollEnabled={!hasOpenDropdowns}
               style={{ flex: 1 }}>
               <View style={{ gap: 16 }}>
                 <View>
