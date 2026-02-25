@@ -53,7 +53,7 @@
       "emailRequired": "Email is required",
       "emailInvalid": "Enter a valid email",
       "passwordRequired": "Password is required",
-      "passwordInvalid": "Password must contain at least 8 characters, one uppercase letter, one number, and one symbol (e.g. !, @, #, $, %, &).",
+      "passwordInvalid": "The password must be between 6 and 12 characters long and include at least one uppercase letter, one number, and one symbol (e.g., !, @, #, $, %, &).",
       "passwordsDontMatch": "Passwords do not match",
       "missingFields": "Please fill in all fields"
     },

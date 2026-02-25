@@ -7,7 +7,7 @@ jest.mock('../../api/appointments.api', () => ({
   getAppointments: jest.fn(),
 }));
 
-// ⭐ Necesitamos fake timers porque React Query usa timers internos
+// Necesitamos fake timers porque React Query usa timers internos
 beforeAll(() => {
   jest.useFakeTimers();
 });
@@ -36,7 +36,7 @@ describe('useAppointments (advanced suite)', () => {
   afterEach(() => {
     jest.clearAllMocks();
 
-    // ⭐ React exige que cualquier timer que cause renders esté dentro de act()
+    //  React exige que cualquier timer que cause renders esté dentro de act()
     act(() => {
       jest.runOnlyPendingTimers();
     });
