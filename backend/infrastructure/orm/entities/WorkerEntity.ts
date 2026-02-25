@@ -17,7 +17,7 @@ export class WorkerEntity {
   phone?: string;
 
   @Column({ type: 'int', nullable: true })
-  maxSimultaneous: number | null = null; // ⭐ CAMBIAR
+  maxSimultaneous: number | null = null;
 
   @Column({ type: 'boolean', default: true })
   isActive!: boolean;

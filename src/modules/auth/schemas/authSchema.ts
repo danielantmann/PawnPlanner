@@ -7,7 +7,8 @@ export const createAuthSchema = (t: TFunction, isLogin: boolean) =>
 
     password: z
       .string()
-      .min(8, t('auth.errors.passwordInvalid'))
+      .min(6, t('auth.errors.passwordInvalid'))
+      .max(12, t('auth.errors.passwordInvalid'))
       .regex(/[A-Z]/, t('auth.errors.passwordInvalid'))
       .regex(/\d/, t('auth.errors.passwordInvalid'))
       .regex(/[^A-Za-z0-9]/, t('auth.errors.passwordInvalid')),

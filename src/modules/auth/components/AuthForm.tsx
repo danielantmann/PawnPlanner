@@ -70,6 +70,7 @@ export const AuthForm: FC<AuthFormProps> = ({ mode }) => {
                 value={field.value ?? ''}
                 onChangeText={(value) => {
                   field.onChange(value);
+                  form.clearErrors('firstName');
                   clearLoginError();
                 }}
                 leftIcon="person"
@@ -92,6 +93,7 @@ export const AuthForm: FC<AuthFormProps> = ({ mode }) => {
                 value={field.value ?? ''}
                 onChangeText={(value) => {
                   field.onChange(value);
+                  form.clearErrors('lastName');
                   clearLoginError();
                 }}
                 leftIcon="person"
@@ -113,6 +115,7 @@ export const AuthForm: FC<AuthFormProps> = ({ mode }) => {
               value={field.value ?? ''}
               onChangeText={(value) => {
                 field.onChange(value);
+                form.clearErrors('email');
                 clearLoginError();
               }}
               leftIcon="mail"
@@ -134,6 +137,7 @@ export const AuthForm: FC<AuthFormProps> = ({ mode }) => {
               value={field.value ?? ''}
               onChangeText={(value) => {
                 field.onChange(value);
+                form.clearErrors('password');
                 clearLoginError();
               }}
               leftIcon="lock"
@@ -147,7 +151,7 @@ export const AuthForm: FC<AuthFormProps> = ({ mode }) => {
       {/* FORGOT PASSWORD */}
       {isLogin && (
         <Pressable onPress={() => router.push('/(auth)/forgot-password')} className="mb-4">
-          <Text className="text-primary text-right text-sm">{t('auth.forgotPassword')}</Text>
+          <Text className="text-right text-sm text-primary">{t('auth.forgotPassword')}</Text>
         </Pressable>
       )}
 

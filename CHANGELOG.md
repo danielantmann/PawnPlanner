@@ -1476,3 +1476,28 @@ Benefits:
 
 - Module ready for integration with Profile and Stats screens
 - Calendar module prepared for future animations and polish
+
+## [25/02] – Auth Module Enhancements
+
+### Added
+
+- Automatic Worker creation on first user registration.
+- Full integration test suite for Login and Register flows.
+- Validation tests for:
+  - First name
+  - Last name
+  - Email
+  - Password
+  - Combined validation errors
+- Session creation and redirect tests for successful flows.
+
+### Improved
+
+- Updated `useRegister` to include Worker backend integration.
+- Unified error handling and validation patterns across Auth module.
+- Cleaner separation between UI and business logic.
+
+### Fixed
+
+- Prevented session creation and redirects when validation fails.
+- Ensured consistent behavior between login and register flows.
