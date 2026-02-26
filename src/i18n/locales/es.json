@@ -129,5 +129,27 @@
       "newAppointment": "Nueva cita",
       "goToday": "Ir a hoy"
     }
+  },
+  "drawer": {
+    "sections": {
+      "shortcuts": "Accesos directos",
+      "management": "Gestión",
+      "settings": "Ajustes"
+    },
+    "items": {
+      "home": "Inicio",
+      "agenda": "Agenda",
+      "stats": "Estadísticas",
+      "search": "Buscar",
+      "profile": "Perfil",
+      "owners": "Dueños",
+      "pets": "Mascotas",
+      "animals": "Animales",
+      "species": "Especies",
+      "breeds": "Razas",
+      "services": "Servicios",
+      "workers": "Trabajadores",
+      "profileSettings": "Perfil y ajustes"
+    }
   }
 }

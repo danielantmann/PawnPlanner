@@ -1,6 +1,7 @@
 import { FC } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { Icon } from '@/src/ui/components/primitives/Icon';
+import { useUIStore } from '@/src/store/ui.store';
 
 type AppHeaderProps = {
   title?: string;
@@ -8,11 +9,20 @@ type AppHeaderProps = {
 };
 
 export const AppHeader: FC<AppHeaderProps> = ({ title = 'Pawn Planner', iconSize = 32 }) => {
-  return (
-    <View className="bg-primary h-20 w-full flex-row items-center justify-center shadow">
-      <Icon name="pawPrint" size={iconSize} color="black" fixedColor />
+  const openDrawer = useUIStore((s) => s.openDrawer);
 
-      <Text className="ml-2 text-2xl font-bold text-white">{title}</Text>
+  return (
+    <View className="h-20 w-full flex-row items-center justify-between bg-primary px-6 shadow">
+      {/* Logo + título */}
+      <View className="flex-row items-center">
+        <Icon name="pawPrint" size={iconSize} color="black" fixedColor />
+        <Text className="ml-3 text-2xl font-bold text-white">{title}</Text>
+      </View>
+
+      {/* Botón hamburguesa */}
+      <Pressable onPress={openDrawer} hitSlop={10}>
+        <Icon name="menu" size={28} color="white" fixedColor />
+      </Pressable>
     </View>
   );
 };

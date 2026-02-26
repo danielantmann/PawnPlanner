@@ -129,5 +129,27 @@
       "newAppointment": "New Appointment",
       "goToday": "Go to today"
     }
+  },
+  "drawer": {
+    "sections": {
+      "shortcuts": "Shortcuts",
+      "management": "Management",
+      "settings": "Settings"
+    },
+    "items": {
+      "home": "Home",
+      "agenda": "Agenda",
+      "stats": "Stats",
+      "search": "Search",
+      "profile": "Profile",
+      "owners": "Owners",
+      "pets": "Pets",
+      "animals": "Animals",
+      "species": "Species",
+      "breeds": "Breeds",
+      "services": "Services",
+      "workers": "Workers",
+      "profileSettings": "Profile & Settings"
+    }
   }
 }
