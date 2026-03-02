@@ -12,7 +12,7 @@ type InputProps = {
   type?: 'text' | 'email' | 'password' | 'number' | 'phone';
   leftIcon?: IconName;
   error?: string;
-  editable?: boolean; // ⭐ AÑADIDO
+  editable?: boolean;
 };
 
 export function Input({

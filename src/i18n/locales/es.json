@@ -151,5 +151,33 @@
       "workers": "Trabajadores",
       "profileSettings": "Perfil y ajustes"
     }
+  },
+  "owners": {
+    "title": "Dueños",
+    "subtitle": "Gestiona tus clientes",
+    "searchPlaceholder": "Buscar dueño...",
+    "searchHint": "Escribe para buscar dueños",
+    "noResults": "No se encontraron dueños",
+    "new": "Nuevo dueño",
+    "edit": "Editar dueño",
+    "delete": "Eliminar dueño",
+    "confirmDelete": "¿Estás seguro de que deseas eliminar este dueño? También se eliminarán sus mascotas.",
+    "pets": "Mascotas",
+    "noPets": "Sin mascotas registradas",
+    "fields": {
+      "name": "Nombre",
+      "namePlaceholder": "Nombre completo",
+      "email": "Correo electrónico",
+      "emailPlaceholder": "correo@ejemplo.com",
+      "phone": "Teléfono",
+      "phonePlaceholder": "612 345 678"
+    },
+    "errors": {
+      "nameRequired": "El nombre es obligatorio",
+      "emailRequired": "El correo es obligatorio",
+      "emailInvalid": "Introduce un correo válido",
+      "phoneRequired": "El teléfono es obligatorio",
+      "phoneInvalid": "Introduce un teléfono válido"
+    }
   }
 }

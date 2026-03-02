@@ -114,6 +114,9 @@ const iconMap = {
   flash: ((props: IoniconProps) => (
     <Ionicons name="flash-outline" {...props} />
   )) as IoniconComponent,
+  edit: ((props: IoniconProps) => (
+    <Ionicons name="create-outline" {...props} />
+  )) as IoniconComponent,
 } as const;
 
 export type IconName = keyof typeof iconMap;

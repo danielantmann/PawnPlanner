@@ -151,5 +151,33 @@
       "workers": "Workers",
       "profileSettings": "Profile & Settings"
     }
+  },
+  "owners": {
+    "title": "Owners",
+    "subtitle": "Manage your clients",
+    "searchPlaceholder": "Search owner...",
+    "searchHint": "Type to search owners",
+    "noResults": "No owners found",
+    "new": "New owner",
+    "edit": "Edit owner",
+    "delete": "Delete owner",
+    "confirmDelete": "Are you sure you want to delete this owner? Their pets will also be deleted.",
+    "pets": "Pets",
+    "noPets": "No pets registered",
+    "fields": {
+      "name": "Name",
+      "namePlaceholder": "Full name",
+      "email": "Email",
+      "emailPlaceholder": "email@example.com",
+      "phone": "Phone",
+      "phonePlaceholder": "612 345 678"
+    },
+    "errors": {
+      "nameRequired": "Name is required",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Enter a valid email",
+      "phoneRequired": "Phone is required",
+      "phoneInvalid": "Enter a valid phone number"
+    }
   }
 }
