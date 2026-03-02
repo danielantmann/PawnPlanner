@@ -14,7 +14,7 @@ export const ScreenHeader: FC<ScreenHeaderProps> = ({ title, subtitle, className
     <Title className="text-textPrimary dark:text-textPrimaryDark">{title}</Title>
 
     {subtitle && (
-      <Subtitle className="text-textSecondary dark:text-textSecondaryDark mt-1">
+      <Subtitle className="mt-1 text-textSecondary dark:text-textSecondaryDark">
         {subtitle}
       </Subtitle>
     )}

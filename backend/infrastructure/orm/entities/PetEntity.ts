@@ -72,7 +72,7 @@ export class PetEntity {
       this.searchName = normalizeSearch(normalizedName);
     }
 
-    // 🔥 Mantener claves foráneas SIEMPRE sincronizadas
+    // Mantener claves foráneas SIEMPRE sincronizadas
     if (this.owner && this.owner.id) {
       this.ownerId = this.owner.id;
     }

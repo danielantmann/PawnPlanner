@@ -12,7 +12,20 @@
   },
   "pets": {
     "searchPlaceholder": "Buscar mascota...",
-    "noResults": "No hay resultados"
+    "noResults": "No hay resultados",
+    "optionalMessage": "Este paso es opcional. Puedes añadir una mascota ahora o más tarde.",
+    "fields": {
+      "animalType": "Tipo de animal",
+      "breed": "Raza",
+      "name": "Nombre de la mascota",
+      "birthDate": "Fecha de nacimiento",
+      "importantNotes": "Notas importantes",
+      "quickNotes": "Notas rápidas"
+    },
+    "errors": {
+      "nameRequired": "El nombre es obligatorio",
+      "breedRequired": "La raza es obligatoria"
+    }
   },
   "services": {
     "searchPlaceholder": "Seleccionar servicio...",
@@ -179,5 +192,32 @@
       "phoneRequired": "El teléfono es obligatorio",
       "phoneInvalid": "Introduce un teléfono válido"
     }
+  },
+  "animals": {
+    "selectPlaceholder": "Selecciona un animal..."
+  },
+  "breeds": {
+    "selectPlaceholder": "Selecciona una raza...",
+    "selectAnimalFirst": "Selecciona primero un animal",
+    "searchPlaceholder": "Buscar raza...",
+    "noResults": "No hay resultados"
+  },
+  "months": {
+    "1": "Enero",
+    "2": "Febrero",
+    "3": "Marzo",
+    "4": "Abril",
+    "5": "Mayo",
+    "6": "Junio",
+    "7": "Julio",
+    "8": "Agosto",
+    "9": "Septiembre",
+    "10": "Octubre",
+    "11": "Noviembre",
+    "12": "Diciembre"
+  },
+  "datePicker": {
+    "title": "Seleccionar fecha",
+    "confirm": "Confirmar"
   }
 }

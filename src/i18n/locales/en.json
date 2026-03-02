@@ -12,7 +12,20 @@
   },
   "pets": {
     "searchPlaceholder": "Search pet...",
-    "noResults": "No results"
+    "noResults": "No results",
+    "optionalMessage": "This step is optional. You can add a pet now or later.",
+    "fields": {
+      "animalType": "Animal type",
+      "breed": "Breed",
+      "name": "Pet name",
+      "birthDate": "Birth date",
+      "importantNotes": "Important notes",
+      "quickNotes": "Quick notes"
+    },
+    "errors": {
+      "nameRequired": "Name is required",
+      "breedRequired": "Breed is required"
+    }
   },
   "services": {
     "searchPlaceholder": "Select service...",
@@ -179,5 +192,32 @@
       "phoneRequired": "Phone is required",
       "phoneInvalid": "Enter a valid phone number"
     }
+  },
+  "animals": {
+    "selectPlaceholder": "Select animal..."
+  },
+  "breeds": {
+    "selectPlaceholder": "Select breed...",
+    "selectAnimalFirst": "Select an animal first",
+    "searchPlaceholder": "Search breed...",
+    "noResults": "No results"
+  },
+  "months": {
+    "1": "January",
+    "2": "February",
+    "3": "March",
+    "4": "April",
+    "5": "May",
+    "6": "June",
+    "7": "July",
+    "8": "August",
+    "9": "September",
+    "10": "October",
+    "11": "November",
+    "12": "December"
+  },
+  "datePicker": {
+    "title": "Select date",
+    "confirm": "Confirm"
   }
 }

@@ -117,6 +117,16 @@ const iconMap = {
   edit: ((props: IoniconProps) => (
     <Ionicons name="create-outline" {...props} />
   )) as IoniconComponent,
+  chevronLeft: ((props: IoniconProps) => (
+    <Ionicons name="chevron-back-outline" {...props} />
+  )) as IoniconComponent,
+
+  chevronRight: ((props: IoniconProps) => (
+    <Ionicons name="chevron-forward-outline" {...props} />
+  )) as IoniconComponent,
+  documentText: ((props: IoniconProps) => (
+    <Ionicons name="document-text-outline" {...props} />
+  )) as IoniconComponent,
 } as const;
 
 export type IconName = keyof typeof iconMap;

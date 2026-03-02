@@ -16,8 +16,17 @@ export async function searchOwnersByName(query: string): Promise<OwnerDTO[]> {
   return response.data;
 }
 
-export async function createOwner(payload: CreateOwnerPayload): Promise<OwnerDTO> {
-  const response = await api.post<OwnerDTO>('/owners', payload);
+export async function createOwnerWithPet(payload: {
+  owner: CreateOwnerPayload;
+  pet?: {
+    name: string;
+    breedId: number;
+    birthDate?: string | null;
+    importantNotes?: string;
+    quickNotes?: string;
+  };
+}): Promise<OwnerDTO> {
+  const response = await api.post<OwnerDTO>('/owners/with-pet', payload);
   return response.data;
 }
 
