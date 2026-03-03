@@ -11,9 +11,16 @@ interface OwnerDetailModalProps {
   onClose: () => void;
   owner: OwnerDTO | null;
   onEdit: () => void;
+  onAddPet: () => void;
 }
 
-export function OwnerDetailModal({ visible, onClose, owner, onEdit }: OwnerDetailModalProps) {
+export function OwnerDetailModal({
+  visible,
+  onClose,
+  owner,
+  onEdit,
+  onAddPet,
+}: OwnerDetailModalProps) {
   const { t } = useTranslation();
 
   if (!owner) return null;
@@ -24,6 +31,7 @@ export function OwnerDetailModal({ visible, onClose, owner, onEdit }: OwnerDetai
         <View
           className="w-full rounded-t-3xl bg-background p-6 dark:bg-backgroundDark"
           style={{ maxHeight: '80%' }}>
+          {/* HEADER */}
           <View className="mb-6 flex-row items-center justify-between">
             <Title>{owner.name}</Title>
             <Pressable onPress={onClose}>
@@ -32,21 +40,34 @@ export function OwnerDetailModal({ visible, onClose, owner, onEdit }: OwnerDetai
           </View>
 
           <ScrollView showsVerticalScrollIndicator={false}>
+            {/* DATOS DE CONTACTO */}
             <View style={{ gap: 12 }} className="mb-6">
-              <View className="flex-row items-center gap-3">
-                <Icon name="mail" size={18} color="muted" />
-                <BodyText>{owner.email}</BodyText>
-              </View>
+              {owner.email && (
+                <View className="flex-row items-center gap-3">
+                  <Icon name="mail" size={18} color="muted" />
+                  <BodyText>{owner.email}</BodyText>
+                </View>
+              )}
               <View className="flex-row items-center gap-3">
                 <Icon name="phone" size={18} color="muted" />
                 <BodyText>{owner.phone}</BodyText>
               </View>
             </View>
 
-            <Text className="mb-3 text-xs font-semibold uppercase text-textSecondary dark:text-textSecondaryDark">
-              {t('owners.pets')} ({owner.pets.length})
-            </Text>
+            {/* CABECERA MASCOTAS */}
+            <View className="mb-3 flex-row items-center justify-between">
+              <Text className="text-xs font-semibold uppercase text-textSecondary dark:text-textSecondaryDark">
+                {t('owners.pets')} ({owner.pets.length})
+              </Text>
+              <Pressable
+                onPress={onAddPet}
+                className="flex-row items-center gap-1 active:opacity-70">
+                <Icon name="add" size={16} color="primary" />
+                <Text className="text-sm font-medium text-primary">{t('owners.addPet')}</Text>
+              </Pressable>
+            </View>
 
+            {/* LISTA MASCOTAS */}
             {owner.pets.length === 0 ? (
               <BodyText className="text-textSecondary dark:text-textSecondaryDark">
                 {t('owners.noPets')}
@@ -58,7 +79,7 @@ export function OwnerDetailModal({ visible, onClose, owner, onEdit }: OwnerDetai
                     key={pet.id}
                     className="flex-row items-center rounded-lg border border-gray-200 px-4 py-3 dark:border-neutral-700">
                     <Icon name="paw" size={16} color="muted" />
-                    <Text className="ml-3 font-medium text-gray-900 dark:text-gray-100">
+                    <Text className="ml-3 font-medium text-textPrimary dark:text-textPrimaryDark">
                       {pet.name}
                     </Text>
                   </View>
@@ -67,6 +88,7 @@ export function OwnerDetailModal({ visible, onClose, owner, onEdit }: OwnerDetai
             )}
           </ScrollView>
 
+          {/* FOOTER */}
           <View className="mt-6 flex-row gap-3">
             <Button onPress={onClose} icon="close" className="flex-1" variant="secondary" />
             <Button onPress={onEdit} icon="edit" className="flex-1" />

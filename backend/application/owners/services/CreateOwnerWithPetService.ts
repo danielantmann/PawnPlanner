@@ -21,8 +21,10 @@ export class CreateOwnerWithPetService {
   ) {}
 
   async execute(dto: CreateOwnerWithPetDTO, userId: number) {
-    const existingEmail = await this.ownerRepository.findByEmail(dto.owner.email, userId);
-    if (existingEmail) throw new ConflictError('Email already in use');
+    if (dto.owner.email) {
+      const existingEmail = await this.ownerRepository.findByEmail(dto.owner.email, userId);
+      if (existingEmail) throw new ConflictError('Email already in use');
+    }
 
     const existingPhone = await this.ownerRepository.findByPhone(dto.owner.phone, userId);
     if (existingPhone) throw new ConflictError('Phone already in use');
@@ -31,7 +33,7 @@ export class CreateOwnerWithPetService {
       const ownerEntity = new OwnerEntity();
       ownerEntity.name = normalizeName(dto.owner.name);
       ownerEntity.searchName = normalizeSearch(dto.owner.name);
-      ownerEntity.email = normalizeEmail(dto.owner.email);
+      ownerEntity.email = dto.owner.email ? normalizeEmail(dto.owner.email) : null;
       ownerEntity.phone = normalizePhone(dto.owner.phone);
       ownerEntity.userId = userId;
 

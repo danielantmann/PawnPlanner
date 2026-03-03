@@ -17,7 +17,7 @@ async function createTestUser() {
 }
 
 describe('Owner service - createOwner', () => {
-  it('should create a new owner successfully', async () => {
+  it('should create a new owner successfully with email', async () => {
     const token = await createTestUser();
 
     const res = await apiRequest
@@ -32,6 +32,22 @@ describe('Owner service - createOwner', () => {
     expect(res.body.email).toBe('dan@google.com');
     expect(Array.isArray(res.body.pets)).toBe(true);
     expect(res.body.pets.length).toBe(0);
+  });
+
+  it('should create a new owner successfully without email', async () => {
+    const token = await createTestUser();
+
+    const res = await apiRequest
+      .post('/owners')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: 'Daniel', phone: '1234567' });
+
+    expect(res.status).toBe(201);
+    expect(res.body).toHaveProperty('id');
+    expect(res.body.name).toBe('Daniel');
+    expect(res.body.phone).toBe('1234567');
+    expect(res.body.email).toBeNull();
+    expect(Array.isArray(res.body.pets)).toBe(true);
   });
 
   it('should throw ConflictError if email already exists', async () => {
@@ -68,7 +84,7 @@ describe('Owner service - createOwner', () => {
     expect(res.body.message).toContain('phone');
   });
 
-  it('should return DTO with correct types', async () => {
+  it('should return DTO with correct types with email', async () => {
     const token = await createTestUser();
 
     const res = await apiRequest
@@ -84,13 +100,25 @@ describe('Owner service - createOwner', () => {
     expect(Array.isArray(res.body.pets)).toBe(true);
   });
 
+  it('should return DTO with null email when not provided', async () => {
+    const token = await createTestUser();
+
+    const res = await apiRequest
+      .post('/owners')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: 'Ana', phone: '8888889' });
+
+    expect(res.status).toBe(201);
+    expect(res.body.email).toBeNull();
+  });
+
   it('should return 400 if name is empty', async () => {
     const token = await createTestUser();
 
     const res = await apiRequest
       .post('/owners')
       .set('Authorization', `Bearer ${token}`)
-      .send({ name: '', phone: '1234567', email: 'emptyname@test.com' });
+      .send({ name: '', phone: '1234567' });
 
     expect(res.status).toBe(400);
     expect(res.body.errors.some((e: any) => e.field === 'name')).toBe(true);
@@ -102,7 +130,7 @@ describe('Owner service - createOwner', () => {
     const res = await apiRequest
       .post('/owners')
       .set('Authorization', `Bearer ${token}`)
-      .send({ name: 'Daniel', phone: '123', email: 'shortphone@test.com' });
+      .send({ name: 'Daniel', phone: '123' });
 
     expect(res.status).toBe(400);
     expect(res.body.errors.some((e: any) => e.field === 'phone')).toBe(true);
@@ -126,7 +154,7 @@ describe('Owner service - createOwner', () => {
     const res = await apiRequest
       .post('/owners')
       .set('Authorization', `Bearer ${token}`)
-      .send({ name: 'A', phone: '1234567', email: 'shortname@test.com' });
+      .send({ name: 'A', phone: '1234567' });
 
     expect(res.status).toBe(400);
     expect(res.body.errors.some((e: any) => e.field === 'name')).toBe(true);
@@ -138,22 +166,10 @@ describe('Owner service - createOwner', () => {
     const res = await apiRequest
       .post('/owners')
       .set('Authorization', `Bearer ${token}`)
-      .send({ name: 'Daniel', email: 'missingphone@test.com' });
+      .send({ name: 'Daniel' });
 
     expect(res.status).toBe(400);
     expect(res.body.errors.some((e: any) => e.field === 'phone')).toBe(true);
-  });
-
-  it('should return 400 if email is missing', async () => {
-    const token = await createTestUser();
-
-    const res = await apiRequest
-      .post('/owners')
-      .set('Authorization', `Bearer ${token}`)
-      .send({ name: 'Daniel', phone: '1234567' });
-
-    expect(res.status).toBe(400);
-    expect(res.body.errors.some((e: any) => e.field === 'email')).toBe(true);
   });
 
   it('should include constraints in validation error for invalid email', async () => {

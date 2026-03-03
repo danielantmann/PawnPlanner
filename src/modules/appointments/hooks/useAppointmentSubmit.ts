@@ -37,9 +37,7 @@ export const useAppointmentSubmit = ({
   const { t } = useTranslation();
 
   const { mutate: createAppointment, isPending: isCreating } = useCreateAppointment();
-
   const { mutate: updateAppointment, isPending: isUpdating } = useUpdateAppointment();
-
   const { mutate: deleteAppointment, isPending: isDeleting } = useDeleteAppointment();
 
   const buildISODateTime = (date: Date, time: string): string => {
@@ -88,22 +86,26 @@ export const useAppointmentSubmit = ({
           },
           {
             onSuccess: () => {
-              Toast.show({
-                type: 'success',
-                text1: '✅ ' + t('appointments.updated'),
-                text2: t('appointments.updated'),
-                position: 'top',
-              });
               onSuccess();
+              setTimeout(() => {
+                Toast.show({
+                  type: 'success',
+                  text1: t('appointments.updated'),
+                  position: 'top',
+                  topOffset: 60,
+                });
+              }, 400);
             },
             onError: (error: any) => {
               const message = getErrorMessage(error);
-              Toast.show({
-                type: 'error',
-                text1: '❌ Error',
-                text2: message,
-                position: 'top',
-              });
+              setTimeout(() => {
+                Toast.show({
+                  type: 'error',
+                  text1: message,
+                  position: 'top',
+                  topOffset: 60,
+                });
+              }, 400);
             },
           }
         );
@@ -119,22 +121,26 @@ export const useAppointmentSubmit = ({
 
         createAppointment(payload, {
           onSuccess: () => {
-            Toast.show({
-              type: 'success',
-              text1: '✅ ' + t('appointments.created'),
-              text2: t('appointments.created'),
-              position: 'top',
-            });
             onSuccess();
+            setTimeout(() => {
+              Toast.show({
+                type: 'success',
+                text1: t('appointments.created'),
+                position: 'top',
+                topOffset: 60,
+              });
+            }, 400);
           },
           onError: (error: any) => {
             const message = getErrorMessage(error);
-            Toast.show({
-              type: 'error',
-              text1: '❌ Error',
-              text2: message,
-              position: 'top',
-            });
+            setTimeout(() => {
+              Toast.show({
+                type: 'error',
+                text1: message,
+                position: 'top',
+                topOffset: 60,
+              });
+            }, 400);
           },
         });
       }
@@ -146,22 +152,26 @@ export const useAppointmentSubmit = ({
     (appointment: AppointmentDTO) => {
       deleteAppointment(appointment.id, {
         onSuccess: () => {
-          Toast.show({
-            type: 'success',
-            text1: '✅ ' + t('appointments.deleted'),
-            text2: t('appointments.deleted'),
-            position: 'top',
-          });
           onSuccess();
+          setTimeout(() => {
+            Toast.show({
+              type: 'success',
+              text1: t('appointments.deleted'),
+              position: 'top',
+              topOffset: 60,
+            });
+          }, 400);
         },
         onError: (error: any) => {
           const message = getErrorMessage(error);
-          Toast.show({
-            type: 'error',
-            text1: '❌ Error',
-            text2: message,
-            position: 'top',
-          });
+          setTimeout(() => {
+            Toast.show({
+              type: 'error',
+              text1: message,
+              position: 'top',
+              topOffset: 60,
+            });
+          }, 400);
         },
       });
     },

@@ -1,9 +1,18 @@
-import { Modal, View, ScrollView, Pressable, Text } from 'react-native';
+import {
+  Modal,
+  View,
+  ScrollView,
+  Pressable,
+  Text,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 
 import { Button } from '@/src/ui/components/primitives/Button';
 import { Input } from '@/src/ui/components/primitives/Input';
+import { InputSelect } from '@/src/ui/components/primitives/InputSelect';
 import { Title } from '@/src/ui/components/primitives/Title';
 import { ConfirmModal } from '@/src/ui/components/patterns/ConfirmModal';
 import { StepIndicator } from '@/src/ui/components/patterns/StepIndicator';
@@ -22,6 +31,8 @@ import { validateOwnerForm } from '../../schemas/owner.schema';
 import { validatePetForm } from '@/src/modules/pets/schemas/pet.schema';
 
 import { DatePickerModal } from '@/src/ui/components/patterns/DatePickerModal';
+import { normalizeOptional } from '@/src/utils/normalizeOptional';
+import { formatDateDisplay, formatDateStorage } from '@/src/utils/formatDate';
 
 import type { OwnerDTO } from '../../types/owner.types';
 
@@ -63,6 +74,12 @@ export function OwnerFormModal({
     return key ? t(key) : undefined;
   };
 
+  const buildOwnerPayload = () => ({
+    name: formState.name,
+    phone: formState.phone.trim(),
+    email: normalizeOptional(formState.email),
+  });
+
   const handleClose = () => {
     if (isSubmitting) return;
     resetForm();
@@ -81,11 +98,13 @@ export function OwnerFormModal({
   };
 
   const handleSkip = async () => {
-    await createOwner({ owner: formState });
-    resetForm();
-    resetPetForm();
-    setStep(0);
-    onClose();
+    try {
+      await createOwner({ owner: buildOwnerPayload() });
+      resetForm();
+      resetPetForm();
+      setStep(0);
+      onClose();
+    } catch {}
   };
 
   const handleSubmit = async () => {
@@ -95,22 +114,22 @@ export function OwnerFormModal({
       return;
     }
 
-    await createOwner({
-      owner: formState,
-      pet: {
-        animalId: petState.animalId,
-        breedId: petState.breedId,
-        name: petState.name,
-        birthDate: petState.birthDate,
-        importantNotes: petState.importantNotes,
-        quickNotes: petState.quickNotes,
-      },
-    });
-
-    resetForm();
-    resetPetForm();
-    setStep(0);
-    onClose();
+    try {
+      await createOwner({
+        owner: buildOwnerPayload(),
+        pet: {
+          breedId: petState.breedId!,
+          name: petState.name,
+          birthDate: petState.birthDate,
+          importantNotes: petState.importantNotes,
+          quickNotes: petState.quickNotes,
+        },
+      });
+      resetForm();
+      resetPetForm();
+      setStep(0);
+      onClose();
+    } catch {}
   };
 
   const handleConfirmDelete = async () => {
@@ -125,10 +144,33 @@ export function OwnerFormModal({
     }
   };
 
+  const handleUpdate = async () => {
+    const result = validateOwnerForm(formState);
+    if (!result.success) {
+      setFormErrors(result.errors as Record<string, string[]>);
+      return;
+    }
+    await updateOwner({ id: owner!.id, payload: buildOwnerPayload() });
+    handleClose();
+  };
+
+  const today = new Date();
+  const pickerDay = petState.birthDate
+    ? parseInt(petState.birthDate.split('-')[2])
+    : today.getDate();
+  const pickerMonth = petState.birthDate
+    ? parseInt(petState.birthDate.split('-')[1])
+    : today.getMonth() + 1;
+  const pickerYear = petState.birthDate
+    ? parseInt(petState.birthDate.split('-')[0])
+    : today.getFullYear();
+
   return (
     <>
       <Modal visible={visible} animationType="slide" transparent>
-        <View className="flex-1 items-center justify-end bg-black/50">
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          className="flex-1 items-center justify-end bg-black/50">
           <View className="w-full flex-1 rounded-t-3xl bg-background p-6 dark:bg-backgroundDark">
             {/* HEADER */}
             <View className="mb-6 flex-row items-center justify-between">
@@ -138,13 +180,12 @@ export function OwnerFormModal({
               </Pressable>
             </View>
 
-            {/* STEP INDICATOR */}
             {!isEditMode && <StepIndicator step={step} />}
 
-            {/* CONTENT */}
             <ScrollView
               contentContainerStyle={{ paddingBottom: 24 }}
               showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
               style={{ flex: 1 }}>
               {/* STEP 0 — OWNER */}
               {step === 0 && (
@@ -153,28 +194,26 @@ export function OwnerFormModal({
                     label={t('owners.fields.name')}
                     placeholder={t('owners.fields.namePlaceholder')}
                     value={formState.name}
-                    onChangeText={(v) => setFormField('name', v)}
+                    onChangeText={(v: string) => setFormField('name', v)}
                     leftIcon="person"
                     editable={!isSubmitting}
                     error={getError('name')}
                   />
-
                   <Input
                     label={t('owners.fields.email')}
                     placeholder={t('owners.fields.emailPlaceholder')}
                     value={formState.email}
-                    onChangeText={(v) => setFormField('email', v)}
+                    onChangeText={(v: string) => setFormField('email', v)}
                     leftIcon="mail"
                     type="email"
                     editable={!isSubmitting}
                     error={getError('email')}
                   />
-
                   <Input
                     label={t('owners.fields.phone')}
                     placeholder={t('owners.fields.phonePlaceholder')}
                     value={formState.phone}
-                    onChangeText={(v) => setFormField('phone', v)}
+                    onChangeText={(v: string) => setFormField('phone', v)}
                     leftIcon="phone"
                     type="phone"
                     editable={!isSubmitting}
@@ -190,11 +229,10 @@ export function OwnerFormModal({
                     {t('pets.optionalMessage')}
                   </Text>
 
-                  {/* Dropdowns SIN iconos externos */}
                   <AnimalDropdown
                     label={t('pets.fields.animalType')}
                     value={petState.animal}
-                    onSelect={(animal) => {
+                    onSelect={(animal: any) => {
                       setPetField('animal', animal);
                       setPetField('animalId', animal.id);
                       setPetField('breed', null);
@@ -206,7 +244,7 @@ export function OwnerFormModal({
                     label={t('pets.fields.breed')}
                     value={petState.breed}
                     animalId={petState.animalId}
-                    onSelect={(breed) => {
+                    onSelect={(breed: any) => {
                       setPetField('breed', breed);
                       setPetField('breedId', breed.id);
                     }}
@@ -215,35 +253,35 @@ export function OwnerFormModal({
                   <Input
                     label={t('pets.fields.name')}
                     value={petState.name}
-                    onChangeText={(v) => setPetField('name', v)}
+                    onChangeText={(v: string) => setPetField('name', v)}
                     error={getPetError('name')}
-                    leftIcon="pawPrint"
+                    leftIcon="paw"
                   />
 
-                  {/* Fecha con DatePicker */}
-                  <Input
+                  <InputSelect
                     label={t('pets.fields.birthDate')}
-                    value={petState.birthDate ?? ''}
-                    onPressIn={() => setShowDatePicker(true)}
+                    value={formatDateDisplay(petState.birthDate) ?? ''}
                     leftIcon="calendar"
-                    editable={false}
+                    onPress={() => setShowDatePicker(true)}
                     error={getPetError('birthDate')}
                   />
 
                   <Input
                     label={t('pets.fields.importantNotes')}
                     value={petState.importantNotes}
-                    onChangeText={(v) => setPetField('importantNotes', v)}
+                    onChangeText={(v: string) => setPetField('importantNotes', v)}
                     error={getPetError('importantNotes')}
                     leftIcon="documentText"
+                    multiline
                   />
 
                   <Input
                     label={t('pets.fields.quickNotes')}
                     value={petState.quickNotes}
-                    onChangeText={(v) => setPetField('quickNotes', v)}
+                    onChangeText={(v: string) => setPetField('quickNotes', v)}
                     error={getPetError('quickNotes')}
                     leftIcon="documentText"
+                    multiline
                   />
                 </View>
               )}
@@ -268,7 +306,7 @@ export function OwnerFormModal({
                     disabled={isSubmitting}
                   />
                   <Button
-                    onPress={() => updateOwner({ id: owner!.id, payload: formState })}
+                    onPress={handleUpdate}
                     icon="check"
                     className="flex-1"
                     loading={isUpdating}
@@ -282,22 +320,28 @@ export function OwnerFormModal({
                 </>
               ) : (
                 <>
-                  <Button onPress={() => setStep(0)} icon="chevronLeft" className="flex-1" />
-                  <Button onPress={handleSkip} icon="close" className="flex-1" />
+                  <Button onPress={() => setStep(0)} icon="chevronLeft" />
+                  <Button
+                    onPress={handleSkip}
+                    variant="secondary"
+                    className="flex-1"
+                    disabled={isSubmitting}
+                    loading={isCreating}>
+                    {t('owners.createWithoutPet')}
+                  </Button>
                   <Button
                     onPress={handleSubmit}
                     icon="check"
-                    className="flex-1"
+                    disabled={isSubmitting}
                     loading={isCreating}
                   />
                 </>
               )}
             </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
 
-      {/* DELETE CONFIRM */}
       <ConfirmModal
         visible={showDeleteConfirm}
         title={t('owners.delete')}
@@ -308,18 +352,14 @@ export function OwnerFormModal({
         onCancel={() => setShowDeleteConfirm(false)}
       />
 
-      {/* DATE PICKER */}
       <DatePickerModal
         visible={showDatePicker}
-        initialDay={1}
-        initialMonth={1}
-        initialYear={2000}
+        initialDay={pickerDay}
+        initialMonth={pickerMonth}
+        initialYear={pickerYear}
         onClose={() => setShowDatePicker(false)}
-        onConfirm={(d, m, y) => {
-          setPetField(
-            'birthDate',
-            `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`
-          );
+        onConfirm={(d: number, m: number, y: number) => {
+          setPetField('birthDate', formatDateStorage(d, m, y));
           setShowDatePicker(false);
         }}
       />

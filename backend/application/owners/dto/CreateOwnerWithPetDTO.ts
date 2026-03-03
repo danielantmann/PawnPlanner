@@ -14,6 +14,7 @@ export class CreateOwnerWithPetOwnerDTO {
   @Length(2, 50)
   name!: string;
 
+  @IsOptional()
   @IsEmail()
   email!: string;
 

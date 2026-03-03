@@ -8,12 +8,14 @@ type InputProps = {
   label?: string;
   placeholder?: string;
   value: string;
-  onChangeText?: (text: string) => void; // ⭐ AHORA OPCIONAL
+  onChangeText?: (text: string) => void;
   type?: 'text' | 'email' | 'password' | 'number' | 'phone';
   leftIcon?: IconName;
   error?: string;
   editable?: boolean;
-  onPressIn?: () => void; // ⭐ PARA DATEPICKER
+  onPressIn?: () => void;
+  multiline?: boolean;
+  numberOfLines?: number;
 };
 
 export function Input({
@@ -26,11 +28,11 @@ export function Input({
   error,
   editable = true,
   onPressIn,
+  multiline = false,
+  numberOfLines = 3,
 }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
-
   const isPassword = type === 'password';
-
   const keyboardType =
     type === 'email'
       ? 'email-address'
@@ -42,32 +44,41 @@ export function Input({
 
   return (
     <View className="z-10 w-full">
-      {label && <Text className="mb-1 font-medium text-gray-700 dark:text-gray-300">{label}</Text>}
-
+      {label && (
+        <Text className="mb-1 font-medium text-textSecondary dark:text-textSecondaryDark">
+          {label}
+        </Text>
+      )}
       <Pressable onPressIn={onPressIn} disabled={editable}>
         <View
           className={cn(
-            'flex-row items-center overflow-hidden rounded-lg border px-3 py-2',
+            'flex-row overflow-hidden rounded-lg border px-3 py-2',
+            multiline ? 'min-h-[100px] items-start' : 'items-center',
             'bg-white dark:bg-neutral-900',
             'border-gray-300 dark:border-neutral-700',
-            error && 'border-red-500',
-            !editable && 'opacity-60'
+            error && 'border-red-500'
           )}>
-          {leftIcon && <Icon name={leftIcon} size={20} color="muted" />}
-
+          {leftIcon && (
+            <View className="pt-0.5">
+              <Icon name={leftIcon} size={20} color="muted" />
+            </View>
+          )}
           <TextInput
             className="ml-2 flex-1 text-gray-900 dark:text-gray-100"
             placeholder={placeholder}
             placeholderTextColor="#9ca3af"
             value={value}
-            onChangeText={onChangeText} // ⭐ ahora puede ser undefined
+            onChangeText={onChangeText}
             secureTextEntry={isPassword && !showPassword}
             autoCapitalize={type === 'email' ? 'none' : 'sentences'}
             keyboardType={keyboardType}
             editable={editable}
             showSoftInputOnFocus={editable}
+            multiline={multiline}
+            numberOfLines={multiline ? numberOfLines : undefined}
+            textAlignVertical={multiline ? 'top' : 'center'}
+            contextMenuHidden={!editable}
           />
-
           {isPassword && (
             <Pressable onPress={() => setShowPassword(!showPassword)}>
               <Icon name={showPassword ? 'eyeOff' : 'eye'} size={20} color="muted" />
@@ -75,7 +86,6 @@ export function Input({
           )}
         </View>
       </Pressable>
-
       {error && <Text className="mt-1 text-sm text-red-500">{error}</Text>}
     </View>
   );

@@ -12,7 +12,6 @@ import {
 import { PetEntity } from './PetEntity';
 import { UserEntity } from './UserEntity';
 
-// Normalizadores centralizados
 import { normalizeName } from '../../../shared/normalizers/normalizeName';
 import { normalizeEmail } from '../../../shared/normalizers/normalizeEmail';
 import { normalizeSearch } from '../../../shared/normalizers/normalizeSearch';
@@ -28,8 +27,8 @@ export class OwnerEntity {
   @Column({ type: 'varchar', length: 255 })
   searchName!: string;
 
-  @Column({ type: 'varchar', length: 255, unique: true })
-  email!: string;
+  @Column({ type: 'varchar', length: 255, nullable: true, unique: true })
+  email!: string | null;
 
   @Column({ type: 'varchar', length: 20, unique: true })
   phone!: string;

@@ -1,4 +1,4 @@
-import { useReducer, useEffect, useRef, useCallback } from 'react';
+import { useReducer, useEffect, useRef, useCallback, useState } from 'react';
 import { ownerFormReducer } from '../reducers/ownerFormReducer';
 import { ownerInitialState } from '../reducers/ownerInitialState';
 import type { OwnerDTO, OwnerFormState } from '../types/owner.types';
@@ -11,14 +11,17 @@ interface UseOwnerFormProps {
 
 export function useOwnerForm({ owner, isEditMode = false, visible }: UseOwnerFormProps) {
   const [formState, dispatch] = useReducer(ownerFormReducer, ownerInitialState);
-  const [formErrors, setFormErrors] = useReducer(
-    (_: Record<string, string[]>, next: Record<string, string[]>) => next,
-    {}
-  );
+  const [formErrors, setFormErrors] = useState<Record<string, string[]>>({});
   const hasInitialized = useRef(false);
 
+  // Clear on change — borra el error del campo al escribir
   const setFormField = useCallback((field: keyof OwnerFormState, value: string) => {
     dispatch({ type: 'SET_FIELD', field, value });
+    setFormErrors((prev) => {
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
   }, []);
 
   const resetForm = useCallback(() => {
@@ -26,7 +29,6 @@ export function useOwnerForm({ owner, isEditMode = false, visible }: UseOwnerFor
     setFormErrors({});
   }, []);
 
-  // Reset cuando el modal se cierra
   useEffect(() => {
     if (!visible) {
       hasInitialized.current = false;
@@ -34,7 +36,6 @@ export function useOwnerForm({ owner, isEditMode = false, visible }: UseOwnerFor
     }
   }, [visible, resetForm]);
 
-  // Inicialización cuando el modal se abre
   useEffect(() => {
     if (!visible || hasInitialized.current) return;
     hasInitialized.current = true;
@@ -44,7 +45,7 @@ export function useOwnerForm({ owner, isEditMode = false, visible }: UseOwnerFor
         type: 'SET_STATE',
         state: {
           name: owner.name,
-          email: owner.email,
+          email: owner.email ?? '',
           phone: owner.phone,
         },
       });

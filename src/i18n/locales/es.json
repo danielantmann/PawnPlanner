@@ -177,6 +177,12 @@
     "confirmDelete": "¿Estás seguro de que deseas eliminar este dueño? También se eliminarán sus mascotas.",
     "pets": "Mascotas",
     "noPets": "Sin mascotas registradas",
+    "addPet": "Añadir mascota",
+    "created": "Dueño creado correctamente",
+    "updated": "Dueño actualizado correctamente",
+    "deleted": "Dueño eliminado correctamente",
+    "createWithoutPet": "Crear sin mascota",
+    "totalOwners": "{{count}} dueños registrados",
     "fields": {
       "name": "Nombre",
       "namePlaceholder": "Nombre completo",

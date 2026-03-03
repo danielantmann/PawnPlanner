@@ -177,6 +177,12 @@
     "confirmDelete": "Are you sure you want to delete this owner? Their pets will also be deleted.",
     "pets": "Pets",
     "noPets": "No pets registered",
+    "addPet": "Add pet",
+    "created": "Dueño creado correctamente",
+    "updated": "Dueño actualizado correctamente",
+    "deleted": "Dueño eliminado correctamente",
+    "createWithoutPet": "Create without pet",
+    "totalOwners": "{{count}} owners registered",
     "fields": {
       "name": "Name",
       "namePlaceholder": "Full name",
