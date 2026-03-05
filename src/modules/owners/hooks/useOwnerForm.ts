@@ -1,7 +1,12 @@
-import { useReducer, useEffect, useRef, useCallback, useState } from 'react';
-import { ownerFormReducer } from '../reducers/ownerFormReducer';
-import { ownerInitialState } from '../reducers/ownerInitialState';
-import type { OwnerDTO, OwnerFormState } from '../types/owner.types';
+import { useEffect, useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+
+import { getOwnerSchema } from '../schemas/owner.schema';
+import type { OwnerDTO } from '../types/owner.types';
+
+export type OwnerFormValues = z.infer<ReturnType<typeof getOwnerSchema>>;
 
 interface UseOwnerFormProps {
   owner?: OwnerDTO | null;
@@ -10,53 +15,26 @@ interface UseOwnerFormProps {
 }
 
 export function useOwnerForm({ owner, isEditMode = false, visible }: UseOwnerFormProps) {
-  const [formState, dispatch] = useReducer(ownerFormReducer, ownerInitialState);
-  const [formErrors, setFormErrors] = useState<Record<string, string[]>>({});
-  const hasInitialized = useRef(false);
+  const form = useForm<OwnerFormValues>({
+    resolver: zodResolver(getOwnerSchema()),
+    mode: 'onSubmit',
+    reValidateMode: 'onChange',
+    defaultValues: { name: '', email: '', phone: '' },
+  });
 
-  // Clear on change — borra el error del campo al escribir
-  const setFormField = useCallback((field: keyof OwnerFormState, value: string) => {
-    dispatch({ type: 'SET_FIELD', field, value });
-    setFormErrors((prev) => {
-      const next = { ...prev };
-      delete next[field];
-      return next;
-    });
-  }, []);
-
-  const resetForm = useCallback(() => {
-    dispatch({ type: 'RESET' });
-    setFormErrors({});
-  }, []);
+  const prevVisible = useRef(visible);
 
   useEffect(() => {
-    if (!visible) {
-      hasInitialized.current = false;
-      resetForm();
+    if (!visible && prevVisible.current) {
+      form.reset({ name: '', email: '', phone: '' });
     }
-  }, [visible, resetForm]);
-
-  useEffect(() => {
-    if (!visible || hasInitialized.current) return;
-    hasInitialized.current = true;
-
-    if (isEditMode && owner) {
-      dispatch({
-        type: 'SET_STATE',
-        state: {
-          name: owner.name,
-          email: owner.email ?? '',
-          phone: owner.phone,
-        },
-      });
+    if (visible && !prevVisible.current) {
+      if (isEditMode && owner) {
+        form.reset({ name: owner.name, email: owner.email ?? '', phone: owner.phone });
+      }
     }
-  }, [visible, isEditMode, owner]);
+    prevVisible.current = visible;
+  }, [visible, isEditMode, owner]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return {
-    formState,
-    formErrors,
-    setFormField,
-    setFormErrors,
-    resetForm,
-  };
+  return { form };
 }

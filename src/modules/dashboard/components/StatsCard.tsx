@@ -15,7 +15,7 @@ interface StatsCardProps {
   items: StatItem[];
   variant?: 'sm' | 'lg';
   onPressMore?: () => void;
-  moreLabel?: string; // 👈 añadido
+  moreLabel?: string;
 }
 
 export const StatsCard = ({
@@ -31,37 +31,29 @@ export const StatsCard = ({
 
   return (
     <View className="mt-8">
-      {/* Header */}
       <View className="mb-3 flex-row items-center justify-between">
-        <Text className="text-textPrimary dark:text-textPrimaryDark text-lg font-semibold">
+        <Text className="text-lg font-semibold text-textPrimary dark:text-textPrimaryDark">
           {title}
         </Text>
-
         {onPressMore && moreLabel && (
           <Pressable onPress={onPressMore}>
-            <Text className="text-primary font-medium">{moreLabel}</Text>
+            <Text className="font-medium text-primary">{moreLabel}</Text>
           </Pressable>
         )}
       </View>
 
-      {/* Card */}
       <View
-        className={`bg-backgroundAlt dark:bg-backgroundDarkAlt flex-row ${radius} ${padding} shadow`}>
+        className={`flex-row bg-backgroundAlt dark:bg-backgroundAltDark ${radius} ${padding} shadow`}>
         {items.map((item, index) => (
           <View key={index} className="flex-1 items-center">
             {item.icon && <Icon name={item.icon} size={iconSize} color="primary" />}
-
             <Label>{item.label}</Label>
-
             <Text
-              className={`font-bold ${
-                variant === 'lg' ? 'text-2xl' : 'text-xl'
-              } ${item.color ?? 'text-textPrimary dark:text-textPrimaryDark'}`}>
+              className={`font-bold ${variant === 'lg' ? 'text-2xl' : 'text-xl'} ${item.color ?? 'text-textPrimary dark:text-textPrimaryDark'}`}>
               {item.value}
             </Text>
-
             {index < items.length - 1 && (
-              <View className="bg-border dark:bg-borderDark absolute bottom-2 right-0 top-2 w-px opacity-30" />
+              <View className="absolute bottom-2 right-0 top-2 w-px bg-border opacity-30 dark:bg-borderDark" />
             )}
           </View>
         ))}

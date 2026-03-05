@@ -15,9 +15,10 @@ type BreedDropdownProps = {
   value: BreedDTO | null;
   animalId: number | null;
   onSelect: (breed: BreedDTO) => void;
+  error?: string;
 };
 
-export function BreedDropdown({ label, value, animalId, onSelect }: BreedDropdownProps) {
+export function BreedDropdown({ label, value, animalId, onSelect, error }: BreedDropdownProps) {
   const { t } = useTranslation();
   const [search, setSearch] = useState('');
   const { data: breeds } = useGetBreedsByAnimal(animalId);
@@ -38,6 +39,7 @@ export function BreedDropdown({ label, value, animalId, onSelect }: BreedDropdow
         value={value?.name}
         leftIcon="branch"
         onPress={animalId ? handleOpen : () => {}}
+        error={error}
       />
 
       {isOpen && animalId && (
@@ -48,7 +50,6 @@ export function BreedDropdown({ label, value, animalId, onSelect }: BreedDropdow
             'border-gray-300 dark:border-neutral-700',
             'max-h-60 overflow-hidden'
           )}>
-          {/* Buscador interno */}
           <View className="border-b border-gray-200 px-3 py-2 dark:border-neutral-700">
             <TextInput
               placeholder={t('breeds.searchPlaceholder')}

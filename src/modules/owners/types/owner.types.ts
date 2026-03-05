@@ -17,14 +17,3 @@ export interface UpdateOwnerPayload {
   email?: string | null;
   phone?: string;
 }
-
-export interface OwnerFormState {
-  name: string;
-  email: string;
-  phone: string;
-}
-
-export type OwnerFormAction =
-  | { type: 'SET_FIELD'; field: keyof OwnerFormState; value: string }
-  | { type: 'RESET' }
-  | { type: 'SET_STATE'; state: OwnerFormState };

@@ -14,6 +14,7 @@
     "searchPlaceholder": "Buscar mascota...",
     "noResults": "No hay resultados",
     "optionalMessage": "Este paso es opcional. Puedes añadir una mascota ahora o más tarde.",
+    "new": "Nueva mascota",
     "fields": {
       "animalType": "Tipo de animal",
       "breed": "Raza",
@@ -86,7 +87,9 @@
     "serverError": "Error del servidor. Intenta de nuevo más tarde.",
     "serviceUnavailable": "Servicio no disponible. Intenta de nuevo más tarde.",
     "validationError": "Revisa los campos marcados.",
-    "unknownError": "Algo salió mal. Intenta de nuevo."
+    "unknownError": "Algo salió mal. Intenta de nuevo.",
+    "phoneConflict": "Este teléfono ya está registrado",
+    "emailConflict": "Este email ya está registrado"
   },
   "appointments": {
     "title": "Citas",
@@ -168,7 +171,7 @@
   "owners": {
     "title": "Dueños",
     "subtitle": "Gestiona tus clientes",
-    "searchPlaceholder": "Buscar dueño...",
+    "searchPlaceholder": "Buscar por nombre, teléfono o email...",
     "searchHint": "Escribe para buscar dueños",
     "noResults": "No se encontraron dueños",
     "new": "Nuevo dueño",
@@ -181,7 +184,7 @@
     "created": "Dueño creado correctamente",
     "updated": "Dueño actualizado correctamente",
     "deleted": "Dueño eliminado correctamente",
-    "createWithoutPet": "Crear sin mascota",
+    "skipPet": "Crear sin mascota",
     "totalOwners": "{{count}} dueños registrados",
     "fields": {
       "name": "Nombre",

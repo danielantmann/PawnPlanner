@@ -10,15 +10,12 @@ export const EmptyAppointmentsCard = ({ full = false }) => {
     <View
       className={
         full
-          ? 'bg-backgroundAlt dark:bg-backgroundDarkAlt w-full items-center justify-center rounded-xl p-6 shadow'
-          : 'bg-backgroundAlt dark:bg-backgroundDarkAlt mr-4 w-64 items-center justify-center rounded-xl p-6 shadow'
+          ? 'w-full items-center justify-center rounded-xl bg-backgroundAlt p-6 shadow dark:bg-backgroundAltDark'
+          : 'mr-4 w-64 items-center justify-center rounded-xl bg-backgroundAlt p-6 shadow dark:bg-backgroundAltDark'
       }>
-      {/* Mensaje grande */}
-      <Label className="text-textPrimary dark:text-textPrimaryDark mb-6 text-center text-lg font-semibold">
+      <Label className="mb-6 text-center text-lg font-semibold text-textPrimary dark:text-textPrimaryDark">
         No hay citas hoy
       </Label>
-
-      {/* Botón redondo */}
       <Button
         icon="calendar"
         onPress={() => router.push('/appointment/new')}
@@ -26,9 +23,7 @@ export const EmptyAppointmentsCard = ({ full = false }) => {
         size="md"
         circle="lg"
       />
-
-      {/* Texto fuera del botón */}
-      <Label className="text-textSecondary dark:text-textSecondaryDark mt-2 text-center text-sm">
+      <Label className="mt-2 text-center text-sm text-textSecondary dark:text-textSecondaryDark">
         Crear cita
       </Label>
     </View>

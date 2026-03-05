@@ -1,57 +1,51 @@
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+
+import { getPetSchema } from '../schemas/pet.schema';
 import type { AnimalDTO } from '@/src/modules/animals/types/animal.types';
 import type { BreedDTO } from '@/src/modules/breeds/types/breed.types';
 
-export type PetFormState = {
+// Extendemos el schema para permitir breedId null en el form (se valida con refine)
+const petFormSchema = getPetSchema();
+export type PetFormValues = z.input<typeof petFormSchema>;
+
+type PetUIState = {
   animal: AnimalDTO | null;
-  animalId: number | null;
   breed: BreedDTO | null;
-  breedId: number | null;
-  name: string;
-  birthDate: string | null;
-  importantNotes: string;
-  quickNotes: string;
 };
 
-export type PetFormErrors = Partial<Record<keyof PetFormState, string[]>>;
-
 export function usePetForm() {
-  const [petState, setPetState] = useState<PetFormState>({
-    animal: null,
-    animalId: null,
-    breed: null,
-    breedId: null,
-    name: '',
-    birthDate: null,
-    importantNotes: '',
-    quickNotes: '',
-  });
+  const [petUI, setPetUI] = useState<PetUIState>({ animal: null, breed: null });
 
-  const [petErrors, setPetErrors] = useState<PetFormErrors>({});
-
-  const setPetField = <K extends keyof PetFormState>(field: K, value: PetFormState[K]) => {
-    setPetState((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const resetPetForm = () => {
-    setPetState({
-      animal: null,
-      animalId: null,
-      breed: null,
-      breedId: null,
+  const form = useForm<PetFormValues>({
+    resolver: zodResolver(petFormSchema) as any,
+    mode: 'onSubmit',
+    reValidateMode: 'onChange',
+    defaultValues: {
       name: '',
+      breedId: undefined,
       birthDate: null,
       importantNotes: '',
       quickNotes: '',
-    });
-    setPetErrors({});
+    },
+  });
+
+  const resetPetForm = () => {
+    form.reset();
+    setPetUI({ animal: null, breed: null });
   };
 
-  return {
-    petState,
-    petErrors,
-    setPetField,
-    setPetErrors,
-    resetPetForm,
+  const selectAnimal = (animal: AnimalDTO) => {
+    setPetUI((prev) => ({ ...prev, animal, breed: null }));
+    form.setValue('breedId', undefined as any);
   };
+
+  const selectBreed = (breed: BreedDTO) => {
+    setPetUI((prev) => ({ ...prev, breed }));
+    form.setValue('breedId', breed.id, { shouldValidate: true });
+  };
+
+  return { form, petUI, selectAnimal, selectBreed, resetPetForm };
 }

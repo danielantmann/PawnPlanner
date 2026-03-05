@@ -127,6 +127,10 @@ const iconMap = {
   documentText: ((props: IoniconProps) => (
     <Ionicons name="document-text-outline" {...props} />
   )) as IoniconComponent,
+
+  alertCircle: ((props: IoniconProps) => (
+    <Ionicons name="alert-circle-outline" {...props} />
+  )) as IoniconComponent,
 } as const;
 
 export type IconName = keyof typeof iconMap;

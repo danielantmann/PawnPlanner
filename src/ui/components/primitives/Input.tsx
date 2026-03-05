@@ -45,7 +45,7 @@ export function Input({
   return (
     <View className="z-10 w-full">
       {label && (
-        <Text className="mb-1 font-medium text-textSecondary dark:text-textSecondaryDark">
+        <Text className="mb-1 text-xs font-semibold uppercase text-textSecondary dark:text-textSecondaryDark">
           {label}
         </Text>
       )}

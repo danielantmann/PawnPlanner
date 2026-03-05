@@ -15,15 +15,3 @@ export const getPetSchema = () => {
     quickNotes: z.string().optional(),
   });
 };
-
-export const validatePetForm = (data: unknown) => {
-  try {
-    const schema = getPetSchema();
-    return { success: true, data: schema.parse(data) };
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return { success: false, errors: error.flatten().fieldErrors };
-    }
-    return { success: false, errors: { root: ['Error desconocido'] } };
-  }
-};

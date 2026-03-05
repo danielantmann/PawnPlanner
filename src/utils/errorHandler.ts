@@ -8,24 +8,29 @@ export interface AppError {
   originalError?: any;
 }
 
-/**
- * Mapea errores de la API a mensajes claros para el usuario
- * Usa traducciones para mensajes multiidioma
- */
+const resolveConflictMessage = (message: string): string => {
+  const t = i18next.t.bind(i18next);
+  const lower = message.toLowerCase();
+  if (lower.includes('phone')) return t('errors.phoneConflict');
+  if (lower.includes('email')) return t('errors.emailConflict');
+  return t('errors.conflict');
+};
+
 export const getErrorMessage = (error: any): string => {
   const t = i18next.t.bind(i18next);
 
-  // Error de Axios
   if (isAxiosError(error)) {
     const status = error.response?.status;
     const data = error.response?.data as any;
 
-    // Backend retornó un mensaje específico (prioridad 1)
+    if (status === 409) {
+      return resolveConflictMessage(data?.message ?? '');
+    }
+
     if (data?.message) {
       return data.message;
     }
 
-    // Errores por status code
     switch (status) {
       case 400:
         return t('errors.validationError');
@@ -35,8 +40,6 @@ export const getErrorMessage = (error: any): string => {
         return t('errors.forbidden');
       case 404:
         return t('errors.notFound');
-      case 409:
-        return t('errors.conflict');
       case 500:
         return t('errors.serverError');
       case 503:
@@ -45,32 +48,18 @@ export const getErrorMessage = (error: any): string => {
         break;
     }
 
-    // Error de red
-    if (error.code === 'ERR_NETWORK') {
-      return t('errors.network');
-    }
-
-    // Timeout
-    if (error.code === 'ECONNABORTED') {
-      return t('errors.timeout');
-    }
+    if (error.code === 'ERR_NETWORK') return t('errors.network');
+    if (error.code === 'ECONNABORTED') return t('errors.timeout');
   }
 
-  // Error genérico
-  if (error instanceof Error) {
-    return error.message;
-  }
+  if (error instanceof Error) return error.message;
 
   return t('errors.unknownError');
 };
 
-/**
- * Parsea error completo para logging/debugging
- */
 export const parseError = (error: any): AppError => {
   if (isAxiosError(error)) {
     const status = error.response?.status;
-
     return {
       code: `HTTP_${status}`,
       message: getErrorMessage(error),
@@ -94,26 +83,16 @@ export const parseError = (error: any): AppError => {
   };
 };
 
-/**
- * Determina si el error es recuperable (se puede reintentar)
- */
 export const isRecoverableError = (error: any): boolean => {
   if (isAxiosError(error)) {
     const status = error.response?.status;
-    // 5xx, network errors, timeout son recuperables
     return (
-      !status || // Sin respuesta del servidor
-      status >= 500 || // Errores de servidor
-      error.code === 'ERR_NETWORK' ||
-      error.code === 'ECONNABORTED'
+      !status || status >= 500 || error.code === 'ERR_NETWORK' || error.code === 'ECONNABORTED'
     );
   }
   return false;
 };
 
-/**
- * Obtiene el código de error para analytics/logging
- */
 export const getErrorCode = (error: any): string => {
   if (isAxiosError(error)) {
     return `HTTP_${error.response?.status}` || 'HTTP_ERROR';
@@ -121,9 +100,6 @@ export const getErrorCode = (error: any): string => {
   return 'UNKNOWN_ERROR';
 };
 
-/**
- * Log de error para debugging
- */
 export const logError = (error: any, context: string = 'Unknown'): void => {
   const parsed = parseError(error);
   console.error(`[${context}] ${parsed.code}: ${parsed.message}`, {

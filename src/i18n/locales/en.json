@@ -14,6 +14,7 @@
     "searchPlaceholder": "Search pet...",
     "noResults": "No results",
     "optionalMessage": "This step is optional. You can add a pet now or later.",
+    "new": "New pet",
     "fields": {
       "animalType": "Animal type",
       "breed": "Breed",
@@ -86,7 +87,9 @@
     "serverError": "Server error. Try again later.",
     "serviceUnavailable": "Service unavailable. Try again later.",
     "validationError": "Check the highlighted fields.",
-    "unknownError": "Something went wrong. Try again."
+    "unknownError": "Something went wrong. Try again.",
+    "phoneConflict": "This phone number is already registered",
+    "emailConflict": "This email is already registered"
   },
   "appointments": {
     "title": "Appointments",
@@ -168,7 +171,7 @@
   "owners": {
     "title": "Owners",
     "subtitle": "Manage your clients",
-    "searchPlaceholder": "Search owner...",
+    "searchPlaceholder": "Search by name, phone or email...",
     "searchHint": "Type to search owners",
     "noResults": "No owners found",
     "new": "New owner",
@@ -178,10 +181,10 @@
     "pets": "Pets",
     "noPets": "No pets registered",
     "addPet": "Add pet",
-    "created": "Dueño creado correctamente",
-    "updated": "Dueño actualizado correctamente",
-    "deleted": "Dueño eliminado correctamente",
-    "createWithoutPet": "Create without pet",
+    "created": "Owner created successfully",
+    "updated": "Owner updated successfully",
+    "deleted": "Owner deleted successfully",
+    "skipPet": "Create without pet",
     "totalOwners": "{{count}} owners registered",
     "fields": {
       "name": "Name",

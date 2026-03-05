@@ -1,13 +1,11 @@
 import { useState, useMemo } from 'react';
 import { View, Text, ScrollView, Pressable, ActivityIndicator } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import Toast from 'react-native-toast-message';
 
 import { Input } from '@/src/ui/components/primitives/Input';
 import { Button } from '@/src/ui/components/primitives/Button';
 import { ScreenHeader } from '@/src/ui/components/patterns/ScreenHeader';
 import { Icon } from '@/src/ui/components/primitives/Icon';
-import { toastConfig } from '@/src/ui/components/patterns/ToastConfig';
 
 import { useOwners } from '@/src/modules/owners/hooks/useOwners';
 import { useOwnerStore } from '@/src/modules/owners/store/owner.store';
@@ -100,7 +98,7 @@ export default function OwnersScreen() {
         {/* EMPTY STATE — sin owners */}
         {!isLoading && !hasOwners && (
           <View className="flex-1 items-center justify-center py-24" style={{ gap: 16 }}>
-            <View className="dark:bg-backgroundAltDark mb-2 h-20 w-20 items-center justify-center rounded-full bg-backgroundAlt">
+            <View className="mb-2 h-20 w-20 items-center justify-center rounded-full bg-backgroundAlt dark:bg-backgroundAltDark">
               <Icon name="people" size={40} color="muted" />
             </View>
             <Text className="text-xl font-bold text-textPrimary dark:text-textPrimaryDark">
@@ -118,7 +116,7 @@ export default function OwnersScreen() {
         {/* HINT — hay owners pero no se está buscando */}
         {!isLoading && hasOwners && !showResults && (
           <View className="items-center py-16" style={{ gap: 12 }}>
-            <View className="dark:bg-backgroundAltDark h-16 w-16 items-center justify-center rounded-full bg-backgroundAlt">
+            <View className="h-16 w-16 items-center justify-center rounded-full bg-backgroundAlt dark:bg-backgroundAltDark">
               <Icon name="search" size={28} color="muted" />
             </View>
             <Text className="font-semibold text-textPrimary dark:text-textPrimaryDark">
@@ -133,7 +131,7 @@ export default function OwnersScreen() {
         {/* SIN RESULTADOS */}
         {!isLoading && showResults && filtered.length === 0 && (
           <View className="items-center py-16" style={{ gap: 12 }}>
-            <View className="dark:bg-backgroundAltDark h-16 w-16 items-center justify-center rounded-full bg-backgroundAlt">
+            <View className="h-16 w-16 items-center justify-center rounded-full bg-backgroundAlt dark:bg-backgroundAltDark">
               <Icon name="person" size={28} color="muted" />
             </View>
             <Text className="font-semibold text-textPrimary dark:text-textPrimaryDark">
@@ -149,7 +147,7 @@ export default function OwnersScreen() {
               <Pressable
                 key={owner.id}
                 onPress={() => handleSelectOwner(owner)}
-                className="dark:bg-backgroundAltDark rounded-2xl border border-gray-200 bg-backgroundAlt px-5 py-4 active:opacity-70 dark:border-neutral-700">
+                className="rounded-2xl border border-gray-200 bg-backgroundAlt px-5 py-4 active:opacity-70 dark:border-neutral-700 dark:bg-backgroundAltDark">
                 <View className="flex-row items-center gap-4">
                   <View className="h-10 w-10 items-center justify-center rounded-full bg-primary/10">
                     <Icon name="person" size={20} color="primary" />
@@ -174,7 +172,7 @@ export default function OwnersScreen() {
                     )}
                   </View>
                   {owner.pets.length > 0 && (
-                    <View className="bg-backgroundAltDarker dark:bg-backgroundAltDarkerDark flex-row items-center gap-1 rounded-full px-3 py-1">
+                    <View className="flex-row items-center gap-1 rounded-full bg-backgroundAltDarker px-3 py-1 dark:bg-backgroundAltDarkerDark">
                       <Icon name="paw" size={12} color="muted" />
                       <Text className="text-xs font-medium text-textSecondary dark:text-textSecondaryDark">
                         {owner.pets.length}
@@ -204,8 +202,6 @@ export default function OwnersScreen() {
         owner={selectedOwner}
         isEditMode
       />
-
-      <Toast config={toastConfig} position="top" topOffset={60} />
     </View>
   );
 }

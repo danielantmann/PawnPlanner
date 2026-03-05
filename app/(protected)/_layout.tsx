@@ -5,6 +5,8 @@ import { ActivityIndicator, View } from 'react-native';
 import { AppHeader } from '@/src/ui/components/patterns/AppHeader';
 import { DrawerMenu } from '@/src/ui/components/patterns/DrawerMenu/DrawerMenu';
 import { colors } from '@/src/ui/theme/colors';
+import Toast from 'react-native-toast-message';
+import { toastConfig } from '@/src/ui/components/patterns/ToastConfig';
 
 export default function ProtectedLayout() {
   const { isAuthenticated, isLoadingSession } = useAuthStore();
@@ -22,17 +24,11 @@ export default function ProtectedLayout() {
   }
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: colors.primary,
-      }}
-      edges={['top']}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.primary }} edges={['top']}>
       <AppHeader />
-
       <Slot />
-
       <DrawerMenu />
+      <Toast config={toastConfig} position="top" topOffset={60} />
     </SafeAreaView>
   );
 }
