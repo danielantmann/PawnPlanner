@@ -82,10 +82,11 @@ describe('OwnerService - getAll', () => {
   it('should not include invalid owners after failed creation', async () => {
     const token = await createTestUser();
 
+    // Email ya no es obligatorio, usamos un campo realmente inválido (phone muy corto)
     const invalidRes = await apiRequest
       .post('/owners')
       .set('Authorization', `Bearer ${token}`)
-      .send({ name: 'Pepe', phone: '444444444' });
+      .send({ name: 'Pepe', phone: '1' }); // phone inválido por longitud
 
     expect(invalidRes.status).toBe(400);
 

@@ -8,7 +8,7 @@ export class OwnerMapper {
     return {
       id: owner.id,
       name: capitalize(owner.name),
-      email: owner.email,
+      email: owner.email ?? null,
       phone: owner.phone,
       pets:
         pets?.map((p) => ({

@@ -9,10 +9,19 @@ import { GetAllOwnersService } from '../application/owners/services/GetAllOwners
 import { GetOwnerByIdService } from '../application/owners/services/GetOwnerByIdService';
 import { GetOwnerByEmailService } from '../application/owners/services/GetOwnerByEmailService';
 import { GetOwnerByNameService } from '../application/owners/services/GetOwnerByNameService';
+import { CreateOwnerWithPetService } from '../application/owners/services/CreateOwnerWithPetService';
 
 export function setupOwnerContainer(dataSource: DataSource): void {
   container.register<IOwnerRepository>('OwnerRepository', {
     useFactory: () => new OwnerRepository(dataSource),
+  });
+
+  container.register(CreateOwnerWithPetService, {
+    useFactory: () =>
+      new CreateOwnerWithPetService(
+        container.resolve<IOwnerRepository>('OwnerRepository'),
+        dataSource
+      ),
   });
 
   container.register(CreateOwnerService, { useClass: CreateOwnerService });

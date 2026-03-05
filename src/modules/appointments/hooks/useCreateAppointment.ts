@@ -11,18 +11,9 @@ export function useCreateAppointment() {
       return response.data;
     },
     onSuccess: () => {
-      //  INVALIDA TODAS LAS QUERIES DE APPOINTMENTS
-      queryClient.invalidateQueries({
-        queryKey: ['appointments'],
-      });
-
-      //  INVALIDA LAS STATS DEL DASHBOARD
-      queryClient.invalidateQueries({
-        queryKey: ['dashboard-today'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['dashboard-weekly'],
-      });
+      queryClient.invalidateQueries({ queryKey: ['appointments'] });
+      queryClient.invalidateQueries({ queryKey: ['dashboard-today'] });
+      queryClient.invalidateQueries({ queryKey: ['dashboard-weekly'] });
     },
   });
 }

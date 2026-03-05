@@ -11,9 +11,11 @@ export class CreateOwnerService {
   constructor(@inject('OwnerRepository') private repo: IOwnerRepository) {}
 
   async execute(dto: CreateOwnerDTO) {
-    const existingByEmail = await this.repo.findByEmail(dto.email, dto.userId);
-    if (existingByEmail) {
-      throw new ConflictError(`Owner with email ${dto.email} already exists`);
+    if (dto.email) {
+      const existingByEmail = await this.repo.findByEmail(dto.email, dto.userId);
+      if (existingByEmail) {
+        throw new ConflictError(`Owner with email ${dto.email} already exists`);
+      }
     }
 
     const existingByPhone = await this.repo.findByPhone(dto.phone, dto.userId);
@@ -25,13 +27,12 @@ export class CreateOwnerService {
       null,
       dto.name,
       normalizeSearch(dto.name),
-      dto.email,
+      dto.email ?? null,
       dto.phone,
       dto.userId
     );
 
     const saved = await this.repo.create(owner);
-    // Newly created owner has no pets
     return OwnerMapper.toDTO(saved, []);
   }
 }

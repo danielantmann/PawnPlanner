@@ -1,4 +1,4 @@
-import { IsEmail, IsString, Length, Matches } from 'class-validator';
+import { IsEmail, IsOptional, IsString, Length, Matches } from 'class-validator';
 
 export class CreateOwnerDTO {
   @IsString()
@@ -11,8 +11,9 @@ export class CreateOwnerDTO {
   })
   phone!: string;
 
+  @IsOptional()
   @IsEmail()
-  email!: string;
+  email?: string;
 
-  userId!: number; // viene del token
+  userId!: number;
 }

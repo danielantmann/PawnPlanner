@@ -9,18 +9,9 @@ export function useDeleteAppointment() {
       await api.delete(`/appointments/${id}`);
     },
     onSuccess: () => {
-      // INVALIDA TODAS LAS QUERIES DE APPOINTMENTS
-      queryClient.invalidateQueries({
-        queryKey: ['appointments'],
-      });
-
-      //  INVALIDA LAS STATS DEL DASHBOARD
-      queryClient.invalidateQueries({
-        queryKey: ['dashboard-today'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['dashboard-weekly'],
-      });
+      queryClient.invalidateQueries({ queryKey: ['appointments'] });
+      queryClient.invalidateQueries({ queryKey: ['dashboard-today'] });
+      queryClient.invalidateQueries({ queryKey: ['dashboard-weekly'] });
     },
   });
 }

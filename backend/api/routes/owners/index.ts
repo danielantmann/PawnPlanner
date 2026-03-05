@@ -12,6 +12,8 @@ import { getAllOwners } from '../../controllers/owners/getAll';
 import { getOwnerById } from '../../controllers/owners/getById';
 import { getOwnerByEmail } from '../../controllers/owners/getByEmail';
 import { getOwnerByName } from '../../controllers/owners/getByName';
+import { CreateOwnerWithPetDTO } from '../../../application/owners/dto/CreateOwnerWithPetDTO';
+import { createOwnerWithPet } from '../../controllers/owners/createWithPet';
 
 /**
  * @openapi
@@ -279,6 +281,7 @@ const router = Router();
 router.use(authMiddleware);
 
 router.post('/', validationMiddleware(CreateOwnerDTO), createOwner);
+router.post('/with-pet', validationMiddleware(CreateOwnerWithPetDTO), createOwnerWithPet);
 router.put('/:id', validationMiddleware(UpdateOwnerDTO), updateOwner);
 router.delete('/:id', deleteOwner);
 

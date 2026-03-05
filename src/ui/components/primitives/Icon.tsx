@@ -91,6 +91,46 @@ const iconMap = {
   trash: ((props: IoniconProps) => (
     <Ionicons name="trash-outline" {...props} />
   )) as IoniconComponent,
+  menu: ((props: IoniconProps) => <Ionicons name="menu-outline" {...props} />) as IoniconComponent,
+
+  // NUEVOS PARA EL MENÚ
+  home: ((props: IoniconProps) => <Ionicons name="home-outline" {...props} />) as IoniconComponent,
+  people: ((props: IoniconProps) => (
+    <Ionicons name="people-outline" {...props} />
+  )) as IoniconComponent,
+  leaf: ((props: IoniconProps) => <Ionicons name="leaf-outline" {...props} />) as IoniconComponent,
+  branch: ((props: IoniconProps) => (
+    <Ionicons name="git-branch-outline" {...props} />
+  )) as IoniconComponent,
+  briefcase: ((props: IoniconProps) => (
+    <Ionicons name="briefcase-outline" {...props} />
+  )) as IoniconComponent,
+  settings: ((props: IoniconProps) => (
+    <Ionicons name="settings-outline" {...props} />
+  )) as IoniconComponent,
+  shapes: ((props: IoniconProps) => (
+    <Ionicons name="shapes-outline" {...props} />
+  )) as IoniconComponent,
+  flash: ((props: IoniconProps) => (
+    <Ionicons name="flash-outline" {...props} />
+  )) as IoniconComponent,
+  edit: ((props: IoniconProps) => (
+    <Ionicons name="create-outline" {...props} />
+  )) as IoniconComponent,
+  chevronLeft: ((props: IoniconProps) => (
+    <Ionicons name="chevron-back-outline" {...props} />
+  )) as IoniconComponent,
+
+  chevronRight: ((props: IoniconProps) => (
+    <Ionicons name="chevron-forward-outline" {...props} />
+  )) as IoniconComponent,
+  documentText: ((props: IoniconProps) => (
+    <Ionicons name="document-text-outline" {...props} />
+  )) as IoniconComponent,
+
+  alertCircle: ((props: IoniconProps) => (
+    <Ionicons name="alert-circle-outline" {...props} />
+  )) as IoniconComponent,
 } as const;
 
 export type IconName = keyof typeof iconMap;
@@ -126,6 +166,7 @@ export const Icon = ({ name, size = 'md', color, strokeColor, fixedColor = false
   const Component = iconMap[name];
 
   if (typeof Component === 'function' && name !== 'pawPrint') {
+    // Dejamos tu forma original, que sabes que te funciona
     return Component({ size: resolvedSize, color: resolvedColor });
   }
 

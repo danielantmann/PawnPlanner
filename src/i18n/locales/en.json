@@ -12,7 +12,21 @@
   },
   "pets": {
     "searchPlaceholder": "Search pet...",
-    "noResults": "No results"
+    "noResults": "No results",
+    "optionalMessage": "This step is optional. You can add a pet now or later.",
+    "new": "New pet",
+    "fields": {
+      "animalType": "Animal type",
+      "breed": "Breed",
+      "name": "Pet name",
+      "birthDate": "Birth date",
+      "importantNotes": "Important notes",
+      "quickNotes": "Quick notes"
+    },
+    "errors": {
+      "nameRequired": "Name is required",
+      "breedRequired": "Breed is required"
+    }
   },
   "services": {
     "searchPlaceholder": "Select service...",
@@ -73,7 +87,9 @@
     "serverError": "Server error. Try again later.",
     "serviceUnavailable": "Service unavailable. Try again later.",
     "validationError": "Check the highlighted fields.",
-    "unknownError": "Something went wrong. Try again."
+    "unknownError": "Something went wrong. Try again.",
+    "phoneConflict": "This phone number is already registered",
+    "emailConflict": "This email is already registered"
   },
   "appointments": {
     "title": "Appointments",
@@ -129,5 +145,88 @@
       "newAppointment": "New Appointment",
       "goToday": "Go to today"
     }
+  },
+  "drawer": {
+    "sections": {
+      "shortcuts": "Shortcuts",
+      "management": "Management",
+      "settings": "Settings"
+    },
+    "items": {
+      "home": "Home",
+      "agenda": "Agenda",
+      "stats": "Stats",
+      "search": "Search",
+      "profile": "Profile",
+      "owners": "Owners",
+      "pets": "Pets",
+      "animals": "Animals",
+      "species": "Species",
+      "breeds": "Breeds",
+      "services": "Services",
+      "workers": "Workers",
+      "profileSettings": "Profile & Settings"
+    }
+  },
+  "owners": {
+    "title": "Owners",
+    "subtitle": "Manage your clients",
+    "searchPlaceholder": "Search by name, phone or email...",
+    "searchHint": "Type to search owners",
+    "noResults": "No owners found",
+    "new": "New owner",
+    "edit": "Edit owner",
+    "delete": "Delete owner",
+    "confirmDelete": "Are you sure you want to delete this owner? Their pets will also be deleted.",
+    "pets": "Pets",
+    "noPets": "No pets registered",
+    "addPet": "Add pet",
+    "created": "Owner created successfully",
+    "updated": "Owner updated successfully",
+    "deleted": "Owner deleted successfully",
+    "skipPet": "Create without pet",
+    "totalOwners": "{{count}} owners registered",
+    "fields": {
+      "name": "Name",
+      "namePlaceholder": "Full name",
+      "email": "Email",
+      "emailPlaceholder": "email@example.com",
+      "phone": "Phone",
+      "phonePlaceholder": "612 345 678"
+    },
+    "errors": {
+      "nameRequired": "Name is required",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Enter a valid email",
+      "phoneRequired": "Phone is required",
+      "phoneInvalid": "Enter a valid phone number"
+    }
+  },
+  "animals": {
+    "selectPlaceholder": "Select animal..."
+  },
+  "breeds": {
+    "selectPlaceholder": "Select breed...",
+    "selectAnimalFirst": "Select an animal first",
+    "searchPlaceholder": "Search breed...",
+    "noResults": "No results"
+  },
+  "months": {
+    "1": "January",
+    "2": "February",
+    "3": "March",
+    "4": "April",
+    "5": "May",
+    "6": "June",
+    "7": "July",
+    "8": "August",
+    "9": "September",
+    "10": "October",
+    "11": "November",
+    "12": "December"
+  },
+  "datePicker": {
+    "title": "Select date",
+    "confirm": "Confirm"
   }
 }
