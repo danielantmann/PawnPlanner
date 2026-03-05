@@ -8,6 +8,8 @@ import { useCreateAppointment } from '../../hooks/useCreateAppointment';
 import { useUpdateAppointment } from '../../hooks/useUpdateAppointment';
 import { useDeleteAppointment } from '../../hooks/useDeleteAppointment';
 
+jest.useFakeTimers();
+
 jest.mock('../../schemas/appointment.schema', () => ({
   validateAppointmentForm: jest.fn(),
 }));
@@ -98,6 +100,8 @@ describe('useAppointmentSubmit', () => {
       result.current.handleSubmit(validForm, false, jest.fn());
     });
 
+    jest.runAllTimers();
+
     expect(createMock.mutate).toHaveBeenCalled();
     expect(Toast.show).toHaveBeenCalled();
     expect(mockOnSuccess).toHaveBeenCalled();
@@ -123,6 +127,8 @@ describe('useAppointmentSubmit', () => {
       result.current.handleSubmit(validForm, true, jest.fn(), appointment);
     });
 
+    jest.runAllTimers();
+
     expect(updateMock.mutate).toHaveBeenCalled();
     expect(Toast.show).toHaveBeenCalled();
     expect(mockOnSuccess).toHaveBeenCalled();
@@ -144,6 +150,8 @@ describe('useAppointmentSubmit', () => {
     act(() => {
       result.current.handleDelete({ id: 10 } as any);
     });
+
+    jest.runAllTimers();
 
     expect(deleteMock.mutate).toHaveBeenCalledWith(10, expect.any(Object));
     expect(Toast.show).toHaveBeenCalled();
@@ -167,6 +175,8 @@ describe('useAppointmentSubmit', () => {
     act(() => {
       result.current.handleSubmit(validForm, false, jest.fn());
     });
+
+    jest.runAllTimers();
 
     expect(Toast.show).toHaveBeenCalledWith(expect.objectContaining({ type: 'error' }));
     expect(mockOnSuccess).not.toHaveBeenCalled();
