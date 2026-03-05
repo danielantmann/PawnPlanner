@@ -1501,3 +1501,47 @@ Benefits:
 
 - Prevented session creation and redirects when validation fails.
 - Ensured consistent behavior between login and register flows.
+
+## [05/03] – Owners + Pets + Animals + Breeds Module Completion
+
+### Added
+
+- Full Owners module functionality:
+  - Owner creation, edition and deletion flows
+  - Owner detail modal and multi‑step form
+  - Owner search and filtering
+  - Owner form validation with Zod
+- Pets module enhancements:
+  - `usePetForm` hook with full validation and controlled state
+  - `PetFormStep` integrated into Owner creation flow
+  - Pet creation from Owner screen
+  - Ability to open Pet detail from Owner profile
+- Animals module integration:
+  - `AnimalDropdown` component
+  - `useGetAnimals` hook
+  - Animal selection inside Owner and Pet forms
+- Breeds module integration:
+  - `BreedDropdown` component
+  - `useGetBreedsByAnimal` hook
+  - Dynamic breed loading based on selected animal
+
+### Improved
+
+- Unified dropdown UX across Owners, Pets, Animals and Breeds
+- Better form state management using domain‑specific hooks
+- Consistent validation patterns across all modules
+- Enhanced OwnerForm modal UX/UI (spacing, navigation, error messages)
+- Refactored data normalization for Pets and Owners
+
+### Fixed
+
+- Incorrect breed loading when switching animals in OwnerForm
+- Pet form not resetting when closing Owner modal
+- Dropdown focus issues inside scrollable modals
+- Missing type safety in Owner and Pet DTOs
+
+### Notes
+
+- Owners module now fully integrated with Pets, Animals and Breeds
+- Pet creation from Owner flow is complete and stable
+- Pet detail modal can now be opened directly from Owner profile
